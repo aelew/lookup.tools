@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CornerDownLeftIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
@@ -15,18 +16,17 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { ToolLayout } from '../_components/tool-layout';
-import { formSchema } from '../schema';
+import { dnsSchema } from '../schema';
 
 export default function DNSLookupPage() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      data: ''
-    }
+  const router = useRouter();
+  const form = useForm<z.infer<typeof dnsSchema>>({
+    resolver: zodResolver(dnsSchema),
+    defaultValues: { domain: '' }
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = (values: z.infer<typeof dnsSchema>) => {
+    router.push(`/dns/${values.domain}`);
   };
 
   return (
@@ -37,11 +37,11 @@ export default function DNSLookupPage() {
     >
       <Form {...form}>
         <form
-          className="relative mx-auto max-w-sm"
           onSubmit={form.handleSubmit(onSubmit)}
+          className="relative mx-auto max-w-sm"
         >
           <FormField
-            name="data"
+            name="domain"
             control={form.control}
             render={({ field }) => (
               <FormItem>
@@ -49,7 +49,7 @@ export default function DNSLookupPage() {
                   <div className="flex items-center">
                     <Input
                       className="h-auto rounded-full py-3 pl-4 pr-16 shadow-lg"
-                      clearHandler={() => form.setValue('data', '')}
+                      clearHandler={() => form.setValue('domain', '')}
                       placeholder="Domain name (e.g.: google.com)"
                       deleteButtonClassName="right-9"
                       {...field}

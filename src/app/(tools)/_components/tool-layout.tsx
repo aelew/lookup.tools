@@ -27,7 +27,7 @@ export function ToolLayout({
             {name}
           </h1>
         </div>
-        <h2 className="mx-auto max-w-2xl text-center font-medium tracking-tight text-muted-foreground">
+        <h2 className="mx-auto max-w-2xl text-center text-sm font-medium tracking-tight text-muted-foreground sm:text-base">
           {description}
         </h2>
       </div>

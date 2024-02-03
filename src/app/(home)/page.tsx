@@ -52,8 +52,9 @@ export default function HomePage() {
               lookup.tools
             </h1>
           </div>
-          <h2 className="mx-auto max-w-2xl text-center font-medium tracking-tight text-muted-foreground">
-            The one-stop shop for all your research needs.
+          <h2 className="mx-auto max-w-lg text-center text-sm font-medium tracking-tight text-muted-foreground sm:text-base">
+            The cyber swiss army knife of lookup tools. Research information on
+            domains, IP addresses, email addresses, phone numbers, and more.
           </h2>
         </div>
         <div className="relative mx-auto flex max-w-sm items-center">
