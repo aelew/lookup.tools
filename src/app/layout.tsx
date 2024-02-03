@@ -1,4 +1,5 @@
 import { GeistSans } from 'geist/font/sans';
+import type { Metadata } from 'next';
 import type { PropsWithChildren } from 'react';
 
 import { AnimatedMain } from '@/lib/framer';
@@ -9,7 +10,14 @@ import { Providers } from './providers';
 
 import '@/styles/globals.css';
 
-export const metadata = { title: 'Lookup Tools' };
+export const metadata: Metadata = {
+  title: {
+    default: 'Lookup Tools',
+    template: '%s | Lookup Tools'
+  },
+  description:
+    'The cyber swiss army knife of lookup tools. Research information on domains, IP addresses, email addresses, phone numbers, and more.'
+};
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (

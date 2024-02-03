@@ -1,8 +1,9 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CornerDownLeftIcon } from 'lucide-react';
+import { CornerDownLeftIcon, LoaderIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
@@ -20,6 +21,8 @@ import { dnsSchema } from '../schema';
 
 export default function DNSLookupPage() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof dnsSchema>>({
     resolver: zodResolver(dnsSchema),
     defaultValues: { domain: '' }
@@ -27,6 +30,7 @@ export default function DNSLookupPage() {
 
   const onSubmit = (values: z.infer<typeof dnsSchema>) => {
     router.push(`/whois/${values.domain}`);
+    setLoading(true);
   };
 
   return (
@@ -55,8 +59,15 @@ export default function DNSLookupPage() {
                       autoFocus
                       {...field}
                     />
-                    <button className="absolute right-0 mr-4">
-                      <CornerDownLeftIcon className="size-4 text-muted-foreground transition-colors hover:text-muted-foreground/60" />
+                    <button
+                      className="absolute right-0 mr-4"
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <LoaderIcon className="size-4 animate-spin text-muted-foreground transition-colors hover:text-muted-foreground/60" />
+                      ) : (
+                        <CornerDownLeftIcon className="size-4 text-muted-foreground transition-colors hover:text-muted-foreground/60" />
+                      )}
                     </button>
                   </div>
                 </FormControl>

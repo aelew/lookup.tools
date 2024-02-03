@@ -22,6 +22,7 @@ import { dnsSchema } from '../schema';
 export default function DNSLookupPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof dnsSchema>>({
     resolver: zodResolver(dnsSchema),
     defaultValues: { domain: '' }
