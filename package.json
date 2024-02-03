@@ -14,6 +14,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
     "@icons-pack/react-simple-icons": "^9.3.0",
+    "@layered/dns-records": "1.5.0",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-select": "^2.0.0",
@@ -38,7 +39,8 @@
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
-    "whoiser": "^1.17.1",
+    "ts-pattern": "^5.0.6",
+    "whis-data": "latest",
     "zod": "^3.22.4"
   },
   "devDependencies": {

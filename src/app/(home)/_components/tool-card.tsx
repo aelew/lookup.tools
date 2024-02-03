@@ -3,7 +3,6 @@ import Link from 'next/link';
 
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle
@@ -32,7 +31,6 @@ export function ToolCard({
           </CardTitle>
           <CardDescription>{description}</CardDescription>
         </CardHeader>
-        <CardContent>asdsas</CardContent>
       </Card>
     </Link>
   );

@@ -10,7 +10,7 @@ const config = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'logo.clearbit.com'
+        hostname: 'icons.duckduckgo.com'
       }
     ]
   }
