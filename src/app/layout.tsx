@@ -1,9 +1,11 @@
 import { GeistSans } from 'geist/font/sans';
 import type { PropsWithChildren } from 'react';
 
+import { AnimatedMain } from '@/lib/framer';
 import { cn } from '@/lib/utils';
-import { TRPCReactProvider } from '@/trpc/react';
+import { Blob } from './_components/blob';
 import { Header } from './_components/header';
+import { Providers } from './providers';
 
 import '@/styles/globals.css';
 
@@ -15,13 +17,16 @@ export default function RootLayout({ children }: PropsWithChildren) {
       <body
         className={cn(
           GeistSans.variable,
-          'container flex min-h-screen flex-col font-sans antialiased'
+          'container flex min-h-screen flex-col pb-4 font-sans antialiased lg:pb-12'
         )}
       >
-        <TRPCReactProvider>
+        <Providers>
+          <Blob />
           <Header />
-          <main>{children}</main>
-        </TRPCReactProvider>
+          <AnimatedMain initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            {children}
+          </AnimatedMain>
+        </Providers>
       </body>
     </html>
   );

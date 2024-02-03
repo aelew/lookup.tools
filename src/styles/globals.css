@@ -74,9 +74,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-@layer utilities {
-  .container {
-    @apply pb-4;
-  }
-}

@@ -24,7 +24,7 @@ export function ToolCard({
 }: ToolCardProps) {
   return (
     <Link href={`/${slug}`}>
-      <Card className="relative rounded-lg transition-all hover:bg-accent/80 active:scale-[0.98]">
+      <Card className="relative rounded-xl shadow-lg transition-all hover:bg-accent/75 active:scale-[0.98]">
         <CardHeader>
           <CardTitle className="flex items-center">
             <Icon className="mr-2 size-5" />

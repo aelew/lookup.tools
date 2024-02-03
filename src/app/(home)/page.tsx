@@ -7,7 +7,6 @@ import {
 } from 'lucide-react';
 
 import { Logo } from '@/components/logo';
-import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ToolCard } from './_components/tool-card';
 
@@ -57,12 +56,13 @@ export default function HomePage() {
             The one-stop shop for all your research needs.
           </h2>
         </div>
-        <Card className="mx-auto max-w-sm p-2">
-          <div className="relative flex items-center">
-            <SearchIcon className="absolute ml-3 size-4 text-muted-foreground" />
-            <Input className="pl-8" placeholder="Search tools" />
-          </div>
-        </Card>
+        <div className="relative mx-auto flex max-w-sm items-center">
+          <SearchIcon className="absolute ml-4 size-4 text-muted-foreground" />
+          <Input
+            className="h-auto rounded-full py-3 pl-10 pr-4 shadow-lg"
+            placeholder="Search tools..."
+          />
+        </div>
       </section>
       <section className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {tools.map((tool) => (
