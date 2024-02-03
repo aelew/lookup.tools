@@ -3,13 +3,16 @@ import {
   GlobeIcon,
   MailIcon,
   MapPinIcon,
-  PhoneIncomingIcon,
-  SearchIcon
+  PhoneIncomingIcon
 } from 'lucide-react';
 
 import { Logo } from '@/components/logo';
-import { Input } from '@/components/ui/input';
+import { SearchBar } from './_components/search-bar';
 import { ToolCard } from './_components/tool-card';
+
+interface HomePageProps {
+  searchParams: { q?: string };
+}
 
 const tools = [
   {
@@ -24,31 +27,30 @@ const tools = [
     name: 'WHOIS Lookup',
     slug: 'whois',
     description:
-      'Find out who owns a domain, including contact information, registration dates, and more.'
+      'Look up information on domain owners, registration dates, nameservers, and more.'
   },
   {
     icon: MapPinIcon,
     name: 'IP Address Lookup',
     slug: 'ip',
-    description:
-      'Lookup information on an IP address, including location, ISP, and more.'
+    description: 'Coming soon!'
   },
   {
     icon: MailIcon,
     name: 'Email Address Lookup',
     slug: 'email',
-    description: 'Lookup information on an email address.'
+    description: 'Coming soon!'
   },
   {
     icon: PhoneIncomingIcon,
     name: 'Phone Number Lookup',
     slug: 'phone-number',
-    description:
-      'Lookup information on a phone number, including owner name, carrier, location, and more.'
+    description: 'Coming soon!'
   }
 ];
 
-export default function HomePage() {
+export default function HomePage({ searchParams }: HomePageProps) {
+  const query = searchParams.q?.toLowerCase();
   return (
     <>
       <section className="space-y-6 py-12 sm:py-24">
@@ -64,19 +66,19 @@ export default function HomePage() {
             domains, IP addresses, email addresses, phone numbers, and more.
           </h2>
         </div>
-        <div className="relative mx-auto flex max-w-sm items-center">
-          <SearchIcon className="absolute ml-4 size-4 text-muted-foreground" />
-          <Input
-            className="h-auto rounded-full py-3 pl-10 pr-4 shadow-lg focus-visible:ring-0"
-            placeholder="Search tools..."
-            autoFocus
-          />
-        </div>
+        <SearchBar />
       </section>
       <section className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
-        {tools.map((tool) => (
-          <ToolCard key={tool.slug} {...tool} />
-        ))}
+        {tools
+          .filter(
+            (tool) =>
+              !query ||
+              tool.name.toLowerCase().includes(query) ||
+              tool.description.toLowerCase().includes(query)
+          )
+          .map((tool) => (
+            <ToolCard key={tool.slug} {...tool} />
+          ))}
       </section>
     </>
   );
