@@ -1,3 +1,4 @@
+// @ts-expect-error package has no types
 import { getAllRecords } from '@layered/dns-records';
 import maxmind, { type CityResponse } from 'maxmind';
 
@@ -6,9 +7,21 @@ import { getRaw, WhoisParser } from '@/lib/whis';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 
 export const lookupRouter = createTRPCRouter({
-  dns: publicProcedure
-    .input(dnsSchema)
-    .mutation(async ({ input }) => getAllRecords(input.domain)),
+  dns: publicProcedure.input(dnsSchema).mutation(async ({ input }) =>
+    (
+      getAllRecords as (domain: string) => Promise<
+        Record<
+          string,
+          {
+            type: string;
+            name: string;
+            ttl: string;
+            value: string;
+          }[]
+        >
+      >
+    )(input.domain)
+  ),
   whois: publicProcedure.input(dnsSchema).mutation(async ({ input }) => {
     let raw, result;
     try {
