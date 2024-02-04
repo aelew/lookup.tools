@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { CloudflareIcon } from '@/components/icons/cloudflare';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -102,14 +103,18 @@ export default async function DNSLookupResultPage({
                         }
 
                         let Icon = null;
-                        for (const service of SERVICES) {
-                          if (
-                            service.matches.some((k) =>
-                              value.toLowerCase().includes(k)
-                            )
-                          ) {
-                            Icon = service.icon;
-                            break;
+                        if (record.cloudflare) {
+                          Icon = CloudflareIcon;
+                        } else {
+                          for (const service of SERVICES) {
+                            if (
+                              service.matches.some((k) =>
+                                value.toLowerCase().includes(k)
+                              )
+                            ) {
+                              Icon = service.icon;
+                              break;
+                            }
                           }
                         }
 

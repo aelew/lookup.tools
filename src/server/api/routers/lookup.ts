@@ -1,3 +1,4 @@
+import isCloudflare from '@authentication/cloudflare-ip';
 // @ts-expect-error package has no types
 import { getAllRecords } from '@layered/dns-records';
 import maxmind, { type CityResponse } from 'maxmind';
@@ -6,22 +7,29 @@ import { dnsSchema, ipSchema } from '@/app/(tools)/schema';
 import { getRaw, WhoisParser } from '@/lib/whis';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 
+type GetAllRecordsFn = (domain: string) => Promise<
+  Record<
+    string,
+    {
+      type: string;
+      name: string;
+      ttl: string;
+      value: string;
+      cloudflare?: boolean;
+    }[]
+  >
+>;
+
 export const lookupRouter = createTRPCRouter({
-  dns: publicProcedure.input(dnsSchema).mutation(async ({ input }) =>
-    (
-      getAllRecords as (domain: string) => Promise<
-        Record<
-          string,
-          {
-            type: string;
-            name: string;
-            ttl: string;
-            value: string;
-          }[]
-        >
-      >
-    )(input.domain)
-  ),
+  dns: publicProcedure.input(dnsSchema).mutation(async ({ input }) => {
+    const result = await (getAllRecords as GetAllRecordsFn)(input.domain);
+
+    // Perform Cloudflare checks
+    result.A?.forEach((r) => (r.cloudflare = isCloudflare(r.value)));
+    result.AAAA?.forEach((r) => (r.cloudflare = isCloudflare(r.value)));
+
+    return result;
+  }),
   whois: publicProcedure.input(dnsSchema).mutation(async ({ input }) => {
     let raw, result;
     try {
