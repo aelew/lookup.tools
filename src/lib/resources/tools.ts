@@ -10,7 +10,7 @@ export const TOOLS = [
     name: 'DNS Lookup',
     slug: 'dns',
     description:
-      "Discover a domain's DNS records, including IP address, name servers, A records, and more."
+      "Discover a domain's DNS records, including IP address, name servers, and MX records."
   },
   {
     icon: MobilePhoneWithArrowIcon,
@@ -23,7 +23,8 @@ export const TOOLS = [
     icon: PushpinIcon,
     name: 'IP Address Lookup',
     slug: 'ip',
-    description: 'Coming soon!'
+    description:
+      'Find information about an IP address including the type, ISP, city, and country.'
   },
   {
     icon: EmailIcon,

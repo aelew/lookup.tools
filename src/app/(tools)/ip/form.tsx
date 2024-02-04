@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -15,9 +16,16 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { api } from '@/trpc/react';
 import { ipSchema } from '../schema';
 
-export function IPLookupForm() {
+interface IPLookupFormProps {
+  showCurrentIPButton?: boolean;
+}
+
+export function IPLookupForm({ showCurrentIPButton }: IPLookupFormProps) {
+  const { data: ip } = api.client.ip.useQuery();
+
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -66,6 +74,15 @@ export function IPLookupForm() {
           )}
         />
       </form>
+      {showCurrentIPButton && (
+        <Button
+          onClick={() => form.setValue('ip', ip?.data ?? '')}
+          className="self-center"
+          variant="secondary"
+        >
+          Use my IP address
+        </Button>
+      )}
     </Form>
   );
 }

@@ -1,4 +1,4 @@
-# For more details, read this: https://coolify.io/docs/github-actions
+# For more details, read this: https://coolify.io/docs/git-providers/github/github-actions
 name: Deploy to Coolify
 on:
   push:
@@ -29,9 +29,9 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          push: true
           file: Dockerfile
           platforms: linux/aarch64
-          push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
       - name: Trigger Coolify deployment
         run: |

@@ -14,7 +14,7 @@ export function ToolLayout({
       {/* eslint-disable-next-line react/no-children-prop */}
       <title children={`${name} | Lookup Tools`} />
       <AnimatedSection
-        className="space-y-6 py-24 sm:py-48"
+        className="flex flex-col space-y-6 py-24 sm:py-48"
         initial={{ y: -96 }}
         animate={{ y: 0 }}
       >

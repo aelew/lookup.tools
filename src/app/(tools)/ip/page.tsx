@@ -11,7 +11,7 @@ export default function IPLookupPage() {
   }
   return (
     <ToolLayout {...tool}>
-      <IPLookupForm />
+      <IPLookupForm showCurrentIPButton />
     </ToolLayout>
   );
 }
