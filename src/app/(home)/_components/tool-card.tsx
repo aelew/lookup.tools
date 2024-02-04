@@ -1,4 +1,3 @@
-import type { LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import {
@@ -7,20 +6,9 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
+import type { Tool } from '@/lib/resources/tools';
 
-interface ToolCardProps {
-  icon: LucideIcon;
-  name: string;
-  slug: string;
-  description: string;
-}
-
-export function ToolCard({
-  icon: Icon,
-  name,
-  slug,
-  description
-}: ToolCardProps) {
+export function ToolCard({ icon: Icon, name, slug, description }: Tool) {
   return (
     <Link href={`/${slug}`}>
       <Card className="relative rounded-xl shadow-lg transition-all hover:bg-accent/75 active:scale-[0.98]">

@@ -1,19 +1,14 @@
-import type { PropsWithChildren, SVGProps } from 'react';
+import type { PropsWithChildren } from 'react';
 
 import { AnimatedSection } from '@/lib/framer';
-
-interface ToolInformationProps extends PropsWithChildren {
-  icon?: (props: SVGProps<SVGSVGElement>) => JSX.Element;
-  name: string;
-  description: string;
-}
+import type { Tool } from '@/lib/resources/tools';
 
 export function ToolLayout({
   icon: Icon,
   name,
   description,
   children
-}: ToolInformationProps) {
+}: Tool & PropsWithChildren) {
   return (
     <>
       {/* eslint-disable-next-line react/no-children-prop */}

@@ -1,53 +1,11 @@
-import {
-  CloudCogIcon,
-  GlobeIcon,
-  MailIcon,
-  MapPinIcon,
-  PhoneIncomingIcon
-} from 'lucide-react';
-
 import { Logo } from '@/components/logo';
+import { TOOLS } from '@/lib/resources/tools';
 import { SearchBar } from './_components/search-bar';
 import { ToolCard } from './_components/tool-card';
 
 interface HomePageProps {
   searchParams: { q?: string };
 }
-
-const tools = [
-  {
-    icon: GlobeIcon,
-    name: 'DNS Lookup',
-    slug: 'dns',
-    description:
-      "Discover a domain's DNS records, including IP address, name servers, A records, and more."
-  },
-  {
-    icon: CloudCogIcon,
-    name: 'WHOIS Lookup',
-    slug: 'whois',
-    description:
-      'Look up information on domain owners, registration dates, nameservers, and more.'
-  },
-  {
-    icon: MapPinIcon,
-    name: 'IP Address Lookup',
-    slug: 'ip',
-    description: 'Coming soon!'
-  },
-  {
-    icon: MailIcon,
-    name: 'Email Address Lookup',
-    slug: 'email',
-    description: 'Coming soon!'
-  },
-  {
-    icon: PhoneIncomingIcon,
-    name: 'Phone Number Lookup',
-    slug: 'phone-number',
-    description: 'Coming soon!'
-  }
-];
 
 export default function HomePage({ searchParams }: HomePageProps) {
   const query = searchParams.q?.toLowerCase();
@@ -69,16 +27,14 @@ export default function HomePage({ searchParams }: HomePageProps) {
         <SearchBar />
       </section>
       <section className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
-        {tools
-          .filter(
-            (tool) =>
-              !query ||
-              tool.name.toLowerCase().includes(query) ||
-              tool.description.toLowerCase().includes(query)
-          )
-          .map((tool) => (
-            <ToolCard key={tool.slug} {...tool} />
-          ))}
+        {TOOLS.filter(
+          (tool) =>
+            !query ||
+            tool.name.toLowerCase().includes(query) ||
+            tool.description.toLowerCase().includes(query)
+        ).map((tool) => (
+          <ToolCard key={tool.slug} {...tool} />
+        ))}
       </section>
     </>
   );
