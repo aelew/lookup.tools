@@ -1,12 +1,21 @@
 # 🔎 lookup.tools
 
-An all-in-one website for looking up information about domains, IP addresses, email addresses, and more.
+The cyber swiss army knife of lookup tools. Research information on domains, IP addresses, email addresses, phone numbers, and more.
 
-## Built with
+Demo: [lookup.tools](https://lookup.tools)
 
-- [Next.js](https://nextjs.org)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+> [!NOTE]  
+> lookup.tools is currently a work in progress. In other words, it's currently in the early stages of development and is not yet complete!
+
+## Tech stack
+
+- Starter: [create-t3-app](https://create.t3.gg)
+- Framework: [Next.js](https://nextjs.org)
+- CSS: [Tailwind CSS](https://tailwindcss.com)
+- Components: [shadcn/ui](https://ui.shadcn.com)
+- Backend: [tRPC](https://trpc.io)
+- Maps: [Pigeon Maps](https://pigeon-maps.js.org)
+- IP Geolocation Data: [MaxMind GeoLite2](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data)
 
 ## Development
 
