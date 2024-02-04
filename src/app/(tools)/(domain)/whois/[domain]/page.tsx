@@ -1,23 +1,18 @@
-import { ExternalLinkIcon, SearchIcon } from 'lucide-react';
 import type { Metadata } from 'next';
 import { unstable_cache } from 'next/cache';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { TOOLS } from '@/lib/resources/tools';
 import type { ContactInfo } from '@/lib/whois';
 import { api } from '@/trpc/server';
 import type { InfoTable } from '@/types';
+import { DomainHeader } from '../../_components/domain-header';
+import { DomainTabsList } from '../../_components/domain-tabs-list';
 import { WhoisLookupForm } from '../form';
 
 interface WhoisLookupResultPageProps {
@@ -153,45 +148,9 @@ export default async function WhoisLookupResultPage({
 
   return (
     <>
-      <div className="my-4 flex flex-col items-center justify-between gap-2 sm:flex-row">
-        <div className="flex items-center gap-3 text-3xl font-semibold tracking-tight">
-          <Image
-            className="rounded-lg bg-white object-contain p-1 shadow ring-1 ring-muted-foreground/25"
-            src={`https://icons.duckduckgo.com/ip3/${domain}.ico`}
-            unoptimized
-            height={36}
-            width={36}
-            alt=""
-          />
-          <h2>{domain}</h2>
-          <Link href={`https://${domain}`} target="_blank">
-            <ExternalLinkIcon className="mt-1 size-4 transition-colors hover:opacity-80" />
-          </Link>
-        </div>
-        <div className="flex items-center gap-2">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="outline" size="sm">
-                <SearchIcon className="mr-2 h-4 w-4" />
-                Search again
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent
-              className="rounded-full p-0 shadow-none"
-              sideOffset={8}
-            >
-              <WhoisLookupForm />
-            </PopoverContent>
-          </Popover>
-        </div>
-      </div>
-      <Tabs value="whois">
-        <TabsList className="shadow">
-          <Link href={`/dns/${domain}`}>
-            <TabsTrigger value="dns">DNS Records</TabsTrigger>
-          </Link>
-          <TabsTrigger value="whois">WHOIS Lookup</TabsTrigger>
-        </TabsList>
+      <DomainHeader domain={domain} searchAgainForm={WhoisLookupForm} />
+      <Tabs className="flex flex-col" value="whois">
+        <DomainTabsList value="whois" domain={domain} />
         <TabsContent value="whois" className="mt-4 space-y-4">
           {tables.map(({ name, keys }) => {
             // if all key values are undefined, skip the table

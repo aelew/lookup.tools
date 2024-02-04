@@ -1,18 +1,11 @@
-import { ExternalLinkIcon, SearchIcon } from 'lucide-react';
+import type { Metadata } from 'next';
 import { unstable_cache } from 'next/cache';
-import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { CloudflareIcon } from '@/components/icons/cloudflare';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover';
 import {
   Table,
   TableBody,
@@ -21,14 +14,15 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { SERVICES } from '@/lib/resources/services';
+import { TOOLS } from '@/lib/resources/tools';
 import { cn, duration } from '@/lib/utils';
 import { api } from '@/trpc/server';
-import { CopyButton } from '../../_components/copy-button';
+import { DomainHeader } from '../../_components/domain-header';
+import { DomainTabsList } from '../../_components/domain-tabs-list';
+import { CopyButton } from '../../../_components/copy-button';
 import { DNSLookupForm } from '../form';
-import type { Metadata } from 'next';
-import { TOOLS } from '@/lib/resources/tools';
 
 interface DNSLookupResultPageProps {
   params: { domain: string };
@@ -62,45 +56,9 @@ export default async function DNSLookupResultPage({
   }
   return (
     <>
-      <div className="my-4 flex flex-col items-center justify-between gap-2 sm:flex-row">
-        <div className="flex items-center gap-3 text-3xl font-semibold tracking-tight">
-          <Image
-            className="rounded-lg bg-white object-contain p-1 shadow ring-1 ring-muted-foreground/25"
-            src={`https://icons.duckduckgo.com/ip3/${domain}.ico`}
-            unoptimized
-            height={36}
-            width={36}
-            alt=""
-          />
-          <h2>{domain}</h2>
-          <Link href={`https://${domain}`} target="_blank">
-            <ExternalLinkIcon className="mt-1 size-4 transition-colors hover:opacity-80" />
-          </Link>
-        </div>
-        <div className="flex items-center gap-2">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="outline" size="sm">
-                <SearchIcon className="mr-2 h-4 w-4" />
-                Search again
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent
-              className="rounded-full p-0 shadow-none"
-              sideOffset={8}
-            >
-              <DNSLookupForm />
-            </PopoverContent>
-          </Popover>
-        </div>
-      </div>
-      <Tabs value="dns">
-        <TabsList className="shadow">
-          <TabsTrigger value="dns">DNS Records</TabsTrigger>
-          <Link href={`/whois/${domain}`}>
-            <TabsTrigger value="whois">WHOIS Lookup</TabsTrigger>
-          </Link>
-        </TabsList>
+      <DomainHeader domain={domain} searchAgainForm={DNSLookupForm} />
+      <Tabs className="flex flex-col" value="dns">
+        <DomainTabsList value="dns" domain={domain} />
         <TabsContent value="dns" className="mt-4 space-y-4">
           {Object.entries(result).map(([type, records]) => {
             if (!records.length) {
@@ -175,13 +133,15 @@ export default async function DNSLookupResultPage({
                               )}
                               {record.type === 'A' || record.type === 'AAAA' ? (
                                 <Link
-                                  className="hover:underline"
+                                  className="whitespace-nowrap hover:underline"
                                   href={`/ip/${value}`}
                                 >
                                   {value}
                                 </Link>
                               ) : (
-                                value
+                                <span className="whitespace-nowrap">
+                                  {value}
+                                </span>
                               )}
                               <CopyButton text={value} />
                             </TableCell>

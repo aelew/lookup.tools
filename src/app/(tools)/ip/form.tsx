@@ -42,8 +42,8 @@ export function IPLookupForm({ showCurrentIPButton }: IPLookupFormProps) {
   return (
     <Form {...form}>
       <form
+        className="relative mx-auto w-full sm:max-w-sm"
         onSubmit={form.handleSubmit(onSubmit)}
-        className="relative mx-auto max-w-sm"
       >
         <FormField
           name="ip"

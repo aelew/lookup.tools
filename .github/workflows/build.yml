@@ -24,7 +24,7 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
         with:
-            platforms: linux/aarch64
+          platforms: linux/aarch64
       - name: Build image and push to registry
         uses: docker/build-push-action@v5
         with:

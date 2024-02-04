@@ -15,9 +15,9 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { dnsSchema } from '../schema';
+import { dnsSchema } from '../../schema';
 
-export function WhoisLookupForm() {
+export function DNSLookupForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -27,15 +27,15 @@ export function WhoisLookupForm() {
   });
 
   const onSubmit = (values: z.infer<typeof dnsSchema>) => {
-    router.push(`/whois/${values.domain}`);
+    router.push(`/dns/${values.domain}`);
     setLoading(true);
   };
 
   return (
     <Form {...form}>
       <form
+        className="relative mx-auto w-full sm:max-w-sm"
         onSubmit={form.handleSubmit(onSubmit)}
-        className="relative mx-auto max-w-sm"
       >
         <FormField
           name="domain"

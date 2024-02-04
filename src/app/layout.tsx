@@ -4,7 +4,6 @@ import type { PropsWithChildren } from 'react';
 
 import { AnimatedMain } from '@/lib/framer';
 import { cn } from '@/lib/utils';
-import { Blob } from './_components/blob';
 import { Header } from './_components/header';
 import { Providers } from './providers';
 
@@ -36,7 +35,6 @@ export default function RootLayout({ children }: PropsWithChildren) {
         )}
       >
         <Providers>
-          <Blob />
           <Header />
           <AnimatedMain initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {children}
