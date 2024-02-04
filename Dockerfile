@@ -31,8 +31,7 @@ RUN \
     else echo "Lockfile not found." && exit 1; \
     fi
 
-RUN apt-get update
-RUN apt-get install dnstools -y
+RUN apt-get update && apt-get install -y dnstools && rm -rf /var/lib/apt/lists/*
 
 # Production image, copy all the files and run next
 FROM base AS runner
