@@ -5,7 +5,7 @@
   "type": "module",
   "author": "aelew",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "lint": "next lint",
     "build": "next build",
     "start": "next start",
