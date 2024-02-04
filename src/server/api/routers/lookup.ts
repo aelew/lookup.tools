@@ -5,7 +5,7 @@ import { Reader, type CityResponse } from 'maxmind';
 
 import { dnsSchema, ipSchema } from '@/app/(tools)/schema';
 import { getGeoLite2CityBuffer } from '@/lib/maxmind';
-import { getRaw, WhoisParser } from '@/lib/whis';
+import { getWHOISData } from '@/lib/whois';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 
 type GetAllRecordsFn = (domain: string) => Promise<
@@ -32,14 +32,7 @@ export const lookupRouter = createTRPCRouter({
     return result;
   }),
   whois: publicProcedure.input(dnsSchema).mutation(async ({ input }) => {
-    let raw, result;
-    try {
-      raw = await getRaw(input.domain);
-      result = WhoisParser(raw);
-    } catch {
-      return { raw, result };
-    }
-    return { raw, result };
+    return getWHOISData(input.domain);
   }),
   ip: publicProcedure.input(ipSchema).mutation(async ({ input }) => {
     let result;

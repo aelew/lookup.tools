@@ -71,6 +71,9 @@ dependencies:
   geist:
     specifier: ^1.2.1
     version: 1.2.1(next@14.1.0)
+  ky:
+    specifier: ^1.2.0
+    version: 1.2.0
   lucide-react:
     specifier: ^0.321.0
     version: 0.321.0(react@18.2.0)
@@ -107,9 +110,6 @@ dependencies:
   ts-pattern:
     specifier: ^5.0.6
     version: 5.0.6
-  whis-data:
-    specifier: latest
-    version: 1.2.20230701
   zod:
     specifier: ^3.22.4
     version: 3.22.4
@@ -3081,6 +3081,11 @@ packages:
       json-buffer: 3.0.1
     dev: true
 
+  /ky@1.2.0:
+    resolution: {integrity: sha512-dnPW+T78MuJ9tLAiF/apJV7bP7RRRCARXQxsCmsWiKLXqGtMBOgDVOFRYzCAfNe/OrRyFyor5ESgvvC+QWEqOA==}
+    engines: {node: '>=18'}
+    dev: false
+
   /language-subtag-registry@0.3.22:
     resolution: {integrity: sha512-tN0MCzyWnoz/4nHS6uxdlFWoUZT7ABptwKPQ52Ea7URk6vll88bWBVhodtnlfEuCcKWNGoc+uGbw1cwa9IKh/w==}
     dev: true
@@ -4359,10 +4364,6 @@ packages:
     hasBin: true
     dependencies:
       isexe: 2.0.0
-
-  /whis-data@1.2.20230701:
-    resolution: {integrity: sha512-omDr9qOE3xUw8tRijmJvpFIZlJPhJzKkIeR5+KA8VVnIii1yykiN4UuF8CWHdcPSKRJrrE8bo5QIVt4ZY4r9yA==}
-    dev: false
 
   /wrap-ansi@7.0.0:
     resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}

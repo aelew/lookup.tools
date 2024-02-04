@@ -33,8 +33,8 @@ export default async function WHOISLookupResultPage({
   params
 }: WHOISLookupResultPageProps) {
   const domain = decodeURIComponent(params.domain).toLowerCase();
-  const { raw, result } = await getCachedWHOISLookup(domain);
-  if (!result?.exists || !result.domain) {
+  const result = await getCachedWHOISLookup(domain);
+  if (!result) {
     notFound();
   }
 
@@ -42,48 +42,49 @@ export default async function WHOISLookupResultPage({
     {
       name: 'Domain Information',
       keys: {
-        Registrar: () => result.registrar,
+        Registrar: () => result.registrar?.name,
         Registered: () =>
-          result.created
-            ? Array.isArray(result.created)
-              ? result.created[0]?.toString()
-              : result.created.toString()
+          result.domain.created_date
+            ? new Date(
+                result.domain.created_date_in_time ?? result.domain.created_date
+              ).toString()
             : null,
-        Updated: () => result.updated?.toString(),
-        Expires: () => result.expiration?.toString(),
-        Status: () => {
-          if (!result.status) {
-            return null;
-          }
-          if (Array.isArray(result.status)) {
-            return (
-              <div className="inline-flex flex-col">
-                {result.status.map((status) => {
-                  const [code, href] = status.split(' ');
-                  return (
-                    <Link className="hover:underline" key={code} href={href!}>
-                      {code}
-                    </Link>
-                  );
-                })}
-              </div>
-            );
-          }
-          const [code, href] = result.status.split(' ');
-          return (
-            <Link className="hover:underline" href={href!}>
-              {code}
-            </Link>
-          );
-        },
+        Updated: () =>
+          result.domain.updated_date
+            ? new Date(
+                result.domain.updated_date_in_time ?? result.domain.updated_date
+              ).toString()
+            : null,
+        Expires: () =>
+          result.domain.expiration_date
+            ? new Date(
+                result.domain.expiration_date_in_time ??
+                  result.domain.expiration_date
+              ).toString()
+            : null,
+        Status: () => (
+          <div className="inline-flex flex-col">
+            {result.domain.status.map((status) => (
+              <Link
+                href={`https://www.icann.org/epp#${status}`}
+                className="hover:underline"
+                key={status}
+              >
+                {status}
+              </Link>
+            ))}
+          </div>
+        ),
         Nameservers: () => {
-          const nameservers = result.nameservers as string[] | undefined;
-          if (!nameservers) {
+          const nameServers = result.domain.name_servers as
+            | string[]
+            | undefined;
+          if (!nameServers) {
             return null;
           }
           return (
             <div className="inline-flex flex-col gap-1">
-              {nameservers.map((ns, i) => {
+              {nameServers.map((ns, i) => {
                 const parts = ns.split('.');
                 const baseDomain =
                   parts.length > 2 ? parts.slice(1).join('.') : ns;
@@ -118,65 +119,57 @@ export default async function WHOISLookupResultPage({
     {
       name: 'Registrant Contact',
       keys: {
-        Name: () => result.registrantName,
-        Organization: () => result.registrantOrganization,
-        Street: () => result.registrantStreet,
-        City: () => result.registrantCity,
-        State: () => result.registrantStateProvince,
-        'Postal Code': () => result.registrantPostalCode,
-        Country: () => result.registrantCountry,
-        Phone: () => result.registrantPhone,
-        Email: () =>
-          result.registrantEmail?.toString().includes('@')
-            ? result.registrantEmail
-            : null
+        Name: () => result.registrant?.name,
+        Organization: () => result.registrant?.organization,
+        Street: () => result.registrant?.street,
+        City: () => result.registrant?.city,
+        State: () => result.registrant?.province,
+        'Postal Code': () => result.registrant?.postal_code,
+        Country: () => result.registrant?.country,
+        Phone: () => result.registrant?.phone,
+        Email: () => result.registrant?.email
       }
     },
     {
       name: 'Admin Contact',
       keys: {
-        Name: () => result.adminName,
-        Organization: () => result.adminOrganization,
-        Street: () => result.adminStreet,
-        City: () => result.adminCity,
-        State: () => result.adminStateProvince,
-        'Postal Code': () => result.adminPostalCode,
-        Country: () => result.adminCountry,
-        Phone: () => result.adminPhone,
-        Email: () =>
-          result.adminEmail?.toString().includes('@') ? result.adminEmail : null
+        Name: () => result.administrative?.name,
+        Organization: () => result.administrative?.organization,
+        Street: () => result.administrative?.street,
+        City: () => result.administrative?.city,
+        State: () => result.administrative?.province,
+        'Postal Code': () => result.administrative?.postal_code,
+        Country: () => result.administrative?.country,
+        Phone: () => result.administrative?.phone,
+        Email: () => result.administrative?.email
       }
     },
     {
       name: 'Technical Contact',
       keys: {
-        Name: () => result.techName,
-        Organization: () => result.techOrganization,
-        Street: () => result.techStreet,
-        City: () => result.techCity,
-        State: () => result.techStateProvince,
-        'Postal Code': () => result.techPostalCode,
-        Country: () => result.techCountry,
-        Phone: () => result.techPhone,
-        Email: () =>
-          result.techEmail?.toString().includes('@') ? result.techEmail : null
+        Name: () => result.technical?.name,
+        Organization: () => result.technical?.organization,
+        Street: () => result.technical?.street,
+        City: () => result.technical?.city,
+        State: () => result.technical?.province,
+        'Postal Code': () => result.technical?.postal_code,
+        Country: () => result.technical?.country,
+        Phone: () => result.technical?.phone,
+        Email: () => result.technical?.email
       }
     },
     {
       name: 'Billing Contact',
       keys: {
-        Name: () => result.billingName,
-        Organization: () => result.billingOrganization,
-        Street: () => result.billingStreet,
-        City: () => result.billingCity,
-        State: () => result.billingStateProvince,
-        'Postal Code': () => result.billingPostalCode,
-        Country: () => result.billingCountry,
-        Phone: () => result.billingPhone,
-        Email: () =>
-          result.billingEmail?.toString().includes('@')
-            ? result.billingEmail
-            : null
+        Name: () => result.billing?.name,
+        Organization: () => result.billing?.organization,
+        Street: () => result.billing?.street,
+        City: () => result.billing?.city,
+        State: () => result.billing?.province,
+        'Postal Code': () => result.billing?.postal_code,
+        Country: () => result.billing?.country,
+        Phone: () => result.billing?.phone,
+        Email: () => result.billing?.email
       }
     }
   ];
@@ -259,11 +252,6 @@ export default async function WHOISLookupResultPage({
               </Card>
             );
           })}
-          <div className="rounded-xl border bg-background px-4 py-3 text-sm">
-            <code className="whitespace-pre-wrap">
-              {raw?.replaceAll('   ', '').trim()}
-            </code>
-          </div>
         </TabsContent>
       </Tabs>
     </>
