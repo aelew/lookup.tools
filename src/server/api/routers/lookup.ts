@@ -47,9 +47,8 @@ export const lookupRouter = createTRPCRouter({
       const buffer = await getGeoLite2CityBuffer();
       const lookup = new Reader<CityResponse>(buffer);
       result = lookup.get(input.ip);
-    } catch (err) {
+    } catch {
       result = null;
-      console.log('lookup rfa', err);
     }
     return result;
   })

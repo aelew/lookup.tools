@@ -1,24 +1,26 @@
-import { ExternalLinkIcon } from 'lucide-react';
+import { ExternalLinkIcon, SearchIcon } from 'lucide-react';
 import { unstable_cache } from 'next/cache';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import type { ReactNode } from 'react';
 
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { api } from '@/trpc/server';
+import type { InfoTable } from '@/types';
+import { WHOISLookupForm } from '../form';
 
 interface WHOISLookupResultPageProps {
   params: {
     domain: string;
   };
-}
-
-interface InfoTable {
-  name: string;
-  keys: Record<string, () => ReactNode | JSX.Element | undefined>;
 }
 
 const getCachedWHOISLookup = unstable_cache(
@@ -80,27 +82,32 @@ export default async function WHOISLookupResultPage({
             return null;
           }
           return (
-            <div className="inline-flex flex-col gap-0.5">
-              {nameservers.map((ns) => {
+            <div className="inline-flex flex-col gap-1">
+              {nameservers.map((ns, i) => {
                 const parts = ns.split('.');
                 const baseDomain =
                   parts.length > 2 ? parts.slice(1).join('.') : ns;
                 return (
-                  <Link
-                    className="flex items-center gap-2 hover:underline"
-                    href={`/whois/${baseDomain}`}
-                    key={ns}
-                  >
-                    <Image
-                      src={`https://icons.duckduckgo.com/ip3/${baseDomain}.ico`}
-                      draggable={false}
-                      height={20}
-                      width={20}
-                      unoptimized
-                      alt=""
-                    />
-                    {ns}
-                  </Link>
+                  <div className="flex items-center gap-2" key={i}>
+                    <div className="h-5 w-5 shrink-0 rounded p-0.5 shadow ring-1 ring-muted-foreground/25">
+                      <Image
+                        src={`https://icons.duckduckgo.com/ip3/${baseDomain}.ico`}
+                        className="select-none"
+                        draggable={false}
+                        unoptimized
+                        height={20}
+                        width={20}
+                        alt=""
+                      />
+                    </div>
+                    <Link
+                      className="flex items-center gap-2 hover:underline"
+                      href={`/whois/${baseDomain}`}
+                      key={ns}
+                    >
+                      {ns}
+                    </Link>
+                  </div>
                 );
               })}
             </div>
@@ -176,7 +183,7 @@ export default async function WHOISLookupResultPage({
 
   return (
     <>
-      <div className="my-4 flex items-center justify-between space-y-2">
+      <div className="my-4 flex flex-col items-center justify-between gap-2 sm:flex-row">
         <div className="flex items-center gap-3 text-3xl font-semibold tracking-tight">
           <Image
             className="rounded-lg bg-white object-contain p-1 shadow ring-1 ring-muted-foreground/25"
@@ -191,17 +198,24 @@ export default async function WHOISLookupResultPage({
             <ExternalLinkIcon className="mt-1 size-4 transition-colors hover:opacity-80" />
           </Link>
         </div>
-        <div className="flex items-center space-x-2">
-          {/* <ViewCounter count={stats?.count} />
-          <SearchAgain type="domainName" /> */}
-          {/*<RefreshButton*/}
-          {/*  refetch={refetch}*/}
-          {/*  refetching={refetching}*/}
-          {/*  setRefetching={setRefetching}*/}
-          {/*/>*/}
+        <div className="flex items-center gap-2">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="sm">
+                <SearchIcon className="mr-2 h-4 w-4" />
+                Search again
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="rounded-full p-0 shadow-none"
+              sideOffset={8}
+            >
+              <WHOISLookupForm />
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
-      <Tabs defaultValue="whois">
+      <Tabs value="whois">
         <TabsList className="shadow">
           <Link href={`/dns/${domain}`}>
             <TabsTrigger value="dns">DNS Records</TabsTrigger>
