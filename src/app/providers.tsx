@@ -10,7 +10,7 @@ export function Providers({ children }: PropsWithChildren) {
   const pathname = usePathname();
   return (
     <TRPCReactProvider>
-      <AnimatePresence mode="popLayout" key={pathname}>
+      <AnimatePresence mode="popLayout" key={encodeURIComponent(pathname)}>
         {children}
       </AnimatePresence>
     </TRPCReactProvider>

@@ -13,3 +13,10 @@ export const dnsSchema = z.object({
       message: m('domain name')
     })
 });
+
+export const ipSchema = z.object({
+  ip: z
+    .string()
+    .trim()
+    .ip({ message: m('IP address') })
+});

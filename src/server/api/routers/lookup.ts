@@ -1,6 +1,7 @@
 import { getAllRecords } from '@layered/dns-records';
+import maxmind, { type CityResponse } from 'maxmind';
 
-import { dnsSchema } from '@/app/(tools)/schema';
+import { dnsSchema, ipSchema } from '@/app/(tools)/schema';
 import { getRaw, WhoisParser } from '@/lib/whis';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 
@@ -17,5 +18,11 @@ export const lookupRouter = createTRPCRouter({
       return { raw, result };
     }
     return { raw, result };
+  }),
+  ip: publicProcedure.input(ipSchema).mutation(async ({ input }) => {
+    const lookup = await maxmind.open<CityResponse>(
+      process.cwd() + '/GeoLite2-City.mmdb'
+    );
+    return lookup.get(input.ip);
   })
 });

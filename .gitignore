@@ -23,6 +23,7 @@ next-env.d.ts
 # misc
 .DS_Store
 *.pem
+*.mmdb
 
 # debug
 npm-debug.log*

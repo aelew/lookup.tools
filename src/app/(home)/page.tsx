@@ -14,8 +14,8 @@ export default function HomePage({ searchParams }: HomePageProps) {
       <section className="space-y-6 py-12 sm:py-24">
         <div className="space-y-4">
           <div className="mx-auto flex max-w-5xl items-center justify-center gap-4">
-            <Logo className="size-12 sm:size-16" />
-            <h1 className="text-5xl font-semibold tracking-tighter md:text-6xl">
+            <Logo className="size-12 shrink-0 sm:size-16" />
+            <h1 className="whitespace-nowrap text-5xl font-semibold tracking-tighter md:text-6xl">
               Lookup Tools
             </h1>
           </div>

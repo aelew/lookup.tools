@@ -15,10 +15,8 @@ const config = {
   },
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'icons.duckduckgo.com'
-      }
+      { protocol: 'https', hostname: 'icons.duckduckgo.com' },
+      { protocol: 'https', hostname: 'flagsapi.com' }
     ]
   }
 };
