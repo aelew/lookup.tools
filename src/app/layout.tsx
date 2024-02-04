@@ -1,5 +1,5 @@
 import { GeistSans } from 'geist/font/sans';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import type { PropsWithChildren } from 'react';
 
 import { AnimatedMain } from '@/lib/framer';
@@ -17,6 +17,13 @@ export const metadata: Metadata = {
   },
   description:
     'The cyber swiss army knife of lookup tools. Research information on domains, IP addresses, email addresses, phone numbers, and more.'
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false
 };
 
 export default function RootLayout({ children }: PropsWithChildren) {
