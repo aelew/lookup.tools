@@ -1,4 +1,3 @@
-import { SiGithub } from '@icons-pack/react-simple-icons';
 import Link from 'next/link';
 
 import { Logo } from '@/components/logo';
@@ -15,10 +14,15 @@ export function Header() {
       </div>
       <div className="flex items-center gap-4">
         <Link
-          className={buttonVariants({ variant: 'ghost', size: 'icon' })}
           href="https://github.com/aelew/lookup.tools"
+          className="group relative shrink-0"
+          target="_blank"
         >
-          <SiGithub className="size-5" />
+          <img
+            src="https://img.shields.io/github/stars/aelew/lookup.tools"
+            alt="GitHub"
+          />
+          <span className="pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2px] transition-colors group-hover:bg-foreground/5" />
         </Link>
         <Link className={buttonVariants()} href="/auth/login">
           Sign up
