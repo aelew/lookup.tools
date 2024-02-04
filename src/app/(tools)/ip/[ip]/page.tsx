@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { api } from '@/trpc/server';
 import { Map } from './_components/map';
 
-interface WHOISLookupResultPageProps {
+interface IPLookupResultPageProps {
   params: {
     ip: string;
   };
@@ -25,18 +25,15 @@ const getCachedIPLookup = unstable_cache(
   { revalidate: 15 }
 );
 
-export default async function WHOISLookupResultPage({
+export default async function IPLookupResultPage({
   params
-}: WHOISLookupResultPageProps) {
+}: IPLookupResultPageProps) {
   const domain = decodeURIComponent(params.ip).toLowerCase();
   const result = await getCachedIPLookup(domain);
   if (!result) {
     notFound();
   }
 
-  // const Map =dynamic(() => import('./_components/map'), { ssr: false })
-
-  console.log(result);
   const tables: InfoTable[] = [
     {
       name: 'IP Address Information',
