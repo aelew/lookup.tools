@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CornerDownLeftIcon, LoaderIcon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
@@ -16,12 +16,18 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { TOOLS } from '@/lib/resources/tools';
 import { ToolLayout } from '../_components/tool-layout';
 import { dnsSchema } from '../schema';
 
 export default function DNSLookupPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+
+  const tool = TOOLS.find((t) => t.slug === 'dns');
+  if (!tool) {
+    notFound();
+  }
 
   const form = useForm<z.infer<typeof dnsSchema>>({
     resolver: zodResolver(dnsSchema),
@@ -34,11 +40,7 @@ export default function DNSLookupPage() {
   };
 
   return (
-    <ToolLayout
-      icon={GlobeIcon}
-      name="DNS Lookup"
-      description="Discover a domain's DNS records, including IP address, name servers, A records, and more."
-    >
+    <ToolLayout {...tool}>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

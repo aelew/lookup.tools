@@ -1,7 +1,8 @@
-import { MailIcon, MapPinIcon, PhoneIncomingIcon } from 'lucide-react';
-
+import { EmailIcon } from '@/components/icons/email';
 import { GlobeIcon } from '@/components/icons/globe';
 import { MobilePhoneWithArrowIcon } from '@/components/icons/mobile-phone-with-arrow';
+import { PushpinIcon } from '@/components/icons/pushpin';
+import { TelephoneIcon } from '@/components/icons/telephone';
 
 export const TOOLS = [
   {
@@ -19,19 +20,19 @@ export const TOOLS = [
       'Look up information on domain owners, registration dates, nameservers, and more.'
   },
   {
-    icon: MapPinIcon,
+    icon: PushpinIcon,
     name: 'IP Address Lookup',
     slug: 'ip',
     description: 'Coming soon!'
   },
   {
-    icon: MailIcon,
+    icon: EmailIcon,
     name: 'Email Address Lookup',
     slug: 'email',
     description: 'Coming soon!'
   },
   {
-    icon: PhoneIncomingIcon,
+    icon: TelephoneIcon,
     name: 'Phone Number Lookup',
     slug: 'phone-number',
     description: 'Coming soon!'
