@@ -29,9 +29,7 @@ import { CopyButton } from '../../_components/copy-button';
 import { DNSLookupForm } from '../form';
 
 interface DNSLookupResultPageProps {
-  params: {
-    domain: string;
-  };
+  params: { domain: string };
 }
 
 const getCachedDNSLookup = unstable_cache(

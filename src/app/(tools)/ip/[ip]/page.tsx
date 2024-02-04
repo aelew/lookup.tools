@@ -17,9 +17,7 @@ import { IPLookupForm } from '../form';
 import { Map } from './_components/map';
 
 interface IPLookupResultPageProps {
-  params: {
-    ip: string;
-  };
+  params: { ip: string };
 }
 
 const getCachedIPLookup = unstable_cache(

@@ -1,6 +1,6 @@
 import ky from 'ky';
 
-type ContactInfo = {
+export type ContactInfo = {
   id?: string;
   name?: string;
   organization?: string;

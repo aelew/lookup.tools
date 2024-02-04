@@ -13,14 +13,13 @@ import {
 } from '@/components/ui/popover';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import type { ContactInfo } from '@/lib/whois';
 import { api } from '@/trpc/server';
 import type { InfoTable } from '@/types';
 import { WHOISLookupForm } from '../form';
 
 interface WHOISLookupResultPageProps {
-  params: {
-    domain: string;
-  };
+  params: { domain: string };
 }
 
 const getCachedWHOISLookup = unstable_cache(
@@ -37,6 +36,18 @@ export default async function WHOISLookupResultPage({
   if (!result) {
     notFound();
   }
+
+  const getContactInfoKeys = (contact?: ContactInfo) => ({
+    Name: () => contact?.name,
+    Organization: () => contact?.organization,
+    Street: () => contact?.street,
+    City: () => contact?.city,
+    State: () => contact?.province,
+    'Postal Code': () => contact?.postal_code,
+    Country: () => contact?.country,
+    Phone: () => contact?.phone,
+    Email: () => contact?.email
+  });
 
   const tables: InfoTable[] = [
     {
@@ -75,102 +86,54 @@ export default async function WHOISLookupResultPage({
             ))}
           </div>
         ),
-        Nameservers: () => {
-          const nameServers = result.domain.name_servers as
-            | string[]
-            | undefined;
-          if (!nameServers) {
-            return null;
-          }
-          return (
-            <div className="inline-flex flex-col gap-1">
-              {nameServers.map((ns, i) => {
-                const parts = ns.split('.');
-                const baseDomain =
-                  parts.length > 2 ? parts.slice(1).join('.') : ns;
-                return (
-                  <div className="flex items-center gap-2" key={i}>
-                    <div className="h-5 w-5 shrink-0 rounded p-0.5 shadow ring-1 ring-muted-foreground/25">
-                      <Image
-                        src={`https://icons.duckduckgo.com/ip3/${baseDomain}.ico`}
-                        className="select-none"
-                        draggable={false}
-                        unoptimized
-                        height={20}
-                        width={20}
-                        alt=""
-                      />
-                    </div>
-                    <Link
-                      className="flex items-center gap-2 hover:underline"
-                      href={`/whois/${baseDomain}`}
-                      key={ns}
-                    >
-                      {ns}
-                    </Link>
+        Nameservers: () => (
+          <div className="inline-flex flex-col gap-1">
+            {result.domain.name_servers.map((ns, i) => {
+              const parts = ns.split('.');
+              const baseDomain =
+                parts.length > 2 ? parts.slice(1).join('.') : ns;
+              return (
+                <div className="flex items-center gap-2" key={i}>
+                  <div className="h-5 w-5 shrink-0 rounded p-0.5 shadow ring-1 ring-muted-foreground/25">
+                    <Image
+                      src={`https://icons.duckduckgo.com/ip3/${baseDomain}.ico`}
+                      className="select-none"
+                      draggable={false}
+                      unoptimized
+                      height={20}
+                      width={20}
+                      alt=""
+                    />
                   </div>
-                );
-              })}
-            </div>
-          );
-        }
+                  <Link
+                    className="flex items-center gap-2 hover:underline"
+                    href={`/whois/${baseDomain}`}
+                    key={ns}
+                  >
+                    {ns}
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+        )
       }
     },
     {
       name: 'Registrant Contact',
-      keys: {
-        Name: () => result.registrant?.name,
-        Organization: () => result.registrant?.organization,
-        Street: () => result.registrant?.street,
-        City: () => result.registrant?.city,
-        State: () => result.registrant?.province,
-        'Postal Code': () => result.registrant?.postal_code,
-        Country: () => result.registrant?.country,
-        Phone: () => result.registrant?.phone,
-        Email: () => result.registrant?.email
-      }
+      keys: getContactInfoKeys(result.registrant)
     },
     {
-      name: 'Admin Contact',
-      keys: {
-        Name: () => result.administrative?.name,
-        Organization: () => result.administrative?.organization,
-        Street: () => result.administrative?.street,
-        City: () => result.administrative?.city,
-        State: () => result.administrative?.province,
-        'Postal Code': () => result.administrative?.postal_code,
-        Country: () => result.administrative?.country,
-        Phone: () => result.administrative?.phone,
-        Email: () => result.administrative?.email
-      }
+      name: 'Administrative Contact',
+      keys: getContactInfoKeys(result.administrative)
     },
     {
       name: 'Technical Contact',
-      keys: {
-        Name: () => result.technical?.name,
-        Organization: () => result.technical?.organization,
-        Street: () => result.technical?.street,
-        City: () => result.technical?.city,
-        State: () => result.technical?.province,
-        'Postal Code': () => result.technical?.postal_code,
-        Country: () => result.technical?.country,
-        Phone: () => result.technical?.phone,
-        Email: () => result.technical?.email
-      }
+      keys: getContactInfoKeys(result.technical)
     },
     {
       name: 'Billing Contact',
-      keys: {
-        Name: () => result.billing?.name,
-        Organization: () => result.billing?.organization,
-        Street: () => result.billing?.street,
-        City: () => result.billing?.city,
-        State: () => result.billing?.province,
-        'Postal Code': () => result.billing?.postal_code,
-        Country: () => result.billing?.country,
-        Phone: () => result.billing?.phone,
-        Email: () => result.billing?.email
-      }
+      keys: getContactInfoKeys(result.billing)
     }
   ];
 
