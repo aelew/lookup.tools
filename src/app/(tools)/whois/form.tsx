@@ -17,7 +17,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { dnsSchema } from '../schema';
 
-export function WHOISLookupForm() {
+export function WhoisLookupForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 

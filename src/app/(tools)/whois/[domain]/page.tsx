@@ -1,4 +1,5 @@
 import { ExternalLinkIcon, SearchIcon } from 'lucide-react';
+import type { Metadata } from 'next';
 import { unstable_cache } from 'next/cache';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -13,26 +14,39 @@ import {
 } from '@/components/ui/popover';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { TOOLS } from '@/lib/resources/tools';
 import type { ContactInfo } from '@/lib/whois';
 import { api } from '@/trpc/server';
 import type { InfoTable } from '@/types';
-import { WHOISLookupForm } from '../form';
+import { WhoisLookupForm } from '../form';
 
-interface WHOISLookupResultPageProps {
+interface WhoisLookupResultPageProps {
   params: { domain: string };
 }
 
-const getCachedWHOISLookup = unstable_cache(
+const getCachedWhoisLookup = unstable_cache(
   async (domain: string) => api.lookup.whois.mutate({ domain }),
   ['whois_lookup'],
   { revalidate: 15 }
 );
 
-export default async function WHOISLookupResultPage({
-  params
-}: WHOISLookupResultPageProps) {
+export async function generateMetadata({ params }: WhoisLookupResultPageProps) {
   const domain = decodeURIComponent(params.domain).toLowerCase();
-  const result = await getCachedWHOISLookup(domain);
+  const result = await getCachedWhoisLookup(domain);
+  if (!result) {
+    notFound();
+  }
+  return {
+    title: `WHOIS Lookup for ${result.domain.domain}`,
+    description: TOOLS.find((tool) => tool.slug === 'whois')?.description
+  } satisfies Metadata;
+}
+
+export default async function WhoisLookupResultPage({
+  params
+}: WhoisLookupResultPageProps) {
+  const domain = decodeURIComponent(params.domain).toLowerCase();
+  const result = await getCachedWhoisLookup(domain);
   if (!result) {
     notFound();
   }
@@ -166,7 +180,7 @@ export default async function WHOISLookupResultPage({
               className="rounded-full p-0 shadow-none"
               sideOffset={8}
             >
-              <WHOISLookupForm />
+              <WhoisLookupForm />
             </PopoverContent>
           </Popover>
         </div>

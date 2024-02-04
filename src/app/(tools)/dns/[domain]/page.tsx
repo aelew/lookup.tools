@@ -27,6 +27,8 @@ import { cn, duration } from '@/lib/utils';
 import { api } from '@/trpc/server';
 import { CopyButton } from '../../_components/copy-button';
 import { DNSLookupForm } from '../form';
+import type { Metadata } from 'next';
+import { TOOLS } from '@/lib/resources/tools';
 
 interface DNSLookupResultPageProps {
   params: { domain: string };
@@ -38,6 +40,18 @@ const getCachedDNSLookup = unstable_cache(
   { revalidate: 15 }
 );
 
+export async function generateMetadata({ params }: DNSLookupResultPageProps) {
+  const domain = decodeURIComponent(params.domain).toLowerCase();
+  const result = await getCachedDNSLookup(domain);
+  if (!result) {
+    notFound();
+  }
+  return {
+    title: `DNS Lookup for ${domain}`,
+    description: TOOLS.find((tool) => tool.slug === 'dns')?.description
+  } satisfies Metadata;
+}
+
 export default async function DNSLookupResultPage({
   params
 }: DNSLookupResultPageProps) {
@@ -46,7 +60,6 @@ export default async function DNSLookupResultPage({
   if (!result) {
     notFound();
   }
-
   return (
     <>
       <div className="my-4 flex flex-col items-center justify-between gap-2 sm:flex-row">

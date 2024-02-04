@@ -1,4 +1,5 @@
 import { SearchIcon } from 'lucide-react';
+import type { Metadata } from 'next';
 import { unstable_cache } from 'next/cache';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -11,6 +12,7 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import { TOOLS } from '@/lib/resources/tools';
 import { api } from '@/trpc/server';
 import type { InfoTable } from '@/types';
 import { IPLookupForm } from '../form';
@@ -25,6 +27,18 @@ const getCachedIPLookup = unstable_cache(
   ['ip_lookup'],
   { revalidate: 15 }
 );
+
+export async function generateMetadata({ params }: IPLookupResultPageProps) {
+  const ip = decodeURIComponent(params.ip).toLowerCase();
+  const result = await getCachedIPLookup(ip);
+  if (!result) {
+    notFound();
+  }
+  return {
+    title: `IP Lookup for ${ip}`,
+    description: TOOLS.find((tool) => tool.slug === 'ip')?.description
+  } satisfies Metadata;
+}
 
 export default async function IPLookupResultPage({
   params
