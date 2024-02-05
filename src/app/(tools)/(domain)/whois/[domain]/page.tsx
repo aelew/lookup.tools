@@ -1,3 +1,4 @@
+import { GlobeIcon, UserSearchIcon } from 'lucide-react';
 import type { Metadata } from 'next';
 import { unstable_cache } from 'next/cache';
 import Image from 'next/image';
@@ -6,7 +7,6 @@ import { notFound } from 'next/navigation';
 
 import { Date } from '@/components/date';
 import { Badge } from '@/components/ui/badge';
-import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
@@ -63,6 +63,7 @@ export default async function WhoisLookupResultPage({
 
   const tables: InfoTable[] = [
     {
+      icon: GlobeIcon,
       name: 'Domain Information',
       keys: {
         Registrar: () => result.registrar?.name,
@@ -137,18 +138,22 @@ export default async function WhoisLookupResultPage({
       }
     },
     {
+      icon: UserSearchIcon,
       name: 'Registrant Contact',
       keys: getContactInfoKeys(result.registrant)
     },
     {
+      icon: UserSearchIcon,
       name: 'Administrative Contact',
       keys: getContactInfoKeys(result.administrative)
     },
     {
+      icon: UserSearchIcon,
       name: 'Technical Contact',
       keys: getContactInfoKeys(result.technical)
     },
     {
+      icon: UserSearchIcon,
       name: 'Billing Contact',
       keys: getContactInfoKeys(result.billing)
     }
@@ -160,7 +165,7 @@ export default async function WhoisLookupResultPage({
       <Tabs className="flex flex-col" value="whois">
         <DomainTabsList value="whois" domain={domain} />
         <TabsContent value="whois" className="mt-4 space-y-4">
-          {tables.map(({ name, keys }) => {
+          {tables.map(({ icon: CardIcon, name, keys }) => {
             // if all key values are undefined, skip the table
             if (Object.values(keys).every((value) => !value())) {
               return null;
@@ -168,7 +173,10 @@ export default async function WhoisLookupResultPage({
             return (
               <Card key={name}>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-2xl">{name}</CardTitle>
+                  <div className="flex items-center gap-2">
+                    <CardIcon className="size-6" />
+                    <CardTitle className="text-2xl">{name}</CardTitle>
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <Table>
