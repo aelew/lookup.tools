@@ -139,8 +139,13 @@ export default async function IPLookupResultPage({
           </p>
           {result.abuse.phone && (
             <p className="text-xs">
-              Phone number:{' '}
-              <span className="font-mono">{result.abuse.phone}</span>
+              Phone:{' '}
+              <Link
+                href={`tel:${result.abuse.phone.replaceAll('-', '')}`}
+                className="font-mono hover:underline"
+              >
+                {result.abuse.phone}
+              </Link>
             </p>
           )}
           <p className="text-xs">
