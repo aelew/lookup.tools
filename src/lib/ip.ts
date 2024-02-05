@@ -14,7 +14,7 @@ export type IPResult = {
   company: {
     name: string;
     abuser_score: string;
-    domain: string;
+    domain?: string;
     type: string;
     network: string;
   };
@@ -33,7 +33,7 @@ export type IPResult = {
     country: string;
     active: boolean;
     org: string;
-    domain: string;
+    domain?: string;
     abuse: string;
     type: string;
     created: string;

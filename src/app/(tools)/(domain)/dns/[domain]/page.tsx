@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { unstable_cache } from 'next/cache';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 
 import { CloudflareIcon } from '@/components/icons/cloudflare';
 import { Badge } from '@/components/ui/badge';

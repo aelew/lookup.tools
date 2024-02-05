@@ -2,6 +2,7 @@ import { CheckIcon, SearchIcon, XIcon } from 'lucide-react';
 import type { Metadata } from 'next';
 import { unstable_cache } from 'next/cache';
 import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
@@ -72,22 +73,44 @@ export default async function IPLookupResultPage({
       ISP: () => (
         <div className="space-y-1">
           <div>
-            <p>{result.asn.org}</p>
+            <p className="font-medium">{result.asn.org}</p>
             <p className="font-mono text-xs">{result.asn.descr}</p>
           </div>
           <div>
             <p className="text-xs">
-              Abuse email: <span className="font-mono">{result.asn.abuse}</span>
+              Abuse email:{' '}
+              <Link
+                className="font-mono hover:underline"
+                rel="nofollow noopener"
+                target="_blank"
+                href={
+                  result.asn.abuse.includes('@')
+                    ? `mailto:${result.asn.abuse}`
+                    : `https://${result.asn.abuse}`
+                }
+              >
+                {result.asn.abuse}
+              </Link>
             </p>
-            <p className="text-xs">
+            <p className="whitespace-nowrap text-xs">
               Abuse score:{' '}
               <span className="font-mono">{result.asn.abuser_score}</span>
             </p>
           </div>
           <div>
-            <p className="text-xs">
-              Domain: <span className="font-mono">{result.asn.domain}</span>
-            </p>
+            {result.asn.domain && (
+              <p className="text-xs">
+                Domain:{' '}
+                <Link
+                  href={`https://${result.asn.domain}`}
+                  className="font-mono hover:underline"
+                  rel="nofollow noopener"
+                  target="_blank"
+                >
+                  {result.asn.domain}
+                </Link>
+              </p>
+            )}
             <p className="text-xs">
               Route: <span className="font-mono">{result.asn.route}</span>
             </p>
@@ -105,21 +128,30 @@ export default async function IPLookupResultPage({
         return (
           <div className="space-y-1">
             <div>
-              <p>{result.company.name}</p>
+              <p className="font-medium">{result.company.name}</p>
               <p className="text-xs">
                 Network:{' '}
                 <span className="font-mono">{result.company.network}</span>
               </p>
             </div>
             <div>
-              <p className="text-xs">
+              <p className="whitespace-nowrap text-xs">
                 Abuse score:{' '}
                 <span className="font-mono">{result.company.abuser_score}</span>
               </p>
-              <p className="text-xs">
-                Domain:{' '}
-                <span className="font-mono">{result.company.domain}</span>
-              </p>
+              {result.company.domain && (
+                <p className="text-xs">
+                  Domain:{' '}
+                  <Link
+                    href={`https://${result.company.domain}`}
+                    className="font-mono hover:underline"
+                    rel="nofollow noopener"
+                    target="_blank"
+                  >
+                    {result.company.domain}
+                  </Link>
+                </p>
+              )}
               <p className="text-xs">
                 Type:{' '}
                 <span className="font-mono">
@@ -131,7 +163,7 @@ export default async function IPLookupResultPage({
         );
       },
       Properties: () => (
-        <div className="grid max-w-96 grid-cols-4 gap-1">
+        <div className="grid grid-cols-2 gap-1 lg:grid-cols-4">
           {properties.map((property) => {
             const PropertyIcon = property.value ? CheckIcon : XIcon;
             return (
@@ -201,7 +233,7 @@ export default async function IPLookupResultPage({
                   }
                   return (
                     <TableRow key={label}>
-                      <TableCell className="w-36 whitespace-nowrap align-top font-medium">
+                      <TableCell className="whitespace-nowrap align-top font-medium">
                         {label}
                       </TableCell>
                       <TableCell>{val}</TableCell>
