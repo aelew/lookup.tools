@@ -62,7 +62,8 @@ export default async function WhoisLookupResultPage({
     'Postal Code': () => contact?.postal_code,
     Country: () => contact?.country,
     Phone: () => contact?.phone,
-    Email: () => contact?.email
+    Email: () =>
+      contact?.email ? <span className="break-all">{contact.email}</span> : null
   });
 
   const tables: InfoTable[] = [
@@ -94,10 +95,11 @@ export default async function WhoisLookupResultPage({
           />
         ),
         Status: () => (
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row">
             {result.domain.status.map((status) => (
               <Link
                 href={`https://www.icann.org/epp#${status}`}
+                className="w-fit"
                 target="_blank"
                 key={status}
               >
@@ -109,13 +111,13 @@ export default async function WhoisLookupResultPage({
           </div>
         ),
         Nameservers: () => (
-          <div className="inline-flex flex-col gap-1">
+          <div className="flex flex-col gap-4 sm:flex-row">
             {result.domain.name_servers.map((ns, i) => {
               const parts = ns.split('.');
               const baseDomain =
                 parts.length > 2 ? parts.slice(1).join('.') : ns;
               return (
-                <div className="flex items-center gap-2" key={i}>
+                <div className="flex w-fit items-center gap-2" key={i}>
                   <div className="h-5 w-5 shrink-0 rounded p-0.5 shadow ring-1 ring-muted-foreground/25">
                     <Image
                       src={`https://icons.duckduckgo.com/ip3/${baseDomain}.ico`}

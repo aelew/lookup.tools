@@ -1,4 +1,6 @@
 import { Logo } from '@/components/logo';
+import { EASE_TRANSITION } from '@/lib/constants';
+import { AnimatedSection } from '@/lib/framer';
 import { TOOLS } from '@/lib/resources/tools';
 import { SearchBar } from './_components/search-bar';
 import { ToolCard } from './_components/tool-card';
@@ -26,7 +28,10 @@ export default function HomePage({ searchParams }: HomePageProps) {
         </div>
         <SearchBar />
       </section>
-      <section className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+      <AnimatedSection
+        {...EASE_TRANSITION}
+        className="grid gap-8 sm:grid-cols-2 md:grid-cols-3"
+      >
         {TOOLS.filter(
           (tool) =>
             !query ||
@@ -35,7 +40,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
         ).map((tool) => (
           <ToolCard key={tool.slug} {...tool} />
         ))}
-      </section>
+      </AnimatedSection>
     </>
   );
 }

@@ -10,7 +10,7 @@ import type { Tool } from '@/lib/resources/tools';
 
 export function ToolCard({ icon: Icon, name, slug, description }: Tool) {
   return (
-    <Link href={`/${slug}`}>
+    <Link href={`/${slug}`} className="contents">
       <Card className="relative rounded-xl shadow-lg transition-all hover:bg-accent/75 active:scale-[0.98]">
         <CardHeader>
           <CardTitle className="flex items-center">

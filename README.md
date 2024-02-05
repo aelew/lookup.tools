@@ -5,7 +5,7 @@ The cyber swiss army knife of lookup tools. Research information on domains, IP 
 Demo: [lookup.tools](https://lookup.tools)
 
 > [!NOTE]  
-> lookup.tools is currently a work in progress. In other words, it's currently in the early stages of development and is not yet complete!
+> lookup.tools is currently a work in progress. If you have any feedback or suggestions, feel free to open an issue or pull request!
 
 ## Tech stack
 
