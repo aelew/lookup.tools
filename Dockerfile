@@ -3,9 +3,8 @@ WORKDIR /app
 
 # Install dependencies using Bun
 FROM deps AS install
-RUN mkdir -p /temp/dev
-COPY package.json bun.lockb /temp/dev/
-RUN cd /temp/dev && bun install --frozen-lockfile
+COPY package.json bun.lockb ./
+RUN bun install --frozen-lockfile
 
 # Build the app
 FROM deps AS builder
