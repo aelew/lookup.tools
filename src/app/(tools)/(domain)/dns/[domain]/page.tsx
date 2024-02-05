@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { unstable_cache } from 'next/cache';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { match } from 'ts-pattern';
 
 import { CloudflareIcon } from '@/components/icons/cloudflare';
 import { Badge } from '@/components/ui/badge';
@@ -18,7 +20,7 @@ import { CACHE_REVALIDATE_SECONDS } from '@/lib/config';
 import { formatDuration } from '@/lib/format';
 import { SERVICES } from '@/lib/resources/services';
 import { TOOLS } from '@/lib/resources/tools';
-import { cn } from '@/lib/utils';
+import { cn, parseDomain } from '@/lib/utils';
 import { api } from '@/trpc/server';
 import { DomainHeader } from '../../_components/domain-header';
 import { DomainNotRegistered } from '../../_components/domain-not-registered';
@@ -37,7 +39,10 @@ const getCachedDNSLookup = unstable_cache(
 );
 
 export async function generateMetadata({ params }: DNSLookupResultPageProps) {
-  const domain = decodeURIComponent(params.domain).toLowerCase();
+  const domain = parseDomain(params.domain);
+  if (!domain) {
+    notFound();
+  }
   const result = await getCachedDNSLookup(domain);
   return {
     title: `DNS Lookup for ${domain}`,
@@ -49,7 +54,11 @@ export async function generateMetadata({ params }: DNSLookupResultPageProps) {
 export default async function DNSLookupResultPage({
   params
 }: DNSLookupResultPageProps) {
-  const domain = decodeURIComponent(params.domain).toLowerCase();
+  const domain = parseDomain(params.domain);
+  if (!domain) {
+    notFound();
+  }
+
   const result = await getCachedDNSLookup(domain);
   if (!result) {
     return (
@@ -59,6 +68,7 @@ export default async function DNSLookupResultPage({
       </>
     );
   }
+
   return (
     <>
       <DomainHeader domain={domain} searchAgainForm={DNSLookupForm} />
@@ -139,18 +149,28 @@ export default async function DNSLookupResultPage({
                                   )}
                                 />
                               )}
-                              {record.type === 'A' || record.type === 'AAAA' ? (
-                                <Link
-                                  className="whitespace-nowrap hover:underline"
-                                  href={`/ip/${value}`}
-                                >
-                                  {value}
-                                </Link>
-                              ) : (
-                                <span className="whitespace-nowrap">
-                                  {value}
-                                </span>
-                              )}
+                              {match(record.type)
+                                .with('A', 'AAAA', () => (
+                                  <Link
+                                    className="whitespace-nowrap hover:underline"
+                                    href={`/ip/${value}`}
+                                  >
+                                    {value}
+                                  </Link>
+                                ))
+                                .with('NS', () => (
+                                  <Link
+                                    className="whitespace-nowrap hover:underline"
+                                    href={`/whois/${parseDomain(value)}`}
+                                  >
+                                    {value}
+                                  </Link>
+                                ))
+                                .otherwise(() => (
+                                  <span className="whitespace-nowrap">
+                                    {value}
+                                  </span>
+                                ))}
                               <CopyButton text={value} />
                             </TableCell>
                           </TableRow>

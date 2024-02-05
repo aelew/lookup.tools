@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { unstable_cache } from 'next/cache';
 import Image from 'next/image';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 import { Date } from '@/components/date';
 import { Badge } from '@/components/ui/badge';
@@ -11,6 +12,7 @@ import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { CACHE_REVALIDATE_SECONDS } from '@/lib/config';
 import { TOOLS } from '@/lib/resources/tools';
+import { parseDomain } from '@/lib/utils';
 import type { ContactInfo } from '@/lib/whois';
 import { api } from '@/trpc/server';
 import type { InfoTable } from '@/types';
@@ -30,7 +32,10 @@ const getCachedWhoisLookup = unstable_cache(
 );
 
 export async function generateMetadata({ params }: WhoisLookupResultPageProps) {
-  const domain = decodeURIComponent(params.domain).toLowerCase();
+  const domain = parseDomain(params.domain);
+  if (!domain) {
+    notFound();
+  }
   const result = await getCachedWhoisLookup(domain);
   return {
     title: `WHOIS Lookup for ${domain}`,
@@ -42,7 +47,11 @@ export async function generateMetadata({ params }: WhoisLookupResultPageProps) {
 export default async function WhoisLookupResultPage({
   params
 }: WhoisLookupResultPageProps) {
-  const domain = decodeURIComponent(params.domain).toLowerCase();
+  const domain = parseDomain(params.domain);
+  if (!domain) {
+    notFound();
+  }
+
   const result = await getCachedWhoisLookup(domain);
   if (!result) {
     return (
@@ -63,7 +72,22 @@ export default async function WhoisLookupResultPage({
     Country: () => contact?.country,
     Phone: () => contact?.phone,
     Email: () =>
-      contact?.email ? <span className="break-all">{contact.email}</span> : null
+      contact?.email && (
+        <Link
+          className="break-all hover:underline"
+          rel="nofollow noopener"
+          target="_blank"
+          href={
+            contact.email.includes('@')
+              ? `mailto:${contact.email}`
+              : contact.email.startsWith('http')
+                ? contact.email
+                : `https://${contact.email}`
+          }
+        >
+          {contact.email}
+        </Link>
+      )
   });
 
   const tables: InfoTable[] = [
@@ -113,14 +137,12 @@ export default async function WhoisLookupResultPage({
         Nameservers: () => (
           <div className="flex flex-col gap-4 sm:flex-row">
             {result.domain.name_servers.map((ns, i) => {
-              const parts = ns.split('.');
-              const baseDomain =
-                parts.length > 2 ? parts.slice(1).join('.') : ns;
+              const nsDomain = parseDomain(ns);
               return (
                 <div className="flex w-fit items-center gap-2" key={i}>
                   <div className="h-5 w-5 shrink-0 rounded p-0.5 shadow ring-1 ring-muted-foreground/25">
                     <Image
-                      src={`https://icons.duckduckgo.com/ip3/${baseDomain}.ico`}
+                      src={`https://icons.duckduckgo.com/ip3/${nsDomain}.ico`}
                       className="select-none"
                       draggable={false}
                       unoptimized
@@ -131,7 +153,7 @@ export default async function WhoisLookupResultPage({
                   </div>
                   <Link
                     className="flex items-center gap-2 hover:underline"
-                    href={`/whois/${baseDomain}`}
+                    href={`/whois/${nsDomain}`}
                     key={ns}
                   >
                     {ns}

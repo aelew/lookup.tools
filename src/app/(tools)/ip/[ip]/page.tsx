@@ -157,7 +157,9 @@ export default async function IPLookupResultPage({
               href={
                 result.abuse.email.includes('@')
                   ? `mailto:${result.abuse.email}`
-                  : `https://${result.abuse.email}`
+                  : result.abuse.email.startsWith('http')
+                    ? result.abuse.email
+                    : `https://${result.abuse.email}`
               }
             >
               {result.abuse.email}
