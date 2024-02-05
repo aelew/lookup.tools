@@ -1,7 +1,9 @@
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata, Viewport } from 'next';
+import PlausibleProvider from 'next-plausible';
 import type { PropsWithChildren } from 'react';
 
+import { env } from '@/env';
 import { AnimatedMain } from '@/lib/framer';
 import { cn } from '@/lib/utils';
 import { TRPCReactProvider } from '@/trpc/react';
@@ -28,6 +30,19 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
+      <head>
+        <PlausibleProvider
+          customDomain="https://s.aelew.dev"
+          domain="lookup.tools"
+          trackOutboundLinks
+          taggedEvents
+          selfHosted
+          enabled={
+            env.NODE_ENV === 'production' &&
+            env.NEXT_PUBLIC_IS_MAIN_INSTANCE === '1'
+          }
+        />
+      </head>
       <body
         className={cn(
           GeistSans.variable,
