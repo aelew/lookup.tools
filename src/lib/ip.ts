@@ -1,73 +1,63 @@
 import ky from 'ky';
 
-export type IPResult = {
-  ip: string;
-  rir: string;
-  is_bogon: boolean;
-  is_mobile: boolean;
-  is_crawler: boolean;
-  is_datacenter: boolean;
-  is_tor: boolean;
-  is_proxy: boolean;
-  is_vpn: boolean;
-  is_abuser: boolean;
-  company: {
-    name: string;
-    abuser_score: string;
-    domain?: string;
-    type: string;
-    network: string;
-  };
-  datacenter?: {
-    datacenter: string;
-    network: string;
-    region: string;
-    service: string;
-    network_border_group: string;
-  };
-  asn?: {
-    asn: number;
-    abuser_score: string;
-    route: string;
-    descr: string;
-    country: string;
-    active: boolean;
-    org: string;
-    domain?: string;
-    abuse: string;
-    type: string;
-    created: string;
-    updated: string;
-    rir: string;
-    whois: string;
-  };
-  location: {
-    continent: string;
-    country: string;
-    country_code: string;
-    state: string;
-    city: string;
-    latitude: number;
-    longitude: number;
-    zip: string;
-    timezone: string;
-    local_time: string;
-    local_time_unix: number;
-    is_dst: boolean;
-  };
-};
+export type IPResult =
+  | {
+      success: true;
+      ip: string;
+      hostname: string;
+      asn: {
+        asn: string;
+        name: string;
+        domain: string;
+        route: string;
+        type: string;
+      };
+      abuse: {
+        address: string;
+        country: string;
+        email: string;
+        name: string;
+        network: string;
+        phone: string | null;
+      };
+      company: {
+        name: string;
+        domain: string;
+        type: string;
+      };
+      organization: string;
+      service: string | null;
+      location: {
+        city: string;
+        region: string;
+        postal: string;
+        country: string;
+        timezone: string;
+        latitude: number;
+        longitude: number;
+      };
+      properties: {
+        tor: boolean;
+        vpn: boolean;
+        bogon: boolean;
+        relay: boolean;
+        proxy: boolean;
+        hosting: boolean;
+      };
+    }
+  | { success: false; error: string };
 
 export async function getIPData(query: string) {
   let result;
   try {
     result = await ky
-      .get(`https://api.incolumitas.com/?q=${encodeURIComponent(query)}`)
-      .json<IPResult | { error: string }>();
-    if ('error' in result) {
-      result = null;
-    }
+      .get(`https://api.aelew.dev/ip/${encodeURIComponent(query)}`)
+      .json<IPResult>();
   } catch (err) {
-    result = null;
+    result = {
+      success: false,
+      error: 'internal_server_error'
+    } as const;
   }
   return result;
 }

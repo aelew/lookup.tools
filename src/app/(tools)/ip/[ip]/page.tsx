@@ -48,84 +48,58 @@ export default async function IPLookupResultPage({
 }: IPLookupResultPageProps) {
   const ip = decodeURIComponent(params.ip).toLowerCase();
   const result = await getCachedIPLookup(ip);
-  if (!result) {
+  if (!result.success) {
     notFound();
   }
 
-  const properties = [
-    { label: 'Bogon', value: result.is_bogon },
-    { label: 'Mobile', value: result.is_mobile },
-    { label: 'Crawler', value: result.is_crawler },
-    { label: 'Datacenter', value: result.is_datacenter },
-    { label: 'Tor', value: result.is_tor },
-    { label: 'Proxy', value: result.is_proxy },
-    { label: 'VPN', value: result.is_vpn },
-    { label: 'Abuser', value: result.is_abuser }
-  ];
+  const properties = Object.entries(result.properties).map(([key, value]) => ({
+    label: key === 'vpn' ? 'VPN' : key.charAt(0).toUpperCase() + key.slice(1),
+    value
+  }));
 
   const table = {
     name: 'IP Address Information',
     keys: {
-      'Postal Code': () => result.location.zip,
-      Location: () => `${result.location.city}, ${result.location.state}`,
-      Country: () => result.location.country,
+      Hostname: () => result.hostname,
       'Time Zone': () => result.location.timezone,
+      Location: () =>
+        result.location.city +
+        ', ' +
+        result.location.region +
+        ' ' +
+        result.location.country,
+      'Postal Code': () => result.location.postal,
       ISP: () => {
         if (!result.asn) {
           return null;
         }
         return (
-          <div className="space-y-1">
-            <div>
-              <p className="font-medium">{result.asn.org}</p>
-              <p className="font-mono text-xs">{result.asn.descr}</p>
-            </div>
-            <div>
+          <>
+            <p className="font-medium">{result.asn.name}</p>
+            {result.asn.domain && (
               <p className="text-xs">
-                Abuse email:{' '}
+                Domain:{' '}
                 <Link
+                  href={`https://${result.asn.domain}`}
                   className="font-mono hover:underline"
                   rel="nofollow noopener"
                   target="_blank"
-                  href={
-                    result.asn.abuse.includes('@')
-                      ? `mailto:${result.asn.abuse}`
-                      : `https://${result.asn.abuse}`
-                  }
                 >
-                  {result.asn.abuse}
+                  {result.asn.domain}
                 </Link>
               </p>
-              <p className="whitespace-nowrap text-xs">
-                Abuse score:{' '}
-                <span className="font-mono">{result.asn.abuser_score}</span>
-              </p>
-            </div>
-            <div>
-              {result.asn.domain && (
-                <p className="text-xs">
-                  Domain:{' '}
-                  <Link
-                    href={`https://${result.asn.domain}`}
-                    className="font-mono hover:underline"
-                    rel="nofollow noopener"
-                    target="_blank"
-                  >
-                    {result.asn.domain}
-                  </Link>
-                </p>
-              )}
-              <p className="text-xs">
-                Route: <span className="font-mono">{result.asn.route}</span>
-              </p>
-              <p className="text-xs">
-                Type:{' '}
-                <span className="font-mono">
-                  {result.asn.type.toUpperCase()}
-                </span>
-              </p>
-            </div>
-          </div>
+            )}
+            <p className="text-xs">
+              Route: <span className="font-mono">{result.asn.route}</span>
+            </p>
+            <p className="text-xs">
+              Type:{' '}
+              <span className="font-mono">{result.asn.type.toUpperCase()}</span>
+            </p>
+            <p className="text-xs">
+              ASN: <span className="font-mono">{result.asn.asn.slice(2)}</span>
+            </p>
+          </>
         );
       },
       Company: () => {
@@ -133,44 +107,64 @@ export default async function IPLookupResultPage({
           return null;
         }
         return (
-          <div className="space-y-1">
-            <div>
-              <p className="font-medium">{result.company.name}</p>
+          <>
+            <p className="font-medium">{result.company.name}</p>
+            {result.company.domain && (
               <p className="text-xs">
-                Network:{' '}
-                <span className="font-mono">{result.company.network}</span>
+                Domain:{' '}
+                <Link
+                  href={`https://${result.company.domain}`}
+                  className="font-mono hover:underline"
+                  rel="nofollow noopener"
+                  target="_blank"
+                >
+                  {result.company.domain}
+                </Link>
               </p>
-            </div>
-            <div>
-              <p className="whitespace-nowrap text-xs">
-                Abuse score:{' '}
-                <span className="font-mono">{result.company.abuser_score}</span>
-              </p>
-              {result.company.domain && (
-                <p className="text-xs">
-                  Domain:{' '}
-                  <Link
-                    href={`https://${result.company.domain}`}
-                    className="font-mono hover:underline"
-                    rel="nofollow noopener"
-                    target="_blank"
-                  >
-                    {result.company.domain}
-                  </Link>
-                </p>
-              )}
-              <p className="text-xs">
-                Type:{' '}
-                <span className="font-mono">
-                  {result.company.type.toUpperCase()}
-                </span>
-              </p>
-            </div>
-          </div>
+            )}
+            <p className="text-xs">
+              Type:{' '}
+              <span className="font-mono">
+                {result.company.type.toUpperCase()}
+              </span>
+            </p>
+          </>
         );
       },
+      Abuse: () => (
+        <>
+          <p className="font-medium">{result.abuse.name}</p>
+          <p className="text-xs">
+            Network: <span className="font-mono">{result.abuse.network}</span>
+          </p>
+          {result.abuse.phone && (
+            <p className="text-xs">
+              Phone number:{' '}
+              <span className="font-mono">{result.abuse.phone}</span>
+            </p>
+          )}
+          <p className="text-xs">
+            Contact:{' '}
+            <Link
+              className="font-mono hover:underline"
+              rel="nofollow noopener"
+              target="_blank"
+              href={
+                result.abuse.email.includes('@')
+                  ? `mailto:${result.abuse.email}`
+                  : `https://${result.abuse.email}`
+              }
+            >
+              {result.abuse.email}
+            </Link>
+          </p>
+          <p className="text-xs">
+            Address: <span className="font-mono">{result.abuse.address}</span>
+          </p>
+        </>
+      ),
       Properties: () => (
-        <div className="grid grid-cols-2 gap-1 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-1 lg:grid-cols-3">
           {properties.map((property) => {
             const PropertyIcon = property.value ? CheckIcon : XIcon;
             return (
@@ -197,7 +191,7 @@ export default async function IPLookupResultPage({
         <div className="flex items-center gap-3 text-3xl font-semibold tracking-tight">
           <Image
             className="rounded-lg bg-white object-contain px-1 shadow ring-1 ring-muted-foreground/25"
-            src={`https://flagsapi.com/${result.location.country_code}/shiny/32.png`}
+            src={`https://flagsapi.com/${result.location.country}/shiny/32.png`}
             unoptimized
             height={40}
             width={40}
@@ -240,7 +234,7 @@ export default async function IPLookupResultPage({
                   }
                   return (
                     <TableRow key={label}>
-                      <TableCell className="whitespace-nowrap align-top font-medium">
+                      <TableCell className="w-[1%] whitespace-nowrap align-top font-medium">
                         {label}
                       </TableCell>
                       <TableCell>{val}</TableCell>
