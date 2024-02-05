@@ -4,8 +4,8 @@ import type { PropsWithChildren } from 'react';
 
 import { AnimatedMain } from '@/lib/framer';
 import { cn } from '@/lib/utils';
+import { TRPCReactProvider } from '@/trpc/react';
 import { Header } from './_components/header';
-import { Providers } from './providers';
 
 import '@/styles/globals.css';
 
@@ -34,12 +34,12 @@ export default function RootLayout({ children }: PropsWithChildren) {
           'container flex min-h-screen flex-col pb-4 font-sans antialiased lg:pb-12'
         )}
       >
-        <Providers>
+        <TRPCReactProvider>
           <Header />
           <AnimatedMain initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {children}
           </AnimatedMain>
-        </Providers>
+        </TRPCReactProvider>
       </body>
     </html>
   );
