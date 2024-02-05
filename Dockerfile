@@ -2,8 +2,6 @@ FROM imbios/bun-node:21-alpine AS deps
 WORKDIR /app
 
 # Install dependencies using Bun
-FROM deps AS install
-WORKDIR /app
 COPY package.json bun.lockb ./
 RUN bun install --frozen-lockfile
 
@@ -11,6 +9,9 @@ RUN bun install --frozen-lockfile
 FROM deps AS builder
 WORKDIR /app
 COPY . .
+
+# Disable telemetry
+ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN bun run build
 
@@ -20,9 +21,6 @@ WORKDIR /app
 
 # Mark environment as production
 ENV NODE_ENV production
-
-# Disable telemetry during runtime
-ENV NEXT_TELEMETRY_DISABLED 1
 
 # For dig DNS lookups
 RUN apk add bind-tools
