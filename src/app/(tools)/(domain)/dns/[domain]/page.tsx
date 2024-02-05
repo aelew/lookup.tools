@@ -15,9 +15,10 @@ import {
   TableRow
 } from '@/components/ui/table';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { formatDuration } from '@/lib/format';
 import { SERVICES } from '@/lib/resources/services';
 import { TOOLS } from '@/lib/resources/tools';
-import { cn, duration } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { api } from '@/trpc/server';
 import { DomainHeader } from '../../_components/domain-header';
 import { DomainTabsList } from '../../_components/domain-tabs-list';
@@ -115,7 +116,7 @@ export default async function DNSLookupResultPage({
                                 className="whitespace-nowrap"
                                 variant="secondary"
                               >
-                                {duration(Number(record.ttl))}
+                                {formatDuration(Number(record.ttl))}
                               </Badge>
                             </TableCell>
                             <TableCell className="flex items-center">

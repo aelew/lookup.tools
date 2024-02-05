@@ -4,6 +4,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { Date } from '@/components/date';
+import { Badge } from '@/components/ui/badge';
+import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
@@ -63,34 +66,39 @@ export default async function WhoisLookupResultPage({
       name: 'Domain Information',
       keys: {
         Registrar: () => result.registrar?.name,
-        Registered: () =>
-          result.domain.created_date
-            ? new Date(
-                result.domain.created_date_in_time ?? result.domain.created_date
-              ).toString()
-            : null,
-        Updated: () =>
-          result.domain.updated_date
-            ? new Date(
-                result.domain.updated_date_in_time ?? result.domain.updated_date
-              ).toString()
-            : null,
-        Expires: () =>
-          result.domain.expiration_date
-            ? new Date(
-                result.domain.expiration_date_in_time ??
-                  result.domain.expiration_date
-              ).toString()
-            : null,
+        Registered: () => (
+          <Date
+            dateTime={
+              result.domain.created_date_in_time ?? result.domain.created_date
+            }
+          />
+        ),
+        Updated: () => (
+          <Date
+            dateTime={
+              result.domain.updated_date_in_time ?? result.domain.updated_date
+            }
+          />
+        ),
+        Expires: () => (
+          <Date
+            dateTime={
+              result.domain.expiration_date_in_time ??
+              result.domain.expiration_date
+            }
+          />
+        ),
         Status: () => (
-          <div className="inline-flex flex-col">
+          <div className="flex gap-2">
             {result.domain.status.map((status) => (
               <Link
                 href={`https://www.icann.org/epp#${status}`}
-                className="hover:underline"
+                target="_blank"
                 key={status}
               >
-                {status}
+                <Badge variant="outline" className="hover:bg-muted">
+                  {status}
+                </Badge>
               </Link>
             ))}
           </div>
