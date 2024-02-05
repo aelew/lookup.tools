@@ -113,10 +113,13 @@ export default async function DNSLookupResultPage({
                             </TableCell>
                             <TableCell>
                               <Badge
-                                className="whitespace-nowrap"
+                                className="-space-x-0.5 whitespace-nowrap"
                                 variant="secondary"
                               >
-                                {formatDuration(Number(record.ttl))}
+                                <span>
+                                  {formatDuration(Number(record.ttl))}
+                                </span>
+                                <CopyButton text={record.ttl} />
                               </Badge>
                             </TableCell>
                             <TableCell className="flex items-center">
