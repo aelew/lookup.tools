@@ -33,13 +33,13 @@ cd lookup.tools
 Install dependencies
 
 ```bash
-pnpm i
+bun i
 ```
 
 Start the local development server on http://localhost:3000
 
 ```bash
-pnpm dev
+bun dev
 ```
 
 ## License
