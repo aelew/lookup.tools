@@ -8,7 +8,6 @@ RUN bun install --frozen-lockfile
 
 # Build the app
 FROM deps AS builder
-WORKDIR /app
 COPY . .
 
 RUN bun run build
