@@ -15,12 +15,14 @@ import {
   TableRow
 } from '@/components/ui/table';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { CACHE_REVALIDATE_SECONDS } from '@/lib/config';
 import { formatDuration } from '@/lib/format';
 import { SERVICES } from '@/lib/resources/services';
 import { TOOLS } from '@/lib/resources/tools';
 import { cn } from '@/lib/utils';
 import { api } from '@/trpc/server';
 import { DomainHeader } from '../../_components/domain-header';
+import { DomainNotRegistered } from '../../_components/domain-not-registered';
 import { DomainTabsList } from '../../_components/domain-tabs-list';
 import { CopyButton } from '../../../_components/copy-button';
 import { DNSLookupForm } from '../form';
@@ -32,17 +34,15 @@ interface DNSLookupResultPageProps {
 const getCachedDNSLookup = unstable_cache(
   async (domain: string) => api.lookup.dns.mutate({ domain }),
   ['dns_lookup'],
-  { revalidate: 15 }
+  { revalidate: CACHE_REVALIDATE_SECONDS }
 );
 
 export async function generateMetadata({ params }: DNSLookupResultPageProps) {
   const domain = decodeURIComponent(params.domain).toLowerCase();
   const result = await getCachedDNSLookup(domain);
-  if (!result) {
-    notFound();
-  }
   return {
     title: `DNS Lookup for ${domain}`,
+    robots: result ? 'noindex' : null,
     description: TOOLS.find((tool) => tool.slug === 'dns')?.description
   } satisfies Metadata;
 }
@@ -53,7 +53,12 @@ export default async function DNSLookupResultPage({
   const domain = decodeURIComponent(params.domain).toLowerCase();
   const result = await getCachedDNSLookup(domain);
   if (!result) {
-    notFound();
+    return (
+      <>
+        <DomainHeader domain={domain} searchAgainForm={DNSLookupForm} />
+        <DomainNotRegistered domain={domain} />
+      </>
+    );
   }
   return (
     <>

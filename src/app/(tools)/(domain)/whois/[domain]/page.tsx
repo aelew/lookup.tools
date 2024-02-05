@@ -3,18 +3,19 @@ import type { Metadata } from 'next';
 import { unstable_cache } from 'next/cache';
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 
 import { Date } from '@/components/date';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { CACHE_REVALIDATE_SECONDS } from '@/lib/config';
 import { TOOLS } from '@/lib/resources/tools';
 import type { ContactInfo } from '@/lib/whois';
 import { api } from '@/trpc/server';
 import type { InfoTable } from '@/types';
 import { DomainHeader } from '../../_components/domain-header';
+import { DomainNotRegistered } from '../../_components/domain-not-registered';
 import { DomainTabsList } from '../../_components/domain-tabs-list';
 import { WhoisLookupForm } from '../form';
 
@@ -25,17 +26,15 @@ interface WhoisLookupResultPageProps {
 const getCachedWhoisLookup = unstable_cache(
   async (domain: string) => api.lookup.whois.mutate({ domain }),
   ['whois_lookup'],
-  { revalidate: 15 }
+  { revalidate: CACHE_REVALIDATE_SECONDS }
 );
 
 export async function generateMetadata({ params }: WhoisLookupResultPageProps) {
   const domain = decodeURIComponent(params.domain).toLowerCase();
   const result = await getCachedWhoisLookup(domain);
-  if (!result) {
-    notFound();
-  }
   return {
-    title: `WHOIS Lookup for ${result.domain.domain}`,
+    title: `WHOIS Lookup for ${domain}`,
+    robots: result ? 'noindex' : null,
     description: TOOLS.find((tool) => tool.slug === 'whois')?.description
   } satisfies Metadata;
 }
@@ -46,7 +45,12 @@ export default async function WhoisLookupResultPage({
   const domain = decodeURIComponent(params.domain).toLowerCase();
   const result = await getCachedWhoisLookup(domain);
   if (!result) {
-    notFound();
+    return (
+      <>
+        <DomainHeader domain={domain} searchAgainForm={WhoisLookupForm} />
+        <DomainNotRegistered domain={domain} />
+      </>
+    );
   }
 
   const getContactInfoKeys = (contact?: ContactInfo) => ({

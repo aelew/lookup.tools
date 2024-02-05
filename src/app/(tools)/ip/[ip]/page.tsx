@@ -12,6 +12,7 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import { CACHE_REVALIDATE_SECONDS } from '@/lib/config';
 import { TOOLS } from '@/lib/resources/tools';
 import { api } from '@/trpc/server';
 import type { InfoTable } from '@/types';
@@ -25,7 +26,7 @@ interface IPLookupResultPageProps {
 const getCachedIPLookup = unstable_cache(
   async (ip: string) => api.lookup.ip.mutate({ ip }),
   ['ip_lookup'],
-  { revalidate: 15 }
+  { revalidate: CACHE_REVALIDATE_SECONDS }
 );
 
 export async function generateMetadata({ params }: IPLookupResultPageProps) {

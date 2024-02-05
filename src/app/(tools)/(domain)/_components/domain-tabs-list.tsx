@@ -21,9 +21,9 @@ export function DomainTabsList({ value, domain }: DomainTabsListProps) {
             {tab.label}
           </TabsTrigger>
         ) : (
-          <Link key={tab.value} href={`/${tab.value}/${domain}`}>
-            <TabsTrigger value={tab.value}>{tab.label}</TabsTrigger>
-          </Link>
+          <TabsTrigger key={tab.value} value={tab.value} asChild>
+            <Link href={`/${tab.value}/${domain}`}>{tab.label}</Link>
+          </TabsTrigger>
         )
       )}
     </TabsList>

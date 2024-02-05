@@ -23,12 +23,15 @@ type GetAllRecordsFn = (domain: string) => Promise<
 
 export const lookupRouter = createTRPCRouter({
   dns: publicProcedure.input(dnsSchema).mutation(async ({ input }) => {
-    const result = await (getAllRecords as GetAllRecordsFn)(input.domain);
-
-    // Perform Cloudflare checks
-    result.A?.forEach((r) => (r.cloudflare = isCloudflare(r.value)));
-    result.AAAA?.forEach((r) => (r.cloudflare = isCloudflare(r.value)));
-
+    let result;
+    try {
+      result = await (getAllRecords as GetAllRecordsFn)(input.domain);
+      // Perform Cloudflare checks
+      result.A?.forEach((r) => (r.cloudflare = isCloudflare(r.value)));
+      result.AAAA?.forEach((r) => (r.cloudflare = isCloudflare(r.value)));
+    } catch {
+      result = null;
+    }
     return result;
   }),
   whois: publicProcedure.input(dnsSchema).mutation(async ({ input }) => {
