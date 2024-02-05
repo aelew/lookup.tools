@@ -2,7 +2,10 @@ FROM imbios/bun-node:21-alpine AS deps
 WORKDIR /app
 
 # Install dependencies using Bun
-RUN bun install
+FROM deps AS install
+RUN mkdir -p /temp/dev
+COPY package.json bun.lockb /temp/dev/
+RUN cd /temp/dev && bun install --frozen-lockfile
 
 # Build the app
 FROM deps AS builder
