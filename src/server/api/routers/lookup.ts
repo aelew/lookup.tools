@@ -1,10 +1,9 @@
 import isCloudflare from '@authentication/cloudflare-ip';
 // @ts-expect-error package has no types
 import { getAllRecords } from '@layered/dns-records';
-import { Reader, type CityResponse } from 'maxmind';
 
 import { dnsSchema, ipSchema } from '@/app/(tools)/schema';
-import { getGeoLite2CityBuffer } from '@/lib/maxmind';
+import { getIPData } from '@/lib/ip';
 import { getWhoisData } from '@/lib/whois';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 
@@ -38,14 +37,6 @@ export const lookupRouter = createTRPCRouter({
     return getWhoisData(input.domain);
   }),
   ip: publicProcedure.input(ipSchema).mutation(async ({ input }) => {
-    let result;
-    try {
-      const buffer = await getGeoLite2CityBuffer();
-      const lookup = new Reader<CityResponse>(buffer);
-      result = lookup.get(input.ip);
-    } catch {
-      result = null;
-    }
-    return result;
+    return getIPData(input.ip);
   })
 });

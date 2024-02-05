@@ -1,4 +1,4 @@
-import { SearchIcon } from 'lucide-react';
+import { CheckIcon, SearchIcon, XIcon } from 'lucide-react';
 import type { Metadata } from 'next';
 import { unstable_cache } from 'next/cache';
 import Image from 'next/image';
@@ -14,6 +14,7 @@ import {
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { CACHE_REVALIDATE_SECONDS } from '@/lib/config';
 import { TOOLS } from '@/lib/resources/tools';
+import { cn } from '@/lib/utils';
 import { api } from '@/trpc/server';
 import type { InfoTable } from '@/types';
 import { IPLookupForm } from '../form';
@@ -50,25 +51,104 @@ export default async function IPLookupResultPage({
     notFound();
   }
 
+  const properties = [
+    { label: 'Bogon', value: result.is_bogon },
+    { label: 'Mobile', value: result.is_mobile },
+    { label: 'Crawler', value: result.is_crawler },
+    { label: 'Datacenter', value: result.is_datacenter },
+    { label: 'Tor', value: result.is_tor },
+    { label: 'Proxy', value: result.is_proxy },
+    { label: 'VPN', value: result.is_vpn },
+    { label: 'Abuser', value: result.is_abuser }
+  ];
+
   const table = {
     name: 'IP Address Information',
     keys: {
-      'Time Zone': () => result.location?.time_zone,
-      Continent: () => result.continent?.names.en,
-      Country: () =>
-        (
-          result.country ??
-          result.represented_country ??
-          result.registered_country
-        )?.names.en,
-      Location: () =>
-        result.city
-          ? result.city.names.en +
-            (result.subdivisions?.length
-              ? `, ${result.subdivisions[0]!.iso_code}`
-              : null)
-          : null,
-      'Postal Code': () => result.postal?.code
+      'Postal Code': () => result.location.zip,
+      Location: () => `${result.location.city}, ${result.location.state}`,
+      Country: () => result.location.country,
+      'Time Zone': () => result.location.timezone,
+      ISP: () => (
+        <div className="space-y-1">
+          <div>
+            <p>{result.asn.org}</p>
+            <p className="font-mono text-xs">{result.asn.descr}</p>
+          </div>
+          <div>
+            <p className="text-xs">
+              Abuse email: <span className="font-mono">{result.asn.abuse}</span>
+            </p>
+            <p className="text-xs">
+              Abuse score:{' '}
+              <span className="font-mono">{result.asn.abuser_score}</span>
+            </p>
+          </div>
+          <div>
+            <p className="text-xs">
+              Domain: <span className="font-mono">{result.asn.domain}</span>
+            </p>
+            <p className="text-xs">
+              Route: <span className="font-mono">{result.asn.route}</span>
+            </p>
+            <p className="text-xs">
+              Type:{' '}
+              <span className="font-mono">{result.asn.type.toUpperCase()}</span>
+            </p>
+          </div>
+        </div>
+      ),
+      Company: () => {
+        if (!result.company) {
+          return null;
+        }
+        return (
+          <div className="space-y-1">
+            <div>
+              <p>{result.company.name}</p>
+              <p className="text-xs">
+                Network:{' '}
+                <span className="font-mono">{result.company.network}</span>
+              </p>
+            </div>
+            <div>
+              <p className="text-xs">
+                Abuse score:{' '}
+                <span className="font-mono">{result.company.abuser_score}</span>
+              </p>
+              <p className="text-xs">
+                Domain:{' '}
+                <span className="font-mono">{result.company.domain}</span>
+              </p>
+              <p className="text-xs">
+                Type:{' '}
+                <span className="font-mono">
+                  {result.company.type.toUpperCase()}
+                </span>
+              </p>
+            </div>
+          </div>
+        );
+      },
+      Properties: () => (
+        <div className="grid max-w-96 grid-cols-4 gap-1">
+          {properties.map((property) => {
+            const PropertyIcon = property.value ? CheckIcon : XIcon;
+            return (
+              <div key={property.label} className="flex items-center">
+                <PropertyIcon
+                  strokeWidth={2}
+                  className={cn(
+                    'mr-1 h-4 w-4 shrink-0',
+                    property.value ? 'text-green-600' : 'text-red-600'
+                  )}
+                />
+                {property.label}
+              </div>
+            );
+          })}
+        </div>
+      )
     }
   } satisfies InfoTable;
 
@@ -78,13 +158,7 @@ export default async function IPLookupResultPage({
         <div className="flex items-center gap-3 text-3xl font-semibold tracking-tight">
           <Image
             className="rounded-lg bg-white object-contain px-1 shadow ring-1 ring-muted-foreground/25"
-            src={`https://flagsapi.com/${
-              (
-                result.country ??
-                result.represented_country ??
-                result.registered_country
-              )?.iso_code
-            }/shiny/32.png`}
+            src={`https://flagsapi.com/${result.location.country_code}/shiny/32.png`}
             unoptimized
             height={40}
             width={40}
@@ -110,7 +184,7 @@ export default async function IPLookupResultPage({
         </div>
       </div>
       <div className="mt-4 grid gap-4 md:grid-cols-2">
-        <Card>
+        <Card className="h-fit">
           <CardHeader className="pb-2">
             <CardTitle className="text-2xl">{table.name}</CardTitle>
           </CardHeader>
@@ -127,7 +201,7 @@ export default async function IPLookupResultPage({
                   }
                   return (
                     <TableRow key={label}>
-                      <TableCell className="w-36 align-top font-medium">
+                      <TableCell className="w-36 whitespace-nowrap align-top font-medium">
                         {label}
                       </TableCell>
                       <TableCell>{val}</TableCell>
@@ -138,7 +212,7 @@ export default async function IPLookupResultPage({
             </Table>
           </CardContent>
         </Card>
-        <Card className="min-h-80 p-1">
+        <Card className="aspect-square min-h-80 p-1">
           <Map location={result.location} />
         </Card>
       </div>

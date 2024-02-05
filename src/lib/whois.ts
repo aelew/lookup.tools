@@ -46,11 +46,11 @@ type WhoisResult = {
   billing?: ContactInfo;
 };
 
-export async function getWhoisData(domain: string) {
+export async function getWhoisData(query: string) {
   let result;
   try {
     result = await ky
-      .get(`https://who-dat.as93.net/${encodeURIComponent(domain)}`)
+      .get(`https://who-dat.as93.net/${encodeURIComponent(query)}`)
       .json<WhoisResult>();
   } catch {
     result = null;

@@ -15,7 +15,6 @@ Demo: [lookup.tools](https://lookup.tools)
 - Components: [shadcn/ui](https://ui.shadcn.com)
 - Backend: [tRPC](https://trpc.io)
 - Maps: [Pigeon Maps](https://pigeon-maps.js.org)
-- IP Geolocation Data: [MaxMind GeoLite2](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data)
 
 ## Development
 

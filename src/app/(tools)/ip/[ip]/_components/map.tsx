@@ -1,10 +1,11 @@
 'use client';
 
-import type { CityResponse } from 'maxmind';
 import { Marker, Map as PigeonMap } from 'pigeon-maps';
 
+import type { IPResult } from '@/lib/ip';
+
 interface MapProps {
-  location: CityResponse['location'];
+  location: IPResult['location'];
 }
 
 export function Map({ location }: MapProps) {
