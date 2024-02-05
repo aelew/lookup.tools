@@ -70,57 +70,64 @@ export default async function IPLookupResultPage({
       Location: () => `${result.location.city}, ${result.location.state}`,
       Country: () => result.location.country,
       'Time Zone': () => result.location.timezone,
-      ISP: () => (
-        <div className="space-y-1">
-          <div>
-            <p className="font-medium">{result.asn.org}</p>
-            <p className="font-mono text-xs">{result.asn.descr}</p>
-          </div>
-          <div>
-            <p className="text-xs">
-              Abuse email:{' '}
-              <Link
-                className="font-mono hover:underline"
-                rel="nofollow noopener"
-                target="_blank"
-                href={
-                  result.asn.abuse.includes('@')
-                    ? `mailto:${result.asn.abuse}`
-                    : `https://${result.asn.abuse}`
-                }
-              >
-                {result.asn.abuse}
-              </Link>
-            </p>
-            <p className="whitespace-nowrap text-xs">
-              Abuse score:{' '}
-              <span className="font-mono">{result.asn.abuser_score}</span>
-            </p>
-          </div>
-          <div>
-            {result.asn.domain && (
+      ISP: () => {
+        if (!result.asn) {
+          return null;
+        }
+        return (
+          <div className="space-y-1">
+            <div>
+              <p className="font-medium">{result.asn.org}</p>
+              <p className="font-mono text-xs">{result.asn.descr}</p>
+            </div>
+            <div>
               <p className="text-xs">
-                Domain:{' '}
+                Abuse email:{' '}
                 <Link
-                  href={`https://${result.asn.domain}`}
                   className="font-mono hover:underline"
                   rel="nofollow noopener"
                   target="_blank"
+                  href={
+                    result.asn.abuse.includes('@')
+                      ? `mailto:${result.asn.abuse}`
+                      : `https://${result.asn.abuse}`
+                  }
                 >
-                  {result.asn.domain}
+                  {result.asn.abuse}
                 </Link>
               </p>
-            )}
-            <p className="text-xs">
-              Route: <span className="font-mono">{result.asn.route}</span>
-            </p>
-            <p className="text-xs">
-              Type:{' '}
-              <span className="font-mono">{result.asn.type.toUpperCase()}</span>
-            </p>
+              <p className="whitespace-nowrap text-xs">
+                Abuse score:{' '}
+                <span className="font-mono">{result.asn.abuser_score}</span>
+              </p>
+            </div>
+            <div>
+              {result.asn.domain && (
+                <p className="text-xs">
+                  Domain:{' '}
+                  <Link
+                    href={`https://${result.asn.domain}`}
+                    className="font-mono hover:underline"
+                    rel="nofollow noopener"
+                    target="_blank"
+                  >
+                    {result.asn.domain}
+                  </Link>
+                </p>
+              )}
+              <p className="text-xs">
+                Route: <span className="font-mono">{result.asn.route}</span>
+              </p>
+              <p className="text-xs">
+                Type:{' '}
+                <span className="font-mono">
+                  {result.asn.type.toUpperCase()}
+                </span>
+              </p>
+            </div>
           </div>
-        </div>
-      ),
+        );
+      },
       Company: () => {
         if (!result.company) {
           return null;

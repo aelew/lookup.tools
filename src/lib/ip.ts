@@ -25,7 +25,7 @@ export type IPResult = {
     service: string;
     network_border_group: string;
   };
-  asn: {
+  asn?: {
     asn: number;
     abuser_score: string;
     route: string;
