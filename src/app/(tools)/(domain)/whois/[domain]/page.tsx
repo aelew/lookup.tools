@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { Date } from '@/components/date';
+import { ErrorState } from '@/components/error-state';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
@@ -55,14 +56,21 @@ export default async function WhoisLookupResultPage({
 
   const result = await getCachedWhoisLookup(domain);
   if (!result.success) {
-    if (result.error !== 'domain_not_found') {
-      // TODO: Add some kind of component that shows the error code
-      notFound();
-    }
     return (
       <>
         <DomainHeader domain={domain} searchAgainForm={WhoisLookupForm} />
-        <DomainNotRegistered domain={domain} />
+        {result.error === 'domain_not_found' ? (
+          <DomainNotRegistered domain={domain} />
+        ) : (
+          <ErrorState
+            description={
+              <p>
+                Error code:{' '}
+                <span className="font-mono text-sm">{result.error}</span>
+              </p>
+            }
+          />
+        )}
       </>
     );
   }
