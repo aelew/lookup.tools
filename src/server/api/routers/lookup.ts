@@ -2,7 +2,7 @@ import isCloudflare from '@authentication/cloudflare-ip';
 // @ts-expect-error package has no types
 import { getAllRecords } from '@layered/dns-records';
 import ky from 'ky';
-import ping, { PingResponse } from 'ping';
+import ping from 'ping';
 
 import { domainSchema, ipSchema } from '@/app/(tools)/schema';
 import { getIPData } from '@/lib/ip';
@@ -66,26 +66,29 @@ export const lookupRouter = createTRPCRouter({
       .json<CertificateInfo[]>();
 
     // Remove duplicates with a set, then sort the subdomains by root domain first and everything else alphabetically
-    const hosts = [...new Set(certs.map((c) => c.common_name))].sort((a, b) => {
-      if (a === input.domain) {
-        return -1;
-      }
-      if (b === input.domain) {
-        return 1;
-      }
-      return a.localeCompare(b);
-    });
+    const hosts = [...new Set(certs.map((c) => c.common_name))]
+      .filter((h) => h !== 'sni.cloudflaressl.com')
+      .sort((a, b) => {
+        if (a === input.domain) {
+          return -1;
+        }
+        if (b === input.domain) {
+          return 1;
+        }
+        return a.localeCompare(b);
+      });
 
     const pings = await Promise.allSettled(
       hosts.map((h) => ping.promise.probe(h))
     );
 
-    return pings.filter(assertFulfilled).map((p) => ({
-      subdomain: p.value.inputHost,
-      ip: p.value.numeric_host,
-      cloudflare: p.value.numeric_host
-        ? isCloudflare(p.value.numeric_host)
-        : false
-    }));
+    return pings.filter(assertFulfilled).map((p) => {
+      const ip = p.value.numeric_host?.replace(')', '');
+      return {
+        ip,
+        subdomain: p.value.inputHost,
+        cloudflare: ip ? isCloudflare(ip) : false
+      };
+    });
   })
 });
