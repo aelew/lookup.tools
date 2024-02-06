@@ -2,7 +2,8 @@
 
 The cyber swiss army knife of lookup tools. Research information on domains, IP addresses, email addresses, phone numbers, and more.
 
-Check out the hosted version here: [lookup.tools](https://lookup.tools)
+Check out the hosted version here: [lookup.tools](https://lookup.tools)  
+Roadmap: https://github.com/users/aelew/projects/1/views/2
 
 ## Built with
 
@@ -26,7 +27,7 @@ git clone https://github.com/aelew/lookup.tools.git
 
 Go to the project directory
 
-```sh
+```bash
 cd lookup.tools
 ```
 
