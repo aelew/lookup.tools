@@ -15,7 +15,7 @@ import {
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { CACHE_REVALIDATE_SECONDS } from '@/lib/config';
 import { TOOLS } from '@/lib/resources/tools';
-import { cn } from '@/lib/utils';
+import { capitalize, cn } from '@/lib/utils';
 import { api } from '@/trpc/server';
 import type { InfoTable } from '@/types';
 import { IPLookupForm } from '../form';
@@ -53,14 +53,19 @@ export default async function IPLookupResultPage({
   }
 
   const properties = Object.entries(result.properties).map(([key, value]) => ({
-    label: key === 'vpn' ? 'VPN' : key.charAt(0).toUpperCase() + key.slice(1),
+    label: key === 'vpn' ? 'VPN' : capitalize(key),
     value
   }));
 
   const table = {
     name: 'IP Address Information',
     keys: {
-      Hostname: () => result.hostname,
+      Hostname: () =>
+        result.hostname && (
+          <Link href={`/whois/${result.hostname}`} className="hover:underline">
+            {result.hostname}
+          </Link>
+        ),
       'Time Zone': () => result.location.timezone,
       Location: () =>
         result.location.city +
@@ -94,7 +99,7 @@ export default async function IPLookupResultPage({
             </p>
             <p className="text-xs">
               Type:{' '}
-              <span className="font-mono">{result.asn.type.toUpperCase()}</span>
+              <span className="font-mono">{capitalize(result.asn.type)}</span>
             </p>
             <p className="text-xs">
               ASN: <span className="font-mono">{result.asn.asn.slice(2)}</span>
@@ -125,7 +130,7 @@ export default async function IPLookupResultPage({
             <p className="text-xs">
               Type:{' '}
               <span className="font-mono">
-                {result.company.type.toUpperCase()}
+                {capitalize(result.company.type)}
               </span>
             </p>
           </>

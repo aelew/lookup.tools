@@ -98,7 +98,7 @@ export default async function WhoisLookupResultPage({
           </Link>
         );
       }
-      return <span className="break-all">{contact.email}</span>;
+      return <span className="break-all sm:break-normal">{contact.email}</span>;
     }
   });
 
@@ -132,22 +132,25 @@ export default async function WhoisLookupResultPage({
         ),
         Status: () => (
           <div className="flex flex-col gap-2 sm:flex-row">
-            {result.domain.status.map((status) => (
-              <Link
-                href={`https://www.icann.org/epp#${status}`}
-                className="w-fit"
-                target="_blank"
-                key={status}
-              >
-                <Badge
-                  className="-ml-[1px] border border-muted-foreground/25 shadow-sm hover:bg-muted"
-                  variant="outline"
+            {result.domain.status.map((s) => {
+              const status =
+                EPP_STATUS_CODES.find((c) => s === c.toLowerCase()) ?? s;
+              return (
+                <Link
+                  href={`https://www.icann.org/epp#${status}`}
+                  className="w-fit"
+                  target="_blank"
+                  key={status}
                 >
-                  {EPP_STATUS_CODES.find((c) => status === c.toLowerCase()) ??
-                    status}
-                </Badge>
-              </Link>
-            ))}
+                  <Badge
+                    className="-ml-[1px] border border-muted-foreground/25 shadow-sm hover:bg-muted-foreground/5"
+                    variant="outline"
+                  >
+                    {status}
+                  </Badge>
+                </Link>
+              );
+            })}
           </div>
         ),
         Nameservers: () => (

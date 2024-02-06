@@ -6,6 +6,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export function parseDomain(hostname: string) {
   const result = _parseDomain(decodeURIComponent(hostname));
   return result.type === ParseResultType.Listed
