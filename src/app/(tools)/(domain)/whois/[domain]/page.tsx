@@ -161,8 +161,8 @@ export default async function WhoisLookupResultPage({
                 <div className="flex w-fit items-center gap-2" key={i}>
                   <div className="h-5 w-5 shrink-0 rounded p-0.5 shadow ring-1 ring-muted-foreground/25">
                     <Image
-                      src={`https://icons.duckduckgo.com/ip3/${nsDomain}.ico`}
-                      className="select-none"
+                      src={`https://favicon.victr.me/blob/https://${nsDomain}`}
+                      className="aspect-square select-none"
                       draggable={false}
                       unoptimized
                       height={20}

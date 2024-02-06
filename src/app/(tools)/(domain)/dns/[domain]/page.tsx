@@ -122,8 +122,15 @@ export default async function DNSLookupResultPage({
 
                         return (
                           <TableRow key={record.name + record.value}>
-                            <TableCell className="whitespace-nowrap">
-                              {record.name}
+                            <TableCell>
+                              <Link
+                                href={`https://${record.name}`}
+                                className="hover:underline"
+                                rel="nofollow noopener"
+                                target="_blank"
+                              >
+                                {record.name}
+                              </Link>
                             </TableCell>
                             <TableCell>
                               <Badge
