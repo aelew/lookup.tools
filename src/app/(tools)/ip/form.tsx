@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CornerDownLeftIcon, LoaderIcon } from 'lucide-react';
+import { usePlausible } from 'next-plausible';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -17,6 +18,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { api } from '@/trpc/react';
+import type { Events } from '@/types';
 import { ipSchema } from '../schema';
 
 interface IPLookupFormProps {
@@ -27,6 +29,7 @@ export function IPLookupForm({ showCurrentIPButton }: IPLookupFormProps) {
   const { data: ip } = api.client.ip.useQuery();
 
   const [loading, setLoading] = useState(false);
+  const plausible = usePlausible<Events>();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof ipSchema>>({
@@ -35,6 +38,7 @@ export function IPLookupForm({ showCurrentIPButton }: IPLookupFormProps) {
   });
 
   const onSubmit = (values: z.infer<typeof ipSchema>) => {
+    plausible('Lookup', { props: { tool: 'ip' } });
     router.push(`/ip/${values.ip}`);
     setLoading(true);
   };

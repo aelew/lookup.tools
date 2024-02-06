@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CornerDownLeftIcon, LoaderIcon } from 'lucide-react';
+import { usePlausible } from 'next-plausible';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -15,10 +16,12 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import type { Events } from '@/types';
 import { domainSchema } from '../../schema';
 
 export function SubdomainFinderForm() {
   const [loading, setLoading] = useState(false);
+  const plausible = usePlausible<Events>();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof domainSchema>>({
@@ -27,6 +30,7 @@ export function SubdomainFinderForm() {
   });
 
   const onSubmit = (values: z.infer<typeof domainSchema>) => {
+    plausible('Lookup', { props: { tool: 'subdomain' } });
     router.push(`/subdomain/${values.domain}`);
     setLoading(true);
   };

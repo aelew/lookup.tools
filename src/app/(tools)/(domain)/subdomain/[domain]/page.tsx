@@ -72,7 +72,10 @@ export default async function SubdomainFinderResultPage({
       <DomainHeader domain={domain} searchAgainForm={SubdomainFinderForm} />
       <Tabs className="flex flex-col" value="subdomain">
         <DomainTabsList value="subdomain" domain={domain} />
-        <TabsContent value="subdomain" className="mt-4 grid md:grid-cols-2 grid-cols-1">
+        <TabsContent
+          value="subdomain"
+          className="mt-4 grid grid-cols-1 md:grid-cols-2"
+        >
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-2xl">Subdomain Scan</CardTitle>
