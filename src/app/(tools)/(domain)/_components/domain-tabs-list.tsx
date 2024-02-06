@@ -15,18 +15,20 @@ interface DomainTabsListProps {
 
 export function DomainTabsList({ value, domain }: DomainTabsListProps) {
   return (
-    <TabsList className="mx-auto w-fit shadow sm:mx-0">
-      {TABS.map((tab) =>
-        tab.value === value ? (
-          <TabsTrigger key={tab.value} value={tab.value}>
-            {tab.label}
-          </TabsTrigger>
-        ) : (
-          <TabsTrigger key={tab.value} value={tab.value} asChild>
-            <Link href={`/${tab.value}/${domain}`}>{tab.label}</Link>
-          </TabsTrigger>
-        )
-      )}
-    </TabsList>
+    <div className="min-w-0 overflow-x-auto">
+      <TabsList className="mx-auto w-fit shadow sm:mx-0">
+        {TABS.map((tab) =>
+          tab.value === value ? (
+            <TabsTrigger key={tab.value} value={tab.value}>
+              {tab.label}
+            </TabsTrigger>
+          ) : (
+            <TabsTrigger key={tab.value} value={tab.value} asChild>
+              <Link href={`/${tab.value}/${domain}`}>{tab.label}</Link>
+            </TabsTrigger>
+          )
+        )}
+      </TabsList>
+    </div>
   );
 }
