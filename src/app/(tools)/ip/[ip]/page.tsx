@@ -74,13 +74,16 @@ export default async function IPLookupResultPage({
         ' ' +
         result.location.country,
       'Postal Code': () => result.location.postal,
-      ISP: () => {
+      ASN: () => {
         if (!result.asn) {
           return null;
         }
         return (
           <>
-            <p className="font-medium">{result.asn.name}</p>
+            <p className="font-medium">
+              {result.asn.name}
+              <span className="ml-1 font-mono text-xs">({result.asn.asn})</span>
+            </p>
             {result.asn.domain && (
               <p className="text-xs">
                 Domain:{' '}
@@ -99,10 +102,11 @@ export default async function IPLookupResultPage({
             </p>
             <p className="text-xs">
               Type:{' '}
-              <span className="font-mono">{capitalize(result.asn.type)}</span>
-            </p>
-            <p className="text-xs">
-              ASN: <span className="font-mono">{result.asn.asn.slice(2)}</span>
+              <span className="font-mono">
+                {result.asn.type === 'isp'
+                  ? 'ISP'
+                  : capitalize(result.asn.type)}
+              </span>
             </p>
           </>
         );
