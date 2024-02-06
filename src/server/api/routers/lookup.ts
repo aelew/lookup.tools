@@ -2,6 +2,7 @@ import isCloudflare from '@authentication/cloudflare-ip';
 // @ts-expect-error package has no types
 import { getAllRecords } from '@layered/dns-records';
 import ky from 'ky';
+import { parseDomain, ParseResultType } from 'parse-domain';
 import ping from 'ping';
 
 import { domainSchema, ipSchema } from '@/app/(tools)/schema';
@@ -65,36 +66,42 @@ export const lookupRouter = createTRPCRouter({
       })
       .json<CertificateInfo[]>();
 
-    console.log('certs', certs);
-
-    // Remove duplicates with a set, then sort the subdomains by root domain first and everything else alphabetically
+    // Remove duplicates with a set
     const hosts = [...new Set(certs.map((c) => c.common_name))]
-      .filter((h) => h !== 'sni.cloudflaressl.com')
+      // Remove wildcard domains and other domains that don't match the input domain
+      .filter(
+        (h) =>
+          !h.includes('*') &&
+          (h === input.domain || h.endsWith(`.${input.domain}`))
+      )
+      // Root first, WWW second, then everything else alphabetically
       .sort((a, b) => {
-        if (a === input.domain) {
-          return -1;
-        }
-        if (b === input.domain) {
-          return 1;
-        }
+        const isRootA = a === input.domain;
+        const isRootB = b === input.domain;
+        if (isRootA) return -1;
+        if (isRootB) return 1;
+        if (a === `www.${input.domain}`) return isRootB ? 1 : -1;
+        if (b === `www.${input.domain}`) return isRootA ? -1 : 1;
         return a.localeCompare(b);
       });
-
-    console.log('hosts', hosts);
 
     const pings = await Promise.allSettled(
       hosts.map((h) => ping.promise.probe(h))
     );
 
-    console.log('pings', JSON.stringify(pings, null, 2));
-
-    return pings.filter(assertFulfilled).map((p) => {
-      const ip = p.value.numeric_host?.replace(')', '');
-      return {
-        ip,
-        subdomain: p.value.inputHost,
-        cloudflare: ip ? isCloudflare(ip) : false
-      };
-    });
+    return pings
+      .filter(assertFulfilled)
+      .filter((p) => {
+        const ip = p.value.numeric_host?.replace(')', '');
+        return ip && parseDomain(ip).type === ParseResultType.Ip;
+      })
+      .map((p) => {
+        const ip = p.value.numeric_host!;
+        return {
+          ip,
+          subdomain: p.value.inputHost,
+          cloudflare: isCloudflare(ip)
+        };
+      });
   })
 });

@@ -96,25 +96,19 @@ export default async function SubdomainFinderResultPage({
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center">
-                          {record.ip ? (
-                            <>
-                              <CloudflareIcon
-                                className={cn(
-                                  'mr-2 size-4 shrink-0 rounded shadow ring-1 ring-muted-foreground/25',
-                                  !record.cloudflare && 'grayscale'
-                                )}
-                              />
-                              <Link
-                                className="whitespace-nowrap hover:underline"
-                                href={`/ip/${record.ip}`}
-                              >
-                                {record.ip}
-                              </Link>
-                              <CopyButton text={record.ip} />
-                            </>
-                          ) : (
-                            '--'
-                          )}
+                          <CloudflareIcon
+                            className={cn(
+                              'mr-2 size-4 shrink-0 rounded shadow ring-1 ring-muted-foreground/25',
+                              !record.cloudflare && 'grayscale'
+                            )}
+                          />
+                          <Link
+                            className="whitespace-nowrap hover:underline"
+                            href={`/ip/${record.ip}`}
+                          >
+                            {record.ip}
+                          </Link>
+                          <CopyButton text={record.ip} />
                         </div>
                       </TableCell>
                     </TableRow>
