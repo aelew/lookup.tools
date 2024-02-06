@@ -169,7 +169,6 @@ export default async function WhoisLookupResultPage({
                       src={`https://favicon.victr.me/blob/https://${nsDomain}`}
                       className="aspect-square select-none"
                       draggable={false}
-                      unoptimized
                       height={20}
                       width={20}
                       alt=""

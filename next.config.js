@@ -15,6 +15,7 @@ const config = {
   },
   images: {
     remotePatterns: [
+      { protocol: 'https', hostname: 'a.impactradius-go.com' },
       { protocol: 'https', hostname: 'favicon.victr.me' },
       { protocol: 'https', hostname: 'flagsapi.com' }
     ]

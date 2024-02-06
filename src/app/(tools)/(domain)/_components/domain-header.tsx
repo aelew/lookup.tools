@@ -24,7 +24,6 @@ export function DomainHeader({
         <Image
           className="aspect-square rounded-lg bg-accent/75 object-contain p-1 shadow ring-1 ring-muted-foreground/25"
           src={`https://favicon.victr.me/blob/https://${domain}`}
-          unoptimized
           height={36}
           width={36}
           alt=""

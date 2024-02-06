@@ -2,19 +2,18 @@
 
 The cyber swiss army knife of lookup tools. Research information on domains, IP addresses, email addresses, phone numbers, and more.
 
-Demo: [lookup.tools](https://lookup.tools)
+Check out the hosted version here: [lookup.tools](https://lookup.tools)
 
-> [!NOTE]  
-> lookup.tools is currently a work in progress. If you have any feedback or suggestions, feel free to open an issue or pull request!
+## Built with
 
-## Tech stack
+- [Next.js](https://nextjs.org): The React framework for the web
+- [tRPC](https://trpc.io): End-to-end typesafe APIs
+- [create-t3-app](https://create.t3.gg): The best way to start a full-stack, typesafe Next.js app
+- [Tailwind CSS](https://tailwindcss.com): A utility-first CSS framework
+- [shadcn/ui](https://ui.shadcn.com): Beautifully designed components
+- [Pigeon Maps](https://pigeon-maps.js.org): Maps without external dependencies
 
-- Starter: [create-t3-app](https://create.t3.gg)
-- Framework: [Next.js](https://nextjs.org)
-- CSS: [Tailwind CSS](https://tailwindcss.com)
-- Components: [shadcn/ui](https://ui.shadcn.com)
-- Backend: [tRPC](https://trpc.io)
-- Maps: [Pigeon Maps](https://pigeon-maps.js.org)
+<a href="https://spaceship.sjv.io/c/5212322/1825519/21274" target="_blank" id="1825519"><img src="https://a.impactradius-go.com/display-ad/21274-1825519" border="0" alt="" style="flex-shrink:0;" /></a><img height="0" width="0" src="https://imp.pxf.io/i/5212322/1825519/21274" style="position:absolute;visibility:hidden;" border="0" />
 
 ## Development
 
