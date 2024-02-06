@@ -51,7 +51,7 @@
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
-    "tldts": "^6.1.8",
+    "tldts": "^6.1.9",
     "ts-pattern": "^5.0.6",
     "zod": "^3.22.4"
   },
