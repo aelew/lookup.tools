@@ -5,3 +5,29 @@ export const EASE_TRANSITION = {
   initial: { opacity: 0, y: 24 },
   animate: { opacity: 1, y: 0 }
 } satisfies MotionProps;
+
+export const EPP_STATUS_CODES = [
+  'addPeriod',
+  'autoRenewPeriod',
+  'inactive',
+  'ok',
+  'pendingCreate',
+  'pendingDelete',
+  'pendingRenew',
+  'pendingRestore',
+  'pendingTransfer',
+  'pendingUpdate',
+  'redemptionPeriod',
+  'renewPeriod',
+  'serverDeleteProhibited',
+  'serverHold',
+  'serverRenewProhibited',
+  'serverTransferProhibited',
+  'serverUpdateProhibited',
+  'transferPeriod',
+  'clientDeleteProhibited',
+  'clientHold',
+  'clientRenewProhibited',
+  'clientTransferProhibited',
+  'clientUpdateProhibited'
+];

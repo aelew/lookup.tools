@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { CACHE_REVALIDATE_SECONDS } from '@/lib/config';
+import { EPP_STATUS_CODES } from '@/lib/constants';
 import { TOOLS } from '@/lib/resources/tools';
 import { parseDomain } from '@/lib/utils';
 import type { ContactInfo } from '@/lib/whois';
@@ -142,7 +143,8 @@ export default async function WhoisLookupResultPage({
                   className="-ml-[1px] border border-muted-foreground/25 shadow-sm hover:bg-muted"
                   variant="outline"
                 >
-                  {status}
+                  {EPP_STATUS_CODES.find((c) => status === c.toLowerCase()) ??
+                    status}
                 </Badge>
               </Link>
             ))}
