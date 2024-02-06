@@ -13,7 +13,7 @@ Check out the hosted version here: [lookup.tools](https://lookup.tools)
 - [shadcn/ui](https://ui.shadcn.com): Beautifully designed components
 - [Pigeon Maps](https://pigeon-maps.js.org): Maps without external dependencies
 
-<a href="https://spaceship.sjv.io/c/5212322/1825519/21274" target="_blank" id="1825519"><img src="https://a.impactradius-go.com/display-ad/21274-1825519" border="0" alt="" style="flex-shrink:0;" /></a><img height="0" width="0" src="https://imp.pxf.io/i/5212322/1825519/21274" style="position:absolute;visibility:hidden;" border="0" />
+<a href="https://spaceship.sjv.io/c/5212322/1825519/21274" target="_blank" id="1825519"><img src="https://a.impactradius-go.com/display-ad/21274-1825515" border="0" alt="" style="flex-shrink:0;" /></a>
 
 ## Development
 
