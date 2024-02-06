@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next';
 import PlausibleProvider from 'next-plausible';
 import type { PropsWithChildren } from 'react';
 
+import { ThemeProvider } from '@/components/ui/theme-provider';
 import { env } from '@/env';
 import { AnimatedMain } from '@/lib/framer';
 import { cn } from '@/lib/utils';
@@ -50,12 +51,19 @@ export default function RootLayout({ children }: PropsWithChildren) {
         )}
       >
         <TRPCReactProvider>
-          <div className="container">
-            <Header />
-            <AnimatedMain initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              {children}
-            </AnimatedMain>
-          </div>
+          <ThemeProvider
+            enableSystem
+            attribute="class"
+            defaultTheme="system"
+            disableTransitionOnChange
+          >
+            <div className="container">
+              <Header />
+              <AnimatedMain initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                {children}
+              </AnimatedMain>
+            </div>
+          </ThemeProvider>
         </TRPCReactProvider>
       </body>
     </html>

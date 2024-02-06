@@ -22,7 +22,7 @@ export function DomainHeader({
     <div className="my-4 flex flex-col-reverse items-center justify-between gap-4 sm:flex-row">
       <div className="flex items-center gap-3 text-3xl font-semibold tracking-tight">
         <Image
-          className="aspect-square rounded-lg bg-white object-contain p-1 shadow ring-1 ring-muted-foreground/25"
+          className="aspect-square rounded-lg bg-accent/75 object-contain p-1 shadow ring-1 ring-muted-foreground/25"
           src={`https://favicon.victr.me/blob/https://${domain}`}
           unoptimized
           height={36}

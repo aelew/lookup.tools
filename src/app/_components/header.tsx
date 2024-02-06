@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { Logo } from '@/components/logo';
-import { buttonVariants } from '@/components/ui/button';
+import { ThemeSwitcher } from '@/components/ui/theme-switcher';
 
 export function Header() {
   return (
@@ -24,9 +24,7 @@ export function Header() {
           />
           <span className="pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2px] transition-colors group-hover:bg-foreground/5" />
         </Link>
-        <Link className={buttonVariants()} href="/auth/login">
-          Sign up
-        </Link>
+        <ThemeSwitcher />
       </div>
     </header>
   );
