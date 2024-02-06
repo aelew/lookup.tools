@@ -71,23 +71,34 @@ export default async function WhoisLookupResultPage({
     'Postal Code': () => contact?.postal_code,
     Country: () => contact?.country,
     Phone: () => contact?.phone,
-    Email: () =>
-      contact?.email && (
-        <Link
-          className="break-all hover:underline"
-          rel="nofollow noopener"
-          target="_blank"
-          href={
-            contact.email.includes('@')
-              ? `mailto:${contact.email}`
-              : contact.email.startsWith('http')
-                ? contact.email
-                : `https://${contact.email}`
-          }
-        >
-          {contact.email}
-        </Link>
-      )
+    Email: () => {
+      if (!contact?.email) {
+        return null;
+      }
+      if (contact.email.includes('@')) {
+        return (
+          <Link
+            className="break-all hover:underline"
+            href={`mailto:${contact.email}`}
+          >
+            {contact.email}
+          </Link>
+        );
+      }
+      if (contact.email.startsWith('http')) {
+        return (
+          <Link
+            className="break-all hover:underline"
+            href={contact.email}
+            rel="nofollow noopener"
+            target="_blank"
+          >
+            {contact.email}
+          </Link>
+        );
+      }
+      return <span className="break-all">{contact.email}</span>;
+    }
   });
 
   const tables: InfoTable[] = [

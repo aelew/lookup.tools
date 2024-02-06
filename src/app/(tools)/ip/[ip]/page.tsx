@@ -131,45 +131,55 @@ export default async function IPLookupResultPage({
           </>
         );
       },
-      Abuse: () => (
-        <>
-          <p className="font-medium">{result.abuse.name}</p>
-          <p className="text-xs">
-            Network: <span className="font-mono">{result.abuse.network}</span>
-          </p>
-          {result.abuse.phone && (
-            <p className="text-xs">
-              Phone:{' '}
-              <Link
-                href={`tel:${result.abuse.phone.replaceAll('-', '')}`}
-                className="font-mono hover:underline"
-              >
-                {result.abuse.phone}
-              </Link>
-            </p>
-          )}
-          <p className="text-xs">
-            Contact:{' '}
+      Abuse: () => {
+        let abuseEmail;
+        if (result.abuse.email.includes('@')) {
+          abuseEmail = (
             <Link
+              href={`mailto:${result.abuse.email}`}
               className="font-mono hover:underline"
-              rel="nofollow noopener"
-              target="_blank"
-              href={
-                result.abuse.email.includes('@')
-                  ? `mailto:${result.abuse.email}`
-                  : result.abuse.email.startsWith('http')
-                    ? result.abuse.email
-                    : `https://${result.abuse.email}`
-              }
             >
               {result.abuse.email}
             </Link>
-          </p>
-          <p className="text-xs">
-            Address: <span className="font-mono">{result.abuse.address}</span>
-          </p>
-        </>
-      ),
+          );
+        } else if (result.abuse.email.startsWith('http')) {
+          abuseEmail = (
+            <Link
+              className="font-mono hover:underline"
+              href={result.abuse.email}
+              rel="nofollow noopener"
+              target="_blank"
+            >
+              {result.abuse.email}
+            </Link>
+          );
+        } else {
+          abuseEmail = <span className="font-mono">{result.abuse.email}</span>;
+        }
+        return (
+          <>
+            <p className="font-medium">{result.abuse.name}</p>
+            <p className="text-xs">
+              Network: <span className="font-mono">{result.abuse.network}</span>
+            </p>
+            {result.abuse.phone && (
+              <p className="text-xs">
+                Phone:{' '}
+                <Link
+                  href={`tel:${result.abuse.phone.replaceAll('-', '')}`}
+                  className="font-mono hover:underline"
+                >
+                  {result.abuse.phone}
+                </Link>
+              </p>
+            )}
+            <p className="text-xs">Contact: {abuseEmail}</p>
+            <p className="text-xs">
+              Address: <span className="font-mono">{result.abuse.address}</span>
+            </p>
+          </>
+        );
+      },
       Properties: () => (
         <div className="grid grid-cols-2 gap-1 lg:grid-cols-3">
           {properties.map((property) => {
