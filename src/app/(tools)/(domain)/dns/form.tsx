@@ -15,18 +15,18 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { dnsSchema } from '../../schema';
+import { domainSchema } from '../../schema';
 
 export function DNSLookupForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof dnsSchema>>({
-    resolver: zodResolver(dnsSchema),
+  const form = useForm<z.infer<typeof domainSchema>>({
+    resolver: zodResolver(domainSchema),
     defaultValues: { domain: '' }
   });
 
-  const onSubmit = (values: z.infer<typeof dnsSchema>) => {
+  const onSubmit = (values: z.infer<typeof domainSchema>) => {
     router.push(`/dns/${values.domain}`);
     setLoading(true);
   };

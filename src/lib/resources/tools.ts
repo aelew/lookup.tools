@@ -1,3 +1,4 @@
+import { DetectiveIcon } from '@/components/icons/detective';
 import { EmailIcon } from '@/components/icons/email';
 import { GlobeIcon } from '@/components/icons/globe';
 import { MobilePhoneWithArrowIcon } from '@/components/icons/mobile-phone-with-arrow';
@@ -18,6 +19,13 @@ export const TOOLS = [
     slug: 'whois',
     description:
       'Look up information on domain owners, registration dates, nameservers, and more.'
+  },
+  {
+    icon: DetectiveIcon,
+    name: 'Subdomain Finder',
+    slug: 'subdomain',
+    description:
+      'Scan and discover subdomains of a domain, including IP addresses and server information.'
   },
   {
     icon: PushpinIcon,

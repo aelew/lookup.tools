@@ -17,7 +17,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { domainSchema } from '../../schema';
 
-export function WhoisLookupForm() {
+export function SubdomainFinderForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -27,7 +27,7 @@ export function WhoisLookupForm() {
   });
 
   const onSubmit = (values: z.infer<typeof domainSchema>) => {
-    router.push(`/whois/${values.domain}`);
+    router.push(`/subdomain/${values.domain}`);
     setLoading(true);
   };
 

@@ -5,7 +5,7 @@ const DOMAIN_REGEX =
 
 const m = (type: string) => `Please enter a valid ${type}.`;
 
-export const dnsSchema = z.object({
+export const domainSchema = z.object({
   domain: z
     .string()
     .trim()

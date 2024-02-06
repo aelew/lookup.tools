@@ -4,7 +4,8 @@ import { TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const TABS = [
   { value: 'dns', label: 'DNS Lookup' },
-  { value: 'whois', label: 'WHOIS Lookup' }
+  { value: 'whois', label: 'WHOIS Lookup' },
+  { value: 'subdomain', label: 'Subdomain Finder' }
 ] as const;
 
 interface DomainTabsListProps {
