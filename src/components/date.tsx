@@ -10,5 +10,9 @@ export function Date({ dateTime }: DateProps) {
   if (!dateTime) {
     return null;
   }
-  return <time dateTime={dateTime}>{formatDate(dateTime)}</time>;
+  return (
+    <time className="tabular-nums" dateTime={dateTime}>
+      {formatDate(dateTime)}
+    </time>
+  );
 }

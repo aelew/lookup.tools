@@ -115,18 +115,18 @@ export default async function WhoisLookupResultPage({
             }
           />
         ),
-        Updated: () => (
-          <Date
-            dateTime={
-              result.domain.updated_date_in_time ?? result.domain.updated_date
-            }
-          />
-        ),
         Expires: () => (
           <Date
             dateTime={
               result.domain.expiration_date_in_time ??
               result.domain.expiration_date
+            }
+          />
+        ),
+        Updated: () => (
+          <Date
+            dateTime={
+              result.domain.updated_date_in_time ?? result.domain.updated_date
             }
           />
         ),

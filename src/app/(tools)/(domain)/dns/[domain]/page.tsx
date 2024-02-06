@@ -159,7 +159,7 @@ export default async function DNSLookupResultPage({
                               {match(record.type)
                                 .with('A', 'AAAA', () => (
                                   <Link
-                                    className="whitespace-nowrap hover:underline"
+                                    className="whitespace-nowrap tabular-nums hover:underline"
                                     href={`/ip/${value}`}
                                   >
                                     {value}

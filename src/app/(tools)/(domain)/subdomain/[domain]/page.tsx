@@ -118,7 +118,7 @@ export default async function SubdomainFinderResultPage({
                             )}
                           />
                           <Link
-                            className="whitespace-nowrap hover:underline"
+                            className="whitespace-nowrap tabular-nums hover:underline"
                             href={`/ip/${record.ip}`}
                           >
                             {record.ip}
@@ -144,7 +144,9 @@ export default async function SubdomainFinderResultPage({
                       <TableCell className="w-36 font-medium">
                         Subdomains found
                       </TableCell>
-                      <TableCell>{result.length}</TableCell>
+                      <TableCell className="tabular-nums">
+                        {result.length}
+                      </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell className="w-36 font-medium">
@@ -154,7 +156,7 @@ export default async function SubdomainFinderResultPage({
                         {mostCommonIp ? (
                           <div className="flex items-center">
                             <Link
-                              className="whitespace-nowrap hover:underline"
+                              className="whitespace-nowrap tabular-nums hover:underline"
                               href={`/ip/${mostCommonIp}`}
                             >
                               {mostCommonIp}
@@ -186,7 +188,7 @@ export default async function SubdomainFinderResultPage({
                     {Object.entries(ipStore)
                       .sort(([_, a], [__, b]) => b - a)
                       .map(([ip, occurrences]) => (
-                        <TableRow key={ip}>
+                        <TableRow className="tabular-nums" key={ip}>
                           <TableCell>
                             <div className="flex items-center">
                               <CloudflareIcon
