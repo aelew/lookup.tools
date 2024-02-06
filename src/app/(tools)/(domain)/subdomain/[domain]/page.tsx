@@ -72,7 +72,7 @@ export default async function SubdomainFinderResultPage({
       <DomainHeader domain={domain} searchAgainForm={SubdomainFinderForm} />
       <Tabs className="flex flex-col" value="subdomain">
         <DomainTabsList value="subdomain" domain={domain} />
-        <TabsContent value="subdomain" className="mt-4 grid md:grid-cols-2">
+        <TabsContent value="subdomain" className="mt-4 grid md:grid-cols-2 grid-cols-1">
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-2xl">Subdomain Scan</CardTitle>
@@ -90,7 +90,14 @@ export default async function SubdomainFinderResultPage({
                     <TableRow key={record.subdomain}>
                       <TableCell>
                         <div className="flex items-center">
-                          {record.subdomain}
+                          <Link
+                            href={`https://${record.subdomain}`}
+                            className="hover:underline"
+                            rel="nofollow noopener"
+                            target="_blank"
+                          >
+                            {record.subdomain}
+                          </Link>
                           <CopyButton text={record.subdomain} />
                         </div>
                       </TableCell>
