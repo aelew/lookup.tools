@@ -2,8 +2,8 @@ import isCloudflare from '@authentication/cloudflare-ip';
 // @ts-expect-error package has no types
 import { getAllRecords } from '@layered/dns-records';
 import ky from 'ky';
-import { parseDomain, ParseResultType } from 'parse-domain';
 import ping from 'ping';
+import { parse } from 'tldts';
 
 import { domainSchema, ipSchema } from '@/app/(tools)/schema';
 import { getIPData } from '@/lib/ip';
@@ -94,7 +94,7 @@ export const lookupRouter = createTRPCRouter({
       .filter(assertFulfilled)
       .filter((p) => {
         const ip = p.value.numeric_host?.replace(')', '');
-        return ip && parseDomain(ip).type === ParseResultType.Ip;
+        return ip && parse(ip).isIp;
       })
       .map((p) => {
         const ip = p.value.numeric_host!.replace(')', '');

@@ -30,7 +30,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
       </section>
       <AnimatedSection
         {...EASE_TRANSITION}
-        className="grid gap-8 sm:grid-cols-2 md:grid-cols-3"
+        className="grid gap-8 pb-12 sm:grid-cols-2 md:grid-cols-3"
       >
         {TOOLS.filter(
           (tool) =>

@@ -6,9 +6,10 @@ Check out the hosted version here: [lookup.tools](https://lookup.tools)
 
 ## Built with
 
+- [create-t3-app](https://create.t3.gg): The best way to start a full-stack, typesafe Next.js app
+- [Bun](https://bun.sh/): An all-in-one JavaScript runtime & toolkit designed for speed
 - [Next.js](https://nextjs.org): The React framework for the web
 - [tRPC](https://trpc.io): End-to-end typesafe APIs
-- [create-t3-app](https://create.t3.gg): The best way to start a full-stack, typesafe Next.js app
 - [Tailwind CSS](https://tailwindcss.com): A utility-first CSS framework
 - [shadcn/ui](https://ui.shadcn.com): Beautifully designed components
 - [Pigeon Maps](https://pigeon-maps.js.org): Maps without external dependencies
