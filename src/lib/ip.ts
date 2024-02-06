@@ -53,9 +53,11 @@ export async function getIPData(query: string) {
   let result;
   try {
     result = await ky
-      .get(`https://api.aelew.dev/ip/${encodeURIComponent(query)}`)
+      .get(`https://api.aelew.dev/ip/${encodeURIComponent(query)}`, {
+        throwHttpErrors: false
+      })
       .json<IPResult>();
-  } catch (err) {
+  } catch {
     result = {
       success: false,
       error: 'internal_server_error'

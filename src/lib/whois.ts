@@ -16,7 +16,8 @@ export type ContactInfo = {
   email?: string;
 };
 
-type WhoisResult = {
+type WhoisSuccessResult = {
+  success: true;
   domain: {
     id: string;
     domain: string;
@@ -46,14 +47,23 @@ type WhoisResult = {
   billing?: ContactInfo;
 };
 
+export type WhoisErrorResult = { success: false; error: string };
+
+export type WhoisResult = WhoisSuccessResult | WhoisErrorResult;
+
 export async function getWhoisData(query: string) {
   let result;
   try {
     result = await ky
-      .get(`https://who-dat.as93.net/${encodeURIComponent(query)}`)
+      .get(`https://api.aelew.dev/whois/${encodeURIComponent(query)}`, {
+        throwHttpErrors: false
+      })
       .json<WhoisResult>();
   } catch {
-    result = null;
+    result = {
+      success: false,
+      error: 'internal_server_error'
+    } as const;
   }
   return result;
 }

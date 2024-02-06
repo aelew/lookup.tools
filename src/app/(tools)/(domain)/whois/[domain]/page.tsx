@@ -54,7 +54,11 @@ export default async function WhoisLookupResultPage({
   }
 
   const result = await getCachedWhoisLookup(domain);
-  if (!result) {
+  if (!result.success) {
+    if (result.error !== 'domain_not_found') {
+      // TODO: Add some kind of component that shows the error code
+      notFound();
+    }
     return (
       <>
         <DomainHeader domain={domain} searchAgainForm={WhoisLookupForm} />
