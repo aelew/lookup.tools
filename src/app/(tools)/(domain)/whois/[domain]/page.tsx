@@ -130,29 +130,34 @@ export default async function WhoisLookupResultPage({
             }
           />
         ),
-        Status: () => (
-          <div className="flex flex-col gap-2 sm:flex-row">
-            {result.domain.status.map((s) => {
-              const status =
-                EPP_STATUS_CODES.find((c) => s === c.toLowerCase()) ?? s;
-              return (
-                <Link
-                  href={`https://www.icann.org/epp#${status}`}
-                  className="w-fit"
-                  target="_blank"
-                  key={status}
-                >
-                  <Badge
-                    className="-ml-[1px] border border-muted-foreground/25 shadow-sm hover:bg-muted-foreground/5"
-                    variant="outline"
+        Status: () => {
+          if (!result.domain.status) {
+            return null;
+          }
+          return (
+            <div className="flex flex-col gap-2 sm:flex-row">
+              {result.domain.status.map((s) => {
+                const status =
+                  EPP_STATUS_CODES.find((c) => s === c.toLowerCase()) ?? s;
+                return (
+                  <Link
+                    href={`https://www.icann.org/epp#${status}`}
+                    className="w-fit"
+                    target="_blank"
+                    key={status}
                   >
-                    {status}
-                  </Badge>
-                </Link>
-              );
-            })}
-          </div>
-        ),
+                    <Badge
+                      className="-ml-[1px] border border-muted-foreground/25 shadow-sm hover:bg-muted-foreground/5"
+                      variant="outline"
+                    >
+                      {status}
+                    </Badge>
+                  </Link>
+                );
+              })}
+            </div>
+          );
+        },
         Nameservers: () => (
           <div className="flex flex-col gap-4 sm:flex-row">
             {result.domain.name_servers.map((ns, i) => {

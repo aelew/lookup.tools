@@ -24,7 +24,7 @@ type WhoisResult = {
     name: string;
     extension: string;
     whois_server?: string;
-    status: string[];
+    status?: string[];
     name_servers: string[];
     created_date?: string;
     created_date_in_time?: string;
@@ -35,7 +35,7 @@ type WhoisResult = {
   };
   registrar?: {
     id?: string;
-    name: string;
+    name?: string;
     phone?: string;
     email?: string;
     referral_url?: string;

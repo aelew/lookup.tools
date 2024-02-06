@@ -59,6 +59,7 @@ export const lookupRouter = createTRPCRouter({
   subdomain: publicProcedure.input(domainSchema).mutation(async ({ input }) => {
     const certs = await ky
       .get('https://crt.sh', {
+        timeout: 20000,
         searchParams: {
           q: `%.${input.domain}`,
           output: 'json'
