@@ -127,7 +127,10 @@ export default async function WhoisLookupResultPage({
                 target="_blank"
                 key={status}
               >
-                <Badge variant="outline" className="hover:bg-muted">
+                <Badge
+                  className="-ml-[1px] border border-muted-foreground/25 shadow-sm hover:bg-muted"
+                  variant="outline"
+                >
                   {status}
                 </Badge>
               </Link>
