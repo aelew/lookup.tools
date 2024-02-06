@@ -14,6 +14,7 @@ const config = {
     ignoreBuildErrors: true
   },
   images: {
+    dangerouslyAllowSVG: true,
     remotePatterns: [
       { protocol: 'https', hostname: 'a.impactradius-go.com' },
       { protocol: 'https', hostname: 'favicon.victr.me' },
