@@ -18,6 +18,7 @@ import { TOOLS } from '@/lib/resources/tools';
 import { capitalize, cn } from '@/lib/utils';
 import { api } from '@/trpc/server';
 import type { InfoTable } from '@/types';
+import { CopyButton } from '../../_components/copy-button';
 import { IPLookupForm } from '../form';
 import { Map } from './_components/map';
 
@@ -224,6 +225,7 @@ export default async function IPLookupResultPage({
             alt=""
           />
           <h2>{ip}</h2>
+          <CopyButton className="ml-0 size-4" text={ip} />
         </div>
         <div className="flex items-center gap-2">
           <Popover>

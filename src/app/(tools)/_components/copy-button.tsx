@@ -8,10 +8,11 @@ import { cn } from '@/lib/utils';
 import { useCopyToClipboard } from '../_hooks/use-copy-to-clipboard';
 
 interface CopyButtonProps {
+  className?: string;
   text: string;
 }
 
-export function CopyButton({ text }: CopyButtonProps) {
+export function CopyButton({ className, text }: CopyButtonProps) {
   const { status, copy } = useCopyToClipboard();
 
   const Icon = match(status)
@@ -28,7 +29,7 @@ export function CopyButton({ text }: CopyButtonProps) {
     <button onClick={() => copy(text)}>
       <AnimatePresence mode="popLayout" initial={false}>
         <Icon
-          className={cn('ml-2 size-3.5', iconColor)}
+          className={cn('ml-2 size-3.5', iconColor, className)}
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
         />
