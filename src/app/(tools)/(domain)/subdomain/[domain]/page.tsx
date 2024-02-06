@@ -1,3 +1,4 @@
+import { ClipboardListIcon, MapPinIcon, RadarIcon } from 'lucide-react';
 import type { Metadata } from 'next';
 import { unstable_cache } from 'next/cache';
 import Link from 'next/link';
@@ -86,7 +87,10 @@ export default async function SubdomainFinderResultPage({
         >
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-2xl">Subdomain Scan</CardTitle>
+              <div className="flex items-center gap-2">
+                <RadarIcon className="size-6" />
+                <CardTitle className="text-2xl">Subdomain Scan</CardTitle>
+              </div>
             </CardHeader>
             <CardContent>
               <Table>
@@ -135,7 +139,10 @@ export default async function SubdomainFinderResultPage({
           <div className="flex flex-col gap-4">
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-2xl">Summary</CardTitle>
+                <div className="flex items-center gap-2">
+                  <ClipboardListIcon className="size-6" />
+                  <CardTitle className="text-2xl">Summary</CardTitle>
+                </div>
               </CardHeader>
               <CardContent>
                 <Table>
@@ -174,7 +181,10 @@ export default async function SubdomainFinderResultPage({
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-2xl">IP addresses found</CardTitle>
+                <div className="flex items-center gap-2">
+                  <MapPinIcon className="size-6" />
+                  <CardTitle className="text-2xl">IP addresses found</CardTitle>
+                </div>
               </CardHeader>
               <CardContent>
                 <Table>
