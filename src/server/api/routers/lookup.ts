@@ -65,6 +65,8 @@ export const lookupRouter = createTRPCRouter({
       })
       .json<CertificateInfo[]>();
 
+    console.log('certs', certs);
+
     // Remove duplicates with a set, then sort the subdomains by root domain first and everything else alphabetically
     const hosts = [...new Set(certs.map((c) => c.common_name))]
       .filter((h) => h !== 'sni.cloudflaressl.com')
@@ -78,9 +80,13 @@ export const lookupRouter = createTRPCRouter({
         return a.localeCompare(b);
       });
 
+    console.log('hosts', hosts);
+
     const pings = await Promise.allSettled(
       hosts.map((h) => ping.promise.probe(h))
     );
+
+    console.log('pings', JSON.stringify(pings, null, 2));
 
     return pings.filter(assertFulfilled).map((p) => {
       const ip = p.value.numeric_host?.replace(')', '');
