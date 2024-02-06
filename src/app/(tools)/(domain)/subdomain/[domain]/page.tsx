@@ -67,14 +67,22 @@ export default async function SubdomainFinderResultPage({
     );
   }
 
+  const ipStore: Record<string, number> = {};
+  result.forEach((record) =>
+    ipStore[record.ip] ? (ipStore[record.ip] += 1) : (ipStore[record.ip] = 1)
+  );
+  const mostCommonIp = Object.keys(ipStore).sort(
+    (a, b) => ipStore[b]! - ipStore[a]!
+  )[0];
+
   return (
     <>
       <DomainHeader domain={domain} searchAgainForm={SubdomainFinderForm} />
       <Tabs className="flex flex-col" value="subdomain">
         <DomainTabsList value="subdomain" domain={domain} />
         <TabsContent
+          className="mt-4 flex flex-col-reverse gap-4 md:grid md:grid-cols-2"
           value="subdomain"
-          className="mt-4 grid grid-cols-1 md:grid-cols-2"
         >
           <Card>
             <CardHeader className="pb-2">
@@ -127,6 +135,87 @@ export default async function SubdomainFinderResultPage({
               </Table>
             </CardContent>
           </Card>
+          <div className="flex flex-col gap-4">
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-2xl">Summary</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell className="w-36 font-medium">
+                        Subdomains found
+                      </TableCell>
+                      <TableCell>{result.length}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="w-36 font-medium">
+                        Most common IP
+                      </TableCell>
+                      <TableCell>
+                        {mostCommonIp ? (
+                          <div className="flex items-center">
+                            <Link
+                              className="whitespace-nowrap hover:underline"
+                              href={`/ip/${mostCommonIp}`}
+                            >
+                              {mostCommonIp}
+                            </Link>
+                            <CopyButton text={mostCommonIp} />
+                          </div>
+                        ) : (
+                          'N/A'
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-2xl">IP addresses found</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>IP Address</TableHead>
+                      <TableHead>Occurrences</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {Object.entries(ipStore)
+                      .sort(([_, a], [__, b]) => b - a)
+                      .map(([ip, occurrences]) => (
+                        <TableRow key={ip}>
+                          <TableCell>
+                            <div className="flex items-center">
+                              <CloudflareIcon
+                                className={cn(
+                                  'mr-2 size-4 shrink-0 rounded shadow ring-1 ring-muted-foreground/25',
+                                  !result.find((r) => r.ip === ip)
+                                    ?.cloudflare && 'grayscale'
+                                )}
+                              />
+                              <Link
+                                className="whitespace-nowrap hover:underline"
+                                href={`/ip/${ip}`}
+                              >
+                                {ip}
+                              </Link>
+                              <CopyButton text={ip} />
+                            </div>
+                          </TableCell>
+                          <TableCell>{occurrences}</TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
       </Tabs>
     </>
