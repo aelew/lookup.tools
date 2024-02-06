@@ -11,7 +11,7 @@ export function Date({ dateTime }: DateProps) {
     return null;
   }
   return (
-    <time className="tabular-nums" dateTime={dateTime}>
+    <time dateTime={dateTime} className="tabular-nums">
       {formatDate(dateTime)}
     </time>
   );

@@ -108,28 +108,22 @@ export default async function WhoisLookupResultPage({
       name: 'Domain Information',
       keys: {
         Registrar: () => result.registrar?.name,
-        Registered: () => (
-          <Date
-            dateTime={
-              result.domain.created_date_in_time ?? result.domain.created_date
-            }
-          />
-        ),
-        Expires: () => (
-          <Date
-            dateTime={
-              result.domain.expiration_date_in_time ??
-              result.domain.expiration_date
-            }
-          />
-        ),
-        Updated: () => (
-          <Date
-            dateTime={
-              result.domain.updated_date_in_time ?? result.domain.updated_date
-            }
-          />
-        ),
+        Registered: () => {
+          const dateTime =
+            result.domain.created_date_in_time ?? result.domain.created_date;
+          return dateTime ? <Date dateTime={dateTime} /> : null;
+        },
+        Expires: () => {
+          const dateTime =
+            result.domain.expiration_date_in_time ??
+            result.domain.expiration_date;
+          return dateTime ? <Date dateTime={dateTime} /> : null;
+        },
+        Updated: () => {
+          const dateTime =
+            result.domain.updated_date_in_time ?? result.domain.updated_date;
+          return dateTime ? <Date dateTime={dateTime} /> : null;
+        },
         Status: () => {
           if (!result.domain.status) {
             return null;
