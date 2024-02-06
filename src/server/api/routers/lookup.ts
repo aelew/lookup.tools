@@ -96,7 +96,7 @@ export const lookupRouter = createTRPCRouter({
         return ip && parseDomain(ip).type === ParseResultType.Ip;
       })
       .map((p) => {
-        const ip = p.value.numeric_host!;
+        const ip = p.value.numeric_host!.replace(')', '');
         return {
           ip,
           subdomain: p.value.inputHost,
