@@ -46,14 +46,16 @@ export default function RootLayout({ children }: PropsWithChildren) {
       <body
         className={cn(
           GeistSans.variable,
-          'container flex min-h-screen flex-col pb-4 font-sans antialiased lg:pb-12'
+          'flex min-h-screen flex-col pb-4 font-sans antialiased lg:pb-12'
         )}
       >
         <TRPCReactProvider>
-          <Header />
-          <AnimatedMain initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            {children}
-          </AnimatedMain>
+          <div className="container">
+            <Header />
+            <AnimatedMain initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              {children}
+            </AnimatedMain>
+          </div>
         </TRPCReactProvider>
       </body>
     </html>

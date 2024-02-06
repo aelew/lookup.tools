@@ -70,7 +70,15 @@
   * {
     @apply border-border;
   }
+  html,
+  body {
+    @apply scroll-smooth;
+  }
   body {
     @apply bg-background text-foreground;
+  }
+  body:not([style*='pointer-events: none']) {
+    overflow-x: hidden;
+    margin-right: calc(-1 * (100vw - 100%));
   }
 }

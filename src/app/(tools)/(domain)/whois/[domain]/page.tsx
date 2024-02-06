@@ -221,7 +221,7 @@ export default async function WhoisLookupResultPage({
               <Card key={name}>
                 <CardHeader className="pb-2">
                   <div className="flex items-center gap-2">
-                    <CardIcon className="size-6" />
+                    {CardIcon && <CardIcon className="size-6" />}
                     <CardTitle className="text-2xl">{name}</CardTitle>
                   </div>
                 </CardHeader>

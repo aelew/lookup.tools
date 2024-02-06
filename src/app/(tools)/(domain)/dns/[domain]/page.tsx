@@ -127,10 +127,10 @@ export default async function DNSLookupResultPage({
                             </TableCell>
                             <TableCell>
                               <Badge
-                                className="-space-x-0.5 whitespace-nowrap"
+                                className="-space-x-0.5"
                                 variant="secondary"
                               >
-                                <span>
+                                <span className="whitespace-nowrap">
                                   {formatDuration(Number(record.ttl))}
                                 </span>
                                 <CopyButton text={record.ttl} />
