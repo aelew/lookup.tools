@@ -1,3 +1,4 @@
+import { vercel } from '@t3-oss/env-core/presets';
 import { createEnv } from '@t3-oss/env-nextjs';
 import { z } from 'zod';
 
@@ -34,5 +35,9 @@ export const env = createEnv({
    * Makes it so that empty strings are treated as undefined. `SOME_VAR: z.string()` and
    * `SOME_VAR=''` will throw an error.
    */
-  emptyStringAsUndefined: true
+  emptyStringAsUndefined: true,
+  /**
+   * Use the Vercel preset to automatically add Vercel's environment variables.
+   */
+  extends: [vercel]
 });
