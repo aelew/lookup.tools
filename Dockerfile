@@ -22,9 +22,6 @@ WORKDIR /app
 # Mark environment as production
 ENV NODE_ENV production
 
-# For dig DNS lookups
-RUN apk add bind-tools
-
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
