@@ -1,60 +1,67 @@
 import isCloudflare from '@authentication/cloudflare-ip';
-// @ts-expect-error package has no types
-import { getAllRecords } from '@layered/dns-records';
 import ky from 'ky';
 import ping from 'ping';
 import { parse } from 'tldts';
 
 import { domainSchema, ipSchema } from '@/app/(tools)/schema';
-import { getIPData } from '@/lib/ip';
+import { API_BASE_URL } from '@/lib/config';
+import { GENERIC_ERROR } from '@/lib/constants';
 import { assertFulfilled } from '@/lib/utils';
-import { getWhoisData } from '@/lib/whois';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
-
-type GetAllRecordsFn = (domain: string) => Promise<
-  Record<
-    string,
-    {
-      type: string;
-      name: string;
-      ttl: string;
-      value: string;
-      cloudflare?: boolean;
-    }[]
-  >
->;
-
-type CertificateInfo = {
-  issuer_ca_id: number;
-  issuer_name: string;
-  common_name: string;
-  name_value: string;
-  id: number;
-  entry_timestamp: string;
-  not_before: string;
-  not_after: string;
-  serial_number: string;
-  result_count: number;
-};
+import type { DNSResolveResult } from '@/types/tools/dns';
+import type { IPResult } from '@/types/tools/ip';
+import type { CertificateInfo } from '@/types/tools/subdomain';
+import type { WhoisResult } from '@/types/tools/whois';
 
 export const lookupRouter = createTRPCRouter({
   dns: publicProcedure.input(domainSchema).mutation(async ({ input }) => {
     let result;
     try {
-      result = await (getAllRecords as GetAllRecordsFn)(input.domain);
-      // Perform Cloudflare checks
-      result.A?.forEach((r) => (r.cloudflare = isCloudflare(r.value)));
-      result.AAAA?.forEach((r) => (r.cloudflare = isCloudflare(r.value)));
+      result = await ky
+        .get(`${API_BASE_URL}/dns/${encodeURIComponent(input.domain)}`, {
+          searchParams: { type: 'cloudflare' },
+          throwHttpErrors: false
+        })
+        .json<DNSResolveResult>();
+      if (result.success) {
+        Object.entries(result.records)
+          .filter(([type]) => type === 'A' || type === 'AAAA')
+          .forEach(([_, records]) => {
+            records.forEach((record) => {
+              record.cloudflare = isCloudflare(record.data);
+            });
+          });
+      }
     } catch {
-      result = null;
+      result = GENERIC_ERROR;
     }
     return result;
   }),
   whois: publicProcedure.input(domainSchema).mutation(async ({ input }) => {
-    return getWhoisData(input.domain);
+    let result;
+    try {
+      result = await ky
+        .get(`${API_BASE_URL}/whois/${encodeURIComponent(input.domain)}`, {
+          throwHttpErrors: false
+        })
+        .json<WhoisResult>();
+    } catch {
+      result = GENERIC_ERROR;
+    }
+    return result;
   }),
   ip: publicProcedure.input(ipSchema).mutation(async ({ input }) => {
-    return getIPData(input.ip);
+    let result;
+    try {
+      result = await ky
+        .get(`${API_BASE_URL}/ip/${encodeURIComponent(input.ip)}`, {
+          throwHttpErrors: false
+        })
+        .json<IPResult>();
+    } catch {
+      result = GENERIC_ERROR;
+    }
+    return result;
   }),
   subdomain: publicProcedure.input(domainSchema).mutation(async ({ input }) => {
     const certs = await ky

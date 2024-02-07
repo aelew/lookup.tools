@@ -1,7 +1,7 @@
 import type { LucideIcon } from 'lucide-react';
 import type { ReactNode, SVGProps } from 'react';
 
-import type { TOOLS } from './lib/resources/tools';
+import type { TOOLS } from '../lib/resources/tools';
 
 export type Icon = (props: SVGProps<SVGSVGElement>) => void;
 

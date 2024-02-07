@@ -1,5 +1,3 @@
-import ky from 'ky';
-
 export type ContactInfo = {
   id?: string;
   name?: string;
@@ -16,7 +14,7 @@ export type ContactInfo = {
   email?: string;
 };
 
-type WhoisSuccessResult = {
+export type WhoisSuccessResult = {
   success: true;
   domain: {
     id: string;
@@ -50,20 +48,3 @@ type WhoisSuccessResult = {
 export type WhoisErrorResult = { success: false; error: string };
 
 export type WhoisResult = WhoisSuccessResult | WhoisErrorResult;
-
-export async function getWhoisData(query: string) {
-  let result;
-  try {
-    result = await ky
-      .get(`https://api.aelew.dev/whois/${encodeURIComponent(query)}`, {
-        throwHttpErrors: false
-      })
-      .json<WhoisResult>();
-  } catch {
-    result = {
-      success: false,
-      error: 'internal_server_error'
-    } as const;
-  }
-  return result;
-}

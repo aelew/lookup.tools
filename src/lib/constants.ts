@@ -6,6 +6,11 @@ export const EASE_TRANSITION = {
   animate: { opacity: 1, y: 0 }
 } satisfies MotionProps;
 
+export const GENERIC_ERROR = {
+  success: false,
+  error: 'internal_server_error'
+} as const;
+
 export const EPP_STATUS_CODES = [
   'addPeriod',
   'autoRenewPeriod',

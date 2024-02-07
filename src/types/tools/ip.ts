@@ -1,5 +1,3 @@
-import ky from 'ky';
-
 export type IPSuccessResult = {
   success: true;
   ip: string;
@@ -48,20 +46,3 @@ export type IPSuccessResult = {
 export type IPErrorResult = { success: false; error: string };
 
 export type IPResult = IPSuccessResult | IPErrorResult;
-
-export async function getIPData(query: string) {
-  let result;
-  try {
-    result = await ky
-      .get(`https://api.aelew.dev/ip/${encodeURIComponent(query)}`, {
-        throwHttpErrors: false
-      })
-      .json<IPResult>();
-  } catch {
-    result = {
-      success: false,
-      error: 'internal_server_error'
-    } as const;
-  }
-  return result;
-}

@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { getDomain } from 'tldts';
+import { parse } from 'tldts';
 
 export function assertFulfilled<T>(
   item: PromiseSettledResult<T>
@@ -17,6 +17,7 @@ export function capitalize(str: string) {
 }
 
 export function parseDomain(hostname: string) {
-  const decodedHostname = decodeURIComponent(hostname);
-  return getDomain(decodedHostname);
+  const decodedHostname = decodeURIComponent(hostname).trim().toLowerCase();
+  const result = parse(decodedHostname);
+  return result.isIcann ? result.domain : null;
 }

@@ -60,7 +60,7 @@ export default async function DNSLookupResultPage({
   }
 
   const result = await getCachedDNSLookup(domain);
-  if (!result) {
+  if (!result.success) {
     return (
       <>
         <DomainHeader domain={domain} searchAgainForm={DNSLookupForm} />
@@ -75,7 +75,7 @@ export default async function DNSLookupResultPage({
       <Tabs className="flex flex-col" value="dns">
         <DomainTabsList value="dns" domain={domain} />
         <TabsContent value="dns" className="mt-4 space-y-4">
-          {Object.entries(result).map(([type, records]) => {
+          {Object.entries(result.records).map(([type, records]) => {
             if (!records.length) {
               return null;
             }
@@ -95,9 +95,15 @@ export default async function DNSLookupResultPage({
                     </TableHeader>
                     <TableBody>
                       {records.map((record) => {
-                        let value = record.value;
-                        if (record.value.endsWith('.')) {
-                          value = value.slice(0, -1);
+                        let data = record.data;
+                        if (record.data.endsWith('.')) {
+                          data = record.data.slice(0, -1);
+                        } else if (
+                          record.type === 'TXT' &&
+                          record.data.startsWith('"') &&
+                          record.data.endsWith('"')
+                        ) {
+                          data = record.data.slice(1, -1);
                         }
 
                         let Icon = null;
@@ -107,7 +113,7 @@ export default async function DNSLookupResultPage({
                           for (const service of SERVICES) {
                             if (
                               service.matches.some((k) =>
-                                value.toLowerCase().includes(k)
+                                data.toLowerCase().includes(k)
                               )
                             ) {
                               Icon = service.icon;
@@ -116,12 +122,8 @@ export default async function DNSLookupResultPage({
                           }
                         }
 
-                        if (record.type === 'TXT') {
-                          value = value.substring(1, value.length - 1);
-                        }
-
                         return (
-                          <TableRow key={record.name + record.value}>
+                          <TableRow key={record.name + record.data}>
                             <TableCell>
                               <Link
                                 href={`https://${record.name}`}
@@ -140,7 +142,7 @@ export default async function DNSLookupResultPage({
                                 <span className="whitespace-nowrap">
                                   {formatDuration(Number(record.ttl))}
                                 </span>
-                                <CopyButton text={record.ttl} />
+                                <CopyButton text={record.ttl.toString()} />
                               </Badge>
                             </TableCell>
                             <TableCell className="flex items-center">
@@ -160,25 +162,25 @@ export default async function DNSLookupResultPage({
                                 .with('A', 'AAAA', () => (
                                   <Link
                                     className="whitespace-nowrap tabular-nums hover:underline"
-                                    href={`/ip/${value}`}
+                                    href={`/ip/${data}`}
                                   >
-                                    {value}
+                                    {data}
                                   </Link>
                                 ))
                                 .with('NS', () => (
                                   <Link
                                     className="whitespace-nowrap hover:underline"
-                                    href={`/whois/${parseDomain(value)}`}
+                                    href={`/whois/${parseDomain(data)}`}
                                   >
-                                    {value}
+                                    {data}
                                   </Link>
                                 ))
                                 .otherwise(() => (
                                   <span className="whitespace-nowrap">
-                                    {value}
+                                    {data}
                                   </span>
                                 ))}
-                              <CopyButton text={value} />
+                              <CopyButton text={data} />
                             </TableCell>
                           </TableRow>
                         );

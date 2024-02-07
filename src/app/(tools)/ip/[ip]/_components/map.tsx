@@ -2,7 +2,7 @@
 
 import { Marker, Map as PigeonMap } from 'pigeon-maps';
 
-import type { IPSuccessResult } from '@/lib/ip';
+import type { IPSuccessResult } from '@/types/tools/ip';
 
 interface MapProps {
   location: IPSuccessResult['location'];
