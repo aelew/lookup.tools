@@ -1,7 +1,5 @@
 import isCloudflare from '@authentication/cloudflare-ip';
 import ky from 'ky';
-import ping from 'ping';
-import { parse } from 'tldts';
 
 import { domainSchema, ipSchema } from '@/app/(tools)/schema';
 import { API_BASE_URL } from '@/lib/config';
@@ -10,7 +8,7 @@ import { assertFulfilled } from '@/lib/utils';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 import type { DNSResolveResult } from '@/types/tools/dns';
 import type { IPResult } from '@/types/tools/ip';
-import type { CertificateInfo } from '@/types/tools/subdomain';
+import type { CertificateInfo, PingResult } from '@/types/tools/subdomain';
 import type { WhoisResult } from '@/types/tools/whois';
 
 export const lookupRouter = createTRPCRouter({
@@ -94,21 +92,24 @@ export const lookupRouter = createTRPCRouter({
       });
 
     const pings = await Promise.allSettled(
-      hosts.map((h) => ping.promise.probe(h))
+      hosts.map((h) =>
+        ky.get(`${API_BASE_URL}/ping/${h}`, { retry: 0 }).json<PingResult>()
+      )
     );
 
     return pings
       .filter(assertFulfilled)
-      .filter((p) => {
-        const ip = p.value.numeric_host?.replace(')', '');
-        return ip && parse(ip).isIp;
-      })
+      .filter((p) => p.value.success && p.value.ip)
       .map((p) => {
-        const ip = p.value.numeric_host!.replace(')', '');
+        if (!p.value.success || !p.value.ip) {
+          throw new Error(
+            'This will never throw but I cba to fix the type guard right now :('
+          );
+        }
         return {
-          ip,
-          subdomain: p.value.inputHost,
-          cloudflare: isCloudflare(ip)
+          ip: p.value.ip,
+          subdomain: p.value.input,
+          cloudflare: isCloudflare(p.value.ip)
         };
       });
   })

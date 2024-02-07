@@ -10,3 +10,7 @@ export type CertificateInfo = {
   serial_number: string;
   result_count: number;
 };
+
+export type PingResult =
+  | { success: true; input: string; ip: string | null; alive: boolean }
+  | { success: false; error: string };
