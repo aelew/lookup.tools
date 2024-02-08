@@ -12,7 +12,7 @@ const getCachedStargazersCount = unstable_cache(
       .json<{ stargazers_count: number }>();
     return data.stargazers_count;
   },
-  ['stargazer_count'],
+  ['stargazers_count'],
   { revalidate: 60 * 15 }
 );
 
@@ -24,8 +24,12 @@ export async function GitHubButton() {
       href="https://github.com/aelew/lookup.tools"
       target="_blank"
     >
-      <Button className="h-8 w-8 hover:bg-primary active:scale-100" size="icon">
+      <Button
+        className="w-8 gap-2 px-0 hover:bg-primary active:scale-100 sm:w-auto sm:px-3"
+        size="sm"
+      >
         <SiGithub className="h-4 w-4" />
+        <span className="hidden sm:inline">GitHub</span>
       </Button>
       <Button
         className="relative after:absolute after:right-[1.9rem] after:border-8 after:border-transparent after:border-r-primary hover:bg-primary active:scale-100"
