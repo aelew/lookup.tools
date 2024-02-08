@@ -1,0 +1,38 @@
+import { SiGithub } from '@icons-pack/react-simple-icons';
+import ky from 'ky';
+import { unstable_cache } from 'next/cache';
+import Link from 'next/link';
+
+import { Button } from '@/components/ui/button';
+
+const getCachedStargazersCount = unstable_cache(
+  async () => {
+    const data = await ky
+      .get('https://api.github.com/repos/aelew/lookup.tools')
+      .json<{ stargazers_count: number }>();
+    return data.stargazers_count;
+  },
+  ['stargazer_count'],
+  { revalidate: 60 * 15 }
+);
+
+export async function GitHubButton() {
+  const stargazersCount = await getCachedStargazersCount();
+  return (
+    <Link
+      className="flex items-center gap-2 transition-opacity hover:opacity-80"
+      href="https://github.com/aelew/lookup.tools"
+      target="_blank"
+    >
+      <Button className="h-8 w-8 hover:bg-primary active:scale-100" size="icon">
+        <SiGithub className="h-4 w-4" />
+      </Button>
+      <Button
+        className="relative after:absolute after:right-[1.9rem] after:border-8 after:border-transparent after:border-r-primary hover:bg-primary active:scale-100"
+        size="sm"
+      >
+        {stargazersCount}
+      </Button>
+    </Link>
+  );
+}
