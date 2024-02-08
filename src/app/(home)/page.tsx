@@ -21,7 +21,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
               Lookup Tools
             </h1>
           </div>
-          <h2 className="mx-auto max-w-lg text-center text-sm font-medium tracking-tight text-muted-foreground sm:text-base">
+          <h2 className="mx-auto max-w-lg text-center text-sm tracking-tight text-muted-foreground sm:text-base">
             The cyber swiss army knife of lookup tools. Research information on
             domains, IP addresses, email addresses, phone numbers, and more.
           </h2>

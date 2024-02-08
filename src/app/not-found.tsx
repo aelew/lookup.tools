@@ -11,7 +11,7 @@ export default function NotFound() {
           404 Not Found
         </h1>
       </div>
-      <h2 className="mx-auto max-w-sm text-center font-medium tracking-tight text-muted-foreground">
+      <h2 className="mx-auto max-w-sm text-center tracking-tight text-muted-foreground">
         Uh oh! We couldn&apos;t find the resource you were looking for. Please
         check your URL and try again.
       </h2>
