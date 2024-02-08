@@ -21,7 +21,6 @@ import { TOOLS } from '@/lib/resources/tools';
 import { cn, parseDomain } from '@/lib/utils';
 import { api } from '@/trpc/server';
 import { DomainHeader } from '../../_components/domain-header';
-import { DomainNotRegistered } from '../../_components/domain-not-registered';
 import { DomainTabsList } from '../../_components/domain-tabs-list';
 import { SubdomainFinderForm } from '../form';
 
@@ -59,17 +58,12 @@ export default async function SubdomainFinderResultPage({
   }
 
   const result = await getCachedSubdomainScan(domain);
-  if (!result) {
-    return (
-      <>
-        <DomainHeader domain={domain} searchAgainForm={SubdomainFinderForm} />
-        <DomainNotRegistered domain={domain} />
-      </>
-    );
+  if (!result.success) {
+    notFound();
   }
 
   const ipStore: Record<string, number> = {};
-  result.forEach((record) =>
+  result.data.forEach((record) =>
     ipStore[record.ip] ? (ipStore[record.ip] += 1) : (ipStore[record.ip] = 1)
   );
   const mostCommonIp = Object.keys(ipStore).sort(
@@ -101,7 +95,7 @@ export default async function SubdomainFinderResultPage({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {result.map((record) => (
+                  {result.data.map((record) => (
                     <TableRow key={record.subdomain}>
                       <TableCell>
                         <Link
@@ -152,7 +146,7 @@ export default async function SubdomainFinderResultPage({
                         Subdomains found
                       </TableCell>
                       <TableCell className="tabular-nums">
-                        {result.length}
+                        {result.data.length}
                       </TableCell>
                     </TableRow>
                     <TableRow>
@@ -204,7 +198,7 @@ export default async function SubdomainFinderResultPage({
                               <CloudflareIcon
                                 className={cn(
                                   'mr-2 size-4 shrink-0 rounded shadow ring-1 ring-muted-foreground/25',
-                                  !result.find((r) => r.ip === ip)
+                                  !result.data.find((r) => r.ip === ip)
                                     ?.cloudflare && 'grayscale'
                                 )}
                               />

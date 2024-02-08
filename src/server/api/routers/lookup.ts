@@ -15,42 +15,33 @@ import type { IPResult } from '@/types/tools/ip';
 import type { CertificateInfo, PingResult } from '@/types/tools/subdomain';
 import type { WhoisResult } from '@/types/tools/whois';
 
+const api = ky.create({ prefixUrl: API_BASE_URL });
+
 export const lookupRouter = createTRPCRouter({
   dns: publicProcedure.input(domainSchema).mutation(async ({ input }) => {
-    let result;
-    try {
-      result = await ky
-        .get(`${API_BASE_URL}/dns/${encodeURIComponent(input.domain)}`, {
-          searchParams: { type: 'cloudflare' },
-          throwHttpErrors: false
-        })
-        .json<DNSResolveResult>();
-      if (result.success) {
-        Object.entries(result.records)
-          .filter(([type]) => type === 'A' || type === 'AAAA')
-          .forEach(([_, records]) => {
-            records.forEach((record) => {
-              record.cloudflare = isCloudflare(record.data);
-            });
+    const result = await api
+      .get(`dns/${input.domain}`, {
+        searchParams: { type: 'cloudflare' },
+        throwHttpErrors: false
+      })
+      .json<DNSResolveResult>();
+
+    if (result.success) {
+      Object.entries(result.records)
+        .filter(([type]) => type === 'A' || type === 'AAAA')
+        .forEach(([_, records]) => {
+          records.forEach((record) => {
+            record.cloudflare = isCloudflare(record.data);
           });
-      }
-    } catch {
-      result = GENERIC_ERROR;
+        });
     }
+
     return result;
   }),
   whois: publicProcedure.input(domainSchema).mutation(async ({ input }) => {
-    let result;
-    try {
-      result = await ky
-        .get(`${API_BASE_URL}/whois/${encodeURIComponent(input.domain)}`, {
-          throwHttpErrors: false
-        })
-        .json<WhoisResult>();
-    } catch {
-      result = GENERIC_ERROR;
-    }
-    return result;
+    return api
+      .get(`whois/${input.domain}`, { throwHttpErrors: false })
+      .json<WhoisResult>();
   }),
   subdomain: publicProcedure.input(domainSchema).mutation(async ({ input }) => {
     const certs = await ky
@@ -83,50 +74,50 @@ export const lookupRouter = createTRPCRouter({
       });
 
     const pings = await Promise.allSettled(
-      hosts.map((h) =>
-        ky.get(`${API_BASE_URL}/ping/${h}`, { retry: 0 }).json<PingResult>()
-      )
+      hosts.map((h) => api.get(`ping/${h}`, { retry: 0 }).json<PingResult>())
     );
 
-    return pings
-      .filter(assertFulfilled)
-      .filter((p) => p.value.success && p.value.ip)
-      .map((p) => {
-        if (!p.value.success || !p.value.ip) {
-          throw new Error(
-            'This will never throw but I cba to fix the type guard right now :('
-          );
-        }
-        return {
-          ip: p.value.ip,
-          subdomain: p.value.input,
-          cloudflare: isCloudflare(p.value.ip)
-        };
-      });
+    return {
+      success: true,
+      data: pings
+        .filter(assertFulfilled)
+        .filter((p) => p.value.success && p.value.ip)
+        .map((p) => {
+          if (!p.value.success || !p.value.ip) {
+            throw new Error(
+              'This will never throw but I cba to fix the type guard right now :('
+            );
+          }
+          return {
+            ip: p.value.ip,
+            subdomain: p.value.input,
+            cloudflare: isCloudflare(p.value.ip)
+          };
+        })
+    };
   }),
   ip: publicProcedure.input(ipSchema).mutation(async ({ input }) => {
-    let result;
-    try {
-      result = await ky
-        .get(`${API_BASE_URL}/ip/${encodeURIComponent(input.ip)}`, {
-          throwHttpErrors: false
-        })
-        .json<IPResult>();
-    } catch {
-      result = GENERIC_ERROR;
-    }
-    return result;
+    return ky
+      .get(`ip/${encodeURIComponent(input.ip)}`, { throwHttpErrors: false })
+      .json<IPResult>();
   }),
   google: publicProcedure.input(emailSchema).mutation(async ({ input }) => {
     return ky
-      .get(`${API_BASE_URL}/google/${input.email}`, { timeout: 10000 })
+      .get(`google/${input.email}`, { timeout: 10000 })
       .json<GoogleProfileResult>();
   }),
   accounts: publicProcedure.input(emailSchema).mutation(async ({ input }) => {
-    const result = await ky
-      .get(`${API_BASE_URL}/accounts/${input.email}`, { timeout: 20000 })
-      .json<RegisteredAccountsResult>();
-    result.websites = result.websites.filter((w) => w.status === 'registered');
+    let result;
+    try {
+      result = await ky
+        .get(`accounts/${input.email}`, { timeout: 20000 })
+        .json<RegisteredAccountsResult>();
+      result.websites = result.websites.filter(
+        (w) => w.status === 'registered'
+      );
+    } catch {
+      result = GENERIC_ERROR;
+    }
     return result;
   })
 });
