@@ -1,7 +1,7 @@
 import isCloudflare from '@authentication/cloudflare-ip';
 import ky from 'ky';
 
-import { domainSchema, ipSchema } from '@/app/(tools)/schema';
+import { domainSchema, emailSchema, ipSchema } from '@/app/(tools)/schema';
 import { API_BASE_URL } from '@/lib/config';
 import { GENERIC_ERROR } from '@/lib/constants';
 import { assertFulfilled } from '@/lib/utils';
@@ -43,19 +43,6 @@ export const lookupRouter = createTRPCRouter({
           throwHttpErrors: false
         })
         .json<WhoisResult>();
-    } catch {
-      result = GENERIC_ERROR;
-    }
-    return result;
-  }),
-  ip: publicProcedure.input(ipSchema).mutation(async ({ input }) => {
-    let result;
-    try {
-      result = await ky
-        .get(`${API_BASE_URL}/ip/${encodeURIComponent(input.ip)}`, {
-          throwHttpErrors: false
-        })
-        .json<IPResult>();
     } catch {
       result = GENERIC_ERROR;
     }
@@ -112,5 +99,21 @@ export const lookupRouter = createTRPCRouter({
           cloudflare: isCloudflare(p.value.ip)
         };
       });
+  }),
+  ip: publicProcedure.input(ipSchema).mutation(async ({ input }) => {
+    let result;
+    try {
+      result = await ky
+        .get(`${API_BASE_URL}/ip/${encodeURIComponent(input.ip)}`, {
+          throwHttpErrors: false
+        })
+        .json<IPResult>();
+    } catch {
+      result = GENERIC_ERROR;
+    }
+    return result;
+  }),
+  email: publicProcedure.input(emailSchema).mutation(async ({ input }) => {
+    return { success: true };
   })
 });

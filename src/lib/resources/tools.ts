@@ -38,7 +38,8 @@ export const TOOLS = [
     icon: EmailIcon,
     name: 'Email Address Lookup',
     slug: 'email',
-    description: 'Coming soon!'
+    description:
+      'Locate social media accounts and other information associated with an email address.'
   },
   {
     icon: TelephoneIcon,
