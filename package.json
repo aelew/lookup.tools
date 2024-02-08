@@ -54,7 +54,7 @@
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
     "@types/eslint": "^8.56.2",
-    "@types/node": "^18.19.14",
+    "@types/node": "^20.11.16",
     "@types/react": "^18.2.54",
     "@types/react-dom": "^18.2.18",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
