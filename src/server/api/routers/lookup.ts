@@ -7,6 +7,10 @@ import { GENERIC_ERROR } from '@/lib/constants';
 import { assertFulfilled } from '@/lib/utils';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 import type { DNSResolveResult } from '@/types/tools/dns';
+import type {
+  GoogleProfileResult,
+  RegisteredAccountsResult
+} from '@/types/tools/email';
 import type { IPResult } from '@/types/tools/ip';
 import type { CertificateInfo, PingResult } from '@/types/tools/subdomain';
 import type { WhoisResult } from '@/types/tools/whois';
@@ -113,7 +117,16 @@ export const lookupRouter = createTRPCRouter({
     }
     return result;
   }),
-  email: publicProcedure.input(emailSchema).mutation(async ({ input }) => {
-    return { success: true };
+  google: publicProcedure.input(emailSchema).mutation(async ({ input }) => {
+    return ky
+      .get(`${API_BASE_URL}/google/${input.email}`, { timeout: 10000 })
+      .json<GoogleProfileResult>();
+  }),
+  accounts: publicProcedure.input(emailSchema).mutation(async ({ input }) => {
+    const result = await ky
+      .get(`${API_BASE_URL}/accounts/${input.email}`, { timeout: 20000 })
+      .json<RegisteredAccountsResult>();
+    result.websites = result.websites.filter((w) => w.status === 'registered');
+    return result;
   })
 });

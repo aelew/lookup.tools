@@ -30,7 +30,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <PlausibleProvider
           customDomain="https://s.aelew.dev"
@@ -45,6 +45,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         />
       </head>
       <body
+        suppressHydrationWarning
         className={cn(
           GeistSans.variable,
           'flex min-h-screen flex-col pb-4 font-sans antialiased lg:pb-12'

@@ -25,7 +25,7 @@ export function EmailLookupForm() {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof emailSchema>>({
-    resolver: zodResolver(ipSchema),
+    resolver: zodResolver(emailSchema),
     defaultValues: { email: '' }
   });
 
@@ -53,6 +53,8 @@ export function EmailLookupForm() {
                     clearHandler={() => form.setValue('email', '')}
                     placeholder="Email address (e.g.: example@gmail.com)"
                     deleteButtonClassName="right-9"
+                    data-1p-ignore="true"
+                    autoComplete="false"
                     autoFocus
                     {...field}
                   />
