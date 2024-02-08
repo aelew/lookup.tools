@@ -20,3 +20,10 @@ export const ipSchema = z.object({
     .trim()
     .ip({ message: m('IP address') })
 });
+
+export const emailSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .email({ message: m('email address') })
+});

@@ -1,12 +1,16 @@
 import isCloudflare from '@authentication/cloudflare-ip';
 import ky from 'ky';
 
-import { domainSchema, ipSchema } from '@/app/(tools)/schema';
+import { domainSchema, emailSchema, ipSchema } from '@/app/(tools)/schema';
 import { API_BASE_URL } from '@/lib/config';
 import { GENERIC_ERROR } from '@/lib/constants';
 import { assertFulfilled } from '@/lib/utils';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 import type { DNSResolveResult } from '@/types/tools/dns';
+import type {
+  GoogleProfileResult,
+  RegisteredAccountsResult
+} from '@/types/tools/email';
 import type { IPResult } from '@/types/tools/ip';
 import type { CertificateInfo, PingResult } from '@/types/tools/subdomain';
 import type { WhoisResult } from '@/types/tools/whois';
@@ -43,19 +47,6 @@ export const lookupRouter = createTRPCRouter({
           throwHttpErrors: false
         })
         .json<WhoisResult>();
-    } catch {
-      result = GENERIC_ERROR;
-    }
-    return result;
-  }),
-  ip: publicProcedure.input(ipSchema).mutation(async ({ input }) => {
-    let result;
-    try {
-      result = await ky
-        .get(`${API_BASE_URL}/ip/${encodeURIComponent(input.ip)}`, {
-          throwHttpErrors: false
-        })
-        .json<IPResult>();
     } catch {
       result = GENERIC_ERROR;
     }
@@ -112,5 +103,30 @@ export const lookupRouter = createTRPCRouter({
           cloudflare: isCloudflare(p.value.ip)
         };
       });
+  }),
+  ip: publicProcedure.input(ipSchema).mutation(async ({ input }) => {
+    let result;
+    try {
+      result = await ky
+        .get(`${API_BASE_URL}/ip/${encodeURIComponent(input.ip)}`, {
+          throwHttpErrors: false
+        })
+        .json<IPResult>();
+    } catch {
+      result = GENERIC_ERROR;
+    }
+    return result;
+  }),
+  google: publicProcedure.input(emailSchema).mutation(async ({ input }) => {
+    return ky
+      .get(`${API_BASE_URL}/google/${input.email}`, { timeout: 10000 })
+      .json<GoogleProfileResult>();
+  }),
+  accounts: publicProcedure.input(emailSchema).mutation(async ({ input }) => {
+    const result = await ky
+      .get(`${API_BASE_URL}/accounts/${input.email}`, { timeout: 20000 })
+      .json<RegisteredAccountsResult>();
+    result.websites = result.websites.filter((w) => w.status === 'registered');
+    return result;
   })
 });
