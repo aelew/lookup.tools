@@ -42,7 +42,7 @@ export function DomainHeader({
             </Button>
           </PopoverTrigger>
           <PopoverContent
-            className="rounded-full p-0 shadow-none"
+            className="rounded-full border-none bg-transparent p-0 shadow-none"
             sideOffset={8}
           >
             <SearchAgainForm />

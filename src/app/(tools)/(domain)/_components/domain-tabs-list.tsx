@@ -16,7 +16,7 @@ interface DomainTabsListProps {
 export function DomainTabsList({ value, domain }: DomainTabsListProps) {
   return (
     <div className="overflow-auto">
-      <TabsList className="w-max overflow-auto shadow">
+      <TabsList className="w-max">
         {TABS.map((tab) =>
           tab.value === value ? (
             <TabsTrigger key={tab.value} value={tab.value}>
