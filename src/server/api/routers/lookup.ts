@@ -2,6 +2,7 @@ import isCloudflare from '@authentication/cloudflare-ip';
 import ky from 'ky';
 
 import { domainSchema, emailSchema, ipSchema } from '@/app/(tools)/schema';
+import { env } from '@/env';
 import { API_BASE_URL } from '@/lib/config';
 import { GENERIC_ERROR } from '@/lib/constants';
 import { assertFulfilled } from '@/lib/utils';
@@ -15,7 +16,10 @@ import type { IPResult } from '@/types/tools/ip';
 import type { CertificateInfo, PingResult } from '@/types/tools/subdomain';
 import type { WhoisResult } from '@/types/tools/whois';
 
-const api = ky.create({ prefixUrl: API_BASE_URL });
+const api = ky.create({
+  headers: { 'x-api-secret': env.API_SECRET_KEY },
+  prefixUrl: API_BASE_URL
+});
 
 export const lookupRouter = createTRPCRouter({
   dns: publicProcedure.input(domainSchema).mutation(async ({ input }) => {
@@ -97,20 +101,20 @@ export const lookupRouter = createTRPCRouter({
     };
   }),
   ip: publicProcedure.input(ipSchema).mutation(async ({ input }) => {
-    return ky
-      .get(`ip/${encodeURIComponent(input.ip)}`, { throwHttpErrors: false })
+    return api
+      .get(`ip/${input.ip}`, { throwHttpErrors: false })
       .json<IPResult>();
   }),
   google: publicProcedure.input(emailSchema).mutation(async ({ input }) => {
-    return ky
-      .get(`google/${input.email}`, { timeout: 10000 })
+    return api
+      .get(`google/${encodeURIComponent(input.email)}`, { timeout: 10000 })
       .json<GoogleProfileResult>();
   }),
   accounts: publicProcedure.input(emailSchema).mutation(async ({ input }) => {
     let result;
     try {
-      result = await ky
-        .get(`accounts/${input.email}`, { timeout: 20000 })
+      result = await api
+        .get(`accounts/${encodeURIComponent(input.email)}`, { timeout: 20000 })
         .json<RegisteredAccountsResult>();
       result.websites = result.websites.filter(
         (w) => w.status === 'registered'

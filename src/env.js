@@ -8,6 +8,7 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
+    API_SECRET_KEY: z.string(),
     NODE_ENV: z.enum(['development', 'test', 'production'])
   },
   /**
@@ -24,6 +25,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    API_SECRET_KEY: process.env.API_SECRET_KEY,
     NEXT_PUBLIC_IS_MAIN_INSTANCE: process.env.NEXT_PUBLIC_IS_MAIN_INSTANCE
   },
   /**
