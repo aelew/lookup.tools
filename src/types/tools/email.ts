@@ -29,7 +29,7 @@ export type GoogleProfileContainerData = {
         };
       };
       names: {
-        PROFILE: {
+        PROFILE?: {
           fullname: string;
           firstName: string;
           lastName: string | null;
