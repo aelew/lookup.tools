@@ -107,14 +107,14 @@ export const lookupRouter = createTRPCRouter({
   }),
   google: publicProcedure.input(emailSchema).mutation(async ({ input }) => {
     return api
-      .get(`google/${encodeURIComponent(input.email)}`, { timeout: 10000 })
+      .get(`google/${input.email}`, { timeout: 10000 })
       .json<GoogleProfileResult>();
   }),
   accounts: publicProcedure.input(emailSchema).mutation(async ({ input }) => {
     let result;
     try {
       result = await api
-        .get(`accounts/${encodeURIComponent(input.email)}`, { timeout: 20000 })
+        .get(`accounts/${input.email}`, { timeout: 20000 })
         .json<RegisteredAccountsResult>();
       result.websites = result.websites.filter(
         (w) => w.status === 'registered'
