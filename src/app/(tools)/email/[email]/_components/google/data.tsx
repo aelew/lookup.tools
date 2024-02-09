@@ -40,15 +40,19 @@ export async function GoogleAccountTable({ email }: EmailCardProps) {
         <TableRow>
           <TableCell className="font-bold">Profile</TableCell>
         </TableRow>
-        <TableRow>
-          <TableCell>Name</TableCell>
-          <TableCell>{result.google.profile.names.PROFILE.fullname}</TableCell>
-        </TableRow>
+        {result.google.profile.names.PROFILE && (
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell>
+              {result.google.profile.names.PROFILE.fullname}
+            </TableCell>
+          </TableRow>
+        )}
         {result.google.profile.names.DOMAIN_PROFILE && (
           <TableRow>
             <TableCell>Domain Profile</TableCell>
             <TableCell>
-              {result.google.profile.names.DOMAIN_PROFILE?.fullname}
+              {result.google.profile.names.DOMAIN_PROFILE.fullname}
             </TableCell>
           </TableRow>
         )}
