@@ -7,17 +7,12 @@ const { env } = await import('./src/env.js');
 /** @type {import("next").NextConfig} */
 const config = {
   output: env.VERCEL === '1' ? undefined : 'standalone',
-  eslint: {
-    ignoreDuringBuilds: true
-  },
-  typescript: {
-    ignoreBuildErrors: true
-  },
+  typescript: { ignoreBuildErrors: true },
+  eslint: { ignoreDuringBuilds: true },
   images: {
     dangerouslyAllowSVG: true,
     remotePatterns: [
       { protocol: 'https', hostname: 'a.impactradius-go.com' },
-      { protocol: 'https', hostname: 'favicon.victr.me' },
       { protocol: 'https', hostname: 'flagsapi.com' }
     ]
   }
