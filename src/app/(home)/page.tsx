@@ -23,14 +23,14 @@ export default function HomePage({ searchParams }: HomePageProps) {
           </div>
           <h2 className="mx-auto max-w-lg text-center text-sm tracking-tight text-muted-foreground sm:text-base">
             The cyber swiss army knife of lookup tools. Research information on
-            domains, IP addresses, email addresses, phone numbers, and more.
+            domains, IP addresses, email addresses, and more.
           </h2>
         </div>
         <SearchBar />
       </section>
       <AnimatedSection
         {...EASE_TRANSITION}
-        className="grid gap-8 pb-12 sm:grid-cols-2 md:grid-cols-3"
+        className="flex flex-wrap justify-center gap-8 pb-12"
       >
         {TOOLS.filter(
           (tool) =>

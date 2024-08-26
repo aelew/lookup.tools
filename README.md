@@ -1,6 +1,6 @@
 # 🔎 lookup.tools
 
-The cyber swiss army knife of lookup tools. Research information on domains, IP addresses, email addresses, phone numbers, and more.
+The cyber swiss army knife of lookup tools. Research information on domains, IP addresses, email addresses, and more.
 
 Check out the hosted version here: [lookup.tools](https://lookup.tools)  
 Roadmap: https://github.com/users/aelew/projects/1/views/2

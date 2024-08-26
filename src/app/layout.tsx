@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     template: '%s | Lookup Tools'
   },
   description:
-    'The cyber swiss army knife of lookup tools. Research information on domains, IP addresses, email addresses, phone numbers, and more.'
+    'The cyber swiss army knife of lookup tools. Research information on domains, IP addresses, email addresses, and more.'
 };
 
 export const viewport: Viewport = {

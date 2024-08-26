@@ -3,7 +3,6 @@ import { EmailIcon } from '@/components/icons/email';
 import { GlobeIcon } from '@/components/icons/globe';
 import { MobilePhoneWithArrowIcon } from '@/components/icons/mobile-phone-with-arrow';
 import { PushpinIcon } from '@/components/icons/pushpin';
-import { TelephoneIcon } from '@/components/icons/telephone';
 
 export const TOOLS = [
   {
@@ -40,12 +39,6 @@ export const TOOLS = [
     slug: 'email',
     description:
       'Locate social media accounts and other information associated with an email address.'
-  },
-  {
-    icon: TelephoneIcon,
-    name: 'Phone Number Lookup',
-    slug: 'phone-number',
-    description: 'Coming soon!'
   }
 ] as const;
 
