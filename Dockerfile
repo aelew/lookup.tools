@@ -1,4 +1,4 @@
-FROM imbios/bun-node:21-alpine AS deps
+FROM imbios/bun-node:22-alpine AS deps
 WORKDIR /app
 
 # Install dependencies using Bun
