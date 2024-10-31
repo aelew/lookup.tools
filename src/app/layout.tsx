@@ -33,7 +33,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <PlausibleProvider
-          customDomain="https://s.aelew.dev"
+          customDomain="https://nom.aelew.dev"
           domain="lookup.tools"
           trackOutboundLinks
           taggedEvents
