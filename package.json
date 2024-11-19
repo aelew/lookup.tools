@@ -9,7 +9,8 @@
     "lint": "next lint",
     "build": "next build",
     "start": "next start",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@authentication/cloudflare-ip": "^1.0.0",
