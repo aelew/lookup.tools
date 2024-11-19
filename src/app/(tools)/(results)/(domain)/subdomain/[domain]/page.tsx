@@ -59,9 +59,9 @@ export default async function SubdomainFinderResultPage({
   }
 
   const ipStore: Record<string, number> = {};
-  result.data.forEach((record) => {
-    ipStore[record.ip] = (ipStore[record.ip] ?? 0) + 1;
-  });
+  result.data.forEach((record) =>
+    ipStore[record.ip] ? (ipStore[record.ip] += 1) : (ipStore[record.ip] = 1)
+  );
   const mostCommonIp = Object.keys(ipStore).sort(
     (a, b) => ipStore[b]! - ipStore[a]!
   )[0];

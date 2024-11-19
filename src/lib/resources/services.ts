@@ -3,7 +3,7 @@ import {
   SiAdobe,
   SiAirtable,
   SiAkamai,
-  SiAmazonwebservices,
+  SiAmazonaws,
   SiApple,
   SiAtlassian,
   SiBox,
@@ -12,6 +12,7 @@ import {
   SiCalendly,
   SiCanva,
   SiDocker,
+  SiDocusign,
   SiDropbox,
   SiFacebook,
   SiFastly,
@@ -29,6 +30,9 @@ import {
   SiLogmein,
   SiLoom,
   SiMailgun,
+  SiMicrosoft,
+  SiMicrosoftazure,
+  SiMicrosoftoutlook,
   SiMiro,
   SiMixpanel,
   SiMongodb,
@@ -46,6 +50,7 @@ import {
   SiStripe,
   SiTutanota,
   SiTwilio,
+  SiTwitter,
   SiVercel,
   SiWix,
   SiWordpress,
@@ -56,13 +61,7 @@ import {
 } from '@icons-pack/react-simple-icons';
 
 import { CloudflareIcon } from '@/components/icons/cloudflare';
-import { DocusignIcon } from '@/components/icons/docusign';
 import { GoogleIcon } from '@/components/icons/google';
-import {
-  MicrosoftAzure,
-  MicrosoftIcon,
-  MicrosoftOutlook
-} from '@/components/icons/microsoft';
 import { SkiffIcon } from '@/components/icons/skiff';
 
 export const SERVICES = [
@@ -89,14 +88,8 @@ export const SERVICES = [
     matches: ['akadns.net', '.edgesuite.net']
   },
   {
-    icon: SiAmazonwebservices,
-    matches: [
-      '.amazon.com',
-      '.awsdns-',
-      '.amazonaws.com',
-      '.cloudfront.net',
-      'amazonses:'
-    ]
+    icon: SiAmazonaws,
+    matches: ['.amazon.com', '.awsdns-', '.amazonaws.com', '.cloudfront.net']
   },
   {
     icon: SiWix,
@@ -105,6 +98,10 @@ export const SERVICES = [
   {
     icon: SiNamecheap,
     matches: ['.registrar-servers.com']
+  },
+  {
+    icon: SiAmazonaws,
+    matches: ['amazonses:']
   },
   {
     icon: SiBrevo,
@@ -231,11 +228,11 @@ export const SERVICES = [
     matches: ['mailgun.org', 'mgverify=']
   },
   {
-    icon: DocusignIcon,
+    icon: SiDocusign,
     matches: ['docusign=']
   },
   {
-    icon: MicrosoftAzure,
+    icon: SiMicrosoftazure,
     matches: [
       '.azure-dns.',
       '.azureedge.net',
@@ -272,15 +269,15 @@ export const SERVICES = [
     matches: ['.icloud.com', ':icloud.com']
   },
   {
-    icon: MicrosoftIcon,
+    icon: SiMicrosoft,
     matches: ['.microsoft.com']
   },
   {
-    icon: MicrosoftOutlook,
+    icon: SiMicrosoftoutlook,
     matches: ['.outlook.com']
   },
   {
-    icon: SiX,
+    icon: SiTwitter,
     matches: ['.twitter.com', '.twtrdns.net']
   },
   {
