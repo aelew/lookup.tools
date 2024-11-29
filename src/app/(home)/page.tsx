@@ -23,7 +23,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
           </div>
           <h2 className="mx-auto max-w-lg text-center text-sm tracking-tight text-muted-foreground sm:text-base">
             The cyber swiss army knife of lookup tools. Research information on
-            domains, IP addresses, email addresses, and more.
+            domains, IP addresses, emails, and more.
           </h2>
         </div>
         <SearchBar />

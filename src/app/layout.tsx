@@ -8,6 +8,7 @@ import { env } from '@/env';
 import { AnimatedMain } from '@/lib/framer';
 import { cn } from '@/lib/utils';
 import { TRPCReactProvider } from '@/trpc/react';
+import { Footer } from './_components/footer';
 import { Header } from './_components/header';
 
 import '@/styles/globals.css';
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
     template: '%s | Lookup Tools'
   },
   description:
-    'The cyber swiss army knife of lookup tools. Research information on domains, IP addresses, email addresses, and more.'
+    'The cyber swiss army knife of lookup tools. Research information on domains, IP addresses, emails, and more.'
 };
 
 export const viewport: Viewport = {
@@ -48,7 +49,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         suppressHydrationWarning
         className={cn(
           GeistSans.variable,
-          'flex min-h-screen flex-col pb-4 font-sans antialiased lg:pb-12'
+          'flex min-h-screen flex-col font-sans antialiased'
         )}
       >
         <TRPCReactProvider>
@@ -58,11 +59,16 @@ export default function RootLayout({ children }: PropsWithChildren) {
             defaultTheme="system"
             disableTransitionOnChange
           >
-            <div className="container">
+            <div className="container flex flex-1 flex-col">
               <Header />
-              <AnimatedMain initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <AnimatedMain
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex-1"
+              >
                 {children}
               </AnimatedMain>
+              <Footer />
             </div>
           </ThemeProvider>
         </TRPCReactProvider>
