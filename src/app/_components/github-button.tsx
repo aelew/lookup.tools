@@ -28,11 +28,11 @@ export async function GitHubButton() {
         className="w-8 gap-2 px-0 hover:bg-primary active:scale-100 sm:w-auto sm:px-3"
         size="sm"
       >
-        <SiGithub className="h-4 w-4" />
+        <SiGithub className="size-4" />
         <span className="hidden sm:inline">GitHub</span>
       </Button>
       <Button
-        className="relative after:absolute after:right-[1.9rem] after:border-8 after:border-transparent after:border-r-primary hover:bg-primary active:scale-100"
+        className="relative after:absolute after:right-[2.1rem] after:border-8 after:border-transparent after:border-r-primary hover:bg-primary active:scale-100"
         size="sm"
       >
         {stargazersCount}
