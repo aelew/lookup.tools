@@ -5,19 +5,24 @@ import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 
-const getCachedStargazersCount = unstable_cache(
+const getCachedStargazerCount = unstable_cache(
   async () => {
-    const data = await ky
-      .get('https://api.github.com/repos/aelew/lookup.tools')
-      .json<{ stargazers_count: number }>();
-    return data.stargazers_count;
+    try {
+      const data = await ky
+        .get('https://api.github.com/repos/aelew/lookup.tools')
+        .json<{ stargazers_count: number }>();
+      return data.stargazers_count;
+    } catch (error) {
+      console.error('Failed to fetch GitHub stargazer count:', error);
+      return -1;
+    }
   },
-  ['stargazers_count'],
+  ['stargazer_count'],
   { revalidate: 60 * 15 }
 );
 
 export async function GitHubButton() {
-  const stargazersCount = await getCachedStargazersCount();
+  const stargazerCount = await getCachedStargazerCount();
   return (
     <Link
       className="flex items-center gap-2 transition-opacity hover:opacity-80"
@@ -31,12 +36,14 @@ export async function GitHubButton() {
         <SiGithub className="size-4" />
         <span className="hidden sm:inline">GitHub</span>
       </Button>
-      <Button
-        className="relative after:absolute after:right-[2.1rem] after:border-8 after:border-transparent after:border-r-primary hover:bg-primary active:scale-100"
-        size="sm"
-      >
-        {stargazersCount}
-      </Button>
+      {stargazerCount !== -1 && (
+        <Button
+          className="relative after:absolute after:right-[2.3rem] after:border-8 after:border-transparent after:border-r-primary hover:bg-primary active:scale-100"
+          size="sm"
+        >
+          {stargazerCount}
+        </Button>
+      )}
     </Link>
   );
 }
