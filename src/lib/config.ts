@@ -1,6 +1,5 @@
 import { env } from '@/env';
 
-export const CACHE_REVALIDATE_SECONDS =
-  env.NODE_ENV === 'development' ? 15 : 900;
+const dev = env.NODE_ENV === 'development';
 
-export const API_BASE_URL = 'https://api.lookup.tools';
+export const TOOL_REVALIDATION_INTERVAL = dev ? 10 : 60; // s

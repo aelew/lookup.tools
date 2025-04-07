@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { TOOLS } from '@/lib/resources/tools';
-import WhoisLookupForm from '../../(results)/(domain)/whois/form';
+import WHOISLookupForm from '../../(results)/(domain)/whois/form';
 
 export function generateMetadata() {
   const tool = TOOLS.find((tool) => tool.slug === 'whois');
@@ -13,6 +13,6 @@ export function generateMetadata() {
   } satisfies Metadata;
 }
 
-export default function WhoisLookupPage() {
-  return <WhoisLookupForm />;
+export default function WHOISLookupPage() {
+  return <WHOISLookupForm />;
 }

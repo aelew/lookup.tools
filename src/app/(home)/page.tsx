@@ -6,10 +6,11 @@ import { SearchBar } from './_components/search-bar';
 import { ToolCard } from './_components/tool-card';
 
 interface HomePageProps {
-  searchParams: { q?: string };
+  searchParams: Promise<{ q?: string }>;
 }
 
-export default function HomePage({ searchParams }: HomePageProps) {
+export default async function HomePage(props: HomePageProps) {
+  const searchParams = await props.searchParams;
   const query = searchParams.q?.toLowerCase();
   return (
     <>

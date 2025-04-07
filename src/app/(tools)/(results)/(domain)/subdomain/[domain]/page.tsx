@@ -15,24 +15,23 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
-import { CACHE_REVALIDATE_SECONDS } from '@/lib/config';
+import { lookupSubdomains } from '@/lib/api';
+import { TOOL_REVALIDATION_INTERVAL } from '@/lib/config';
 import { TOOLS } from '@/lib/resources/tools';
 import { cn, parseDomain } from '@/lib/utils';
-import { api } from '@/trpc/server';
 
 interface SubdomainFinderResultPageProps {
-  params: { domain: string };
+  params: Promise<{ domain: string }>;
 }
 
 const getCachedSubdomainScan = unstable_cache(
-  async (domain: string) => api.lookup.subdomain.mutate({ domain }),
+  async (domain: string) => lookupSubdomains(domain),
   ['subdomain_scan'],
-  { revalidate: CACHE_REVALIDATE_SECONDS }
+  { revalidate: TOOL_REVALIDATION_INTERVAL }
 );
 
-export async function generateMetadata({
-  params
-}: SubdomainFinderResultPageProps) {
+export async function generateMetadata(props: SubdomainFinderResultPageProps) {
+  const params = await props.params;
   const domain = parseDomain(params.domain);
   if (!domain) {
     notFound();
@@ -45,9 +44,10 @@ export async function generateMetadata({
   } satisfies Metadata;
 }
 
-export default async function SubdomainFinderResultPage({
-  params
-}: SubdomainFinderResultPageProps) {
+export default async function SubdomainFinderResultPage(
+  props: SubdomainFinderResultPageProps
+) {
+  const params = await props.params;
   const domain = parseDomain(params.domain);
   if (!domain) {
     notFound();

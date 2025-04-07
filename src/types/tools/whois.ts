@@ -14,7 +14,7 @@ export type ContactInfo = {
   email?: string;
 };
 
-export type WhoisSuccessResult = {
+export type WHOISSuccessResult = {
   success: true;
   domain: {
     id: string;
@@ -45,6 +45,6 @@ export type WhoisSuccessResult = {
   billing?: ContactInfo;
 };
 
-export type WhoisErrorResult = { success: false; error: string };
+export type WHOISErrorResult = { success: false; error: string };
 
-export type WhoisResult = WhoisSuccessResult | WhoisErrorResult;
+export type WHOISResult = WHOISSuccessResult | WHOISErrorResult;

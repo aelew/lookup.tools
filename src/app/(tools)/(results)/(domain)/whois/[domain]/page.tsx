@@ -10,31 +10,32 @@ import { ErrorState } from '@/components/error-state';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
-import { CACHE_REVALIDATE_SECONDS } from '@/lib/config';
+import { lookupWHOIS } from '@/lib/api';
+import { TOOL_REVALIDATION_INTERVAL } from '@/lib/config';
 import { EPP_STATUS_CODES } from '@/lib/constants';
 import { TOOLS } from '@/lib/resources/tools';
 import { parseDomain } from '@/lib/utils';
-import { api } from '@/trpc/server';
 import type { InfoTable } from '@/types';
 import type { ContactInfo } from '@/types/tools/whois';
 import { DomainNotRegistered } from '../../_components/domain-not-registered';
 
-interface WhoisLookupResultPageProps {
-  params: { domain: string };
+interface WHOISLookupResultPageProps {
+  params: Promise<{ domain: string }>;
 }
 
-const getCachedWhoisLookup = unstable_cache(
-  async (domain: string) => api.lookup.whois.mutate({ domain }),
-  ['whois_lookup'],
-  { revalidate: CACHE_REVALIDATE_SECONDS }
+const getCachedWHOISLookup = unstable_cache(
+  async (domain: string) => lookupWHOIS(domain),
+  ['lookup_whois'],
+  { revalidate: TOOL_REVALIDATION_INTERVAL }
 );
 
-export async function generateMetadata({ params }: WhoisLookupResultPageProps) {
+export async function generateMetadata(props: WHOISLookupResultPageProps) {
+  const params = await props.params;
   const domain = parseDomain(params.domain);
   if (!domain) {
     notFound();
   }
-  const result = await getCachedWhoisLookup(domain);
+  const result = await getCachedWHOISLookup(domain);
   return {
     title: `WHOIS Lookup for ${domain}`,
     robots: result ? 'noindex' : null,
@@ -42,15 +43,16 @@ export async function generateMetadata({ params }: WhoisLookupResultPageProps) {
   } satisfies Metadata;
 }
 
-export default async function WhoisLookupResultPage({
-  params
-}: WhoisLookupResultPageProps) {
+export default async function WHOISLookupResultPage(
+  props: WHOISLookupResultPageProps
+) {
+  const params = await props.params;
   const domain = parseDomain(params.domain);
   if (!domain) {
     notFound();
   }
 
-  const result = await getCachedWhoisLookup(domain);
+  const result = await getCachedWHOISLookup(domain);
   if (!result.success) {
     if (result.error === 'domain_not_found') {
       return <DomainNotRegistered domain={domain} />;

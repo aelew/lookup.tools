@@ -1,11 +1,11 @@
-import type { PropsWithChildren } from 'react';
+import type { PropsWithChildren, ReactNode } from 'react';
 
 import { XCircleIcon } from './icons/x-circle';
 import { Card } from './ui/card';
 
 interface ErrorStateProps extends PropsWithChildren {
   title?: string;
-  description: JSX.Element;
+  description: ReactNode;
 }
 
 export function ErrorState({

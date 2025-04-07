@@ -13,41 +13,46 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
-import { CACHE_REVALIDATE_SECONDS } from '@/lib/config';
+import { lookupIP } from '@/lib/api';
+import { TOOL_REVALIDATION_INTERVAL } from '@/lib/config';
 import { TOOLS } from '@/lib/resources/tools';
 import { capitalize, cn } from '@/lib/utils';
-import { api } from '@/trpc/server';
 import type { InfoTable } from '@/types';
 import { CopyButton } from '../../../../../components/copy-button';
 import { IPLookupForm } from '../form';
 import { Map } from './_components/map';
 
 interface IPLookupResultPageProps {
-  params: { ip: string };
+  params: Promise<{ ip: string }>;
 }
 
 const getCachedIPLookup = unstable_cache(
-  async (ip: string) => api.lookup.ip.mutate({ ip }),
-  ['ip_lookup'],
-  { revalidate: CACHE_REVALIDATE_SECONDS }
+  async (ip: string) => lookupIP(ip),
+  ['lookup_ip'],
+  { revalidate: TOOL_REVALIDATION_INTERVAL }
 );
 
-export async function generateMetadata({ params }: IPLookupResultPageProps) {
+export async function generateMetadata(props: IPLookupResultPageProps) {
+  const params = await props.params;
   const ip = decodeURIComponent(params.ip).toLowerCase();
+
   const result = await getCachedIPLookup(ip);
   if (!result) {
     notFound();
   }
+
   return {
     title: `IP Lookup for ${ip}`,
     description: TOOLS.find((tool) => tool.slug === 'ip')?.description
   } satisfies Metadata;
 }
 
-export default async function IPLookupResultPage({
-  params
-}: IPLookupResultPageProps) {
+export default async function IPLookupResultPage(
+  props: IPLookupResultPageProps
+) {
+  const params = await props.params;
   const ip = decodeURIComponent(params.ip).toLowerCase();
+
   const result = await getCachedIPLookup(ip);
   if (!result.success) {
     notFound();
@@ -58,7 +63,7 @@ export default async function IPLookupResultPage({
     value
   }));
 
-  const table = {
+  const table: InfoTable = {
     name: 'IP Address Information',
     keys: {
       Hostname: () =>
@@ -210,7 +215,7 @@ export default async function IPLookupResultPage({
         </div>
       )
     }
-  } satisfies InfoTable;
+  };
 
   return (
     <>

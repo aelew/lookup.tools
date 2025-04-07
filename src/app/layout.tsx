@@ -1,13 +1,12 @@
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata, Viewport } from 'next';
 import PlausibleProvider from 'next-plausible';
+import { ThemeProvider } from 'next-themes';
 import type { PropsWithChildren } from 'react';
 
-import { ThemeProvider } from '@/components/ui/theme-provider';
 import { env } from '@/env';
 import { AnimatedMain } from '@/lib/framer';
 import { cn } from '@/lib/utils';
-import { TRPCReactProvider } from '@/trpc/react';
 import { Footer } from './_components/footer';
 import { Header } from './_components/header';
 
@@ -52,26 +51,24 @@ export default function RootLayout({ children }: PropsWithChildren) {
           'flex min-h-screen flex-col font-sans antialiased'
         )}
       >
-        <TRPCReactProvider>
-          <ThemeProvider
-            enableSystem
-            attribute="class"
-            defaultTheme="system"
-            disableTransitionOnChange
-          >
-            <div className="container flex flex-1 flex-col">
-              <Header />
-              <AnimatedMain
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex-1"
-              >
-                {children}
-              </AnimatedMain>
-              <Footer />
-            </div>
-          </ThemeProvider>
-        </TRPCReactProvider>
+        <ThemeProvider
+          enableSystem
+          attribute="class"
+          defaultTheme="system"
+          disableTransitionOnChange
+        >
+          <div className="container flex flex-1 flex-col">
+            <Header />
+            <AnimatedMain
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex-1"
+            >
+              {children}
+            </AnimatedMain>
+            <Footer />
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

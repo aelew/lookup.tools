@@ -19,7 +19,7 @@ import { Input } from '@/components/ui/input';
 import type { Events } from '@/types';
 import { domainSchema } from '../../../schema';
 
-export default function WhoisLookupForm() {
+export default function WHOISLookupForm() {
   const [loading, setLoading] = useState(false);
   const plausible = usePlausible<Events>();
   const router = useRouter();
