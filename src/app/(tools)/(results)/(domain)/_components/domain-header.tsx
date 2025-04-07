@@ -16,12 +16,12 @@ import {
 import type { DomainTool } from '@/types';
 
 const DNSLookupForm = dynamic(() => import('../dns/form'));
-const WhoisLookupForm = dynamic(() => import('../whois/form'));
+const WHOISLookupForm = dynamic(() => import('../whois/form'));
 const SubdomainFinderForm = dynamic(() => import('../subdomain/form'));
 
 const forms: Record<DomainTool, ComponentType> = {
   dns: DNSLookupForm,
-  whois: WhoisLookupForm,
+  whois: WHOISLookupForm,
   subdomain: SubdomainFinderForm
 };
 

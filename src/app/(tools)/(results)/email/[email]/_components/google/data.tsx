@@ -2,9 +2,9 @@ import { unstable_cache } from 'next/cache';
 import Link from 'next/link';
 
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
-import { CACHE_REVALIDATE_SECONDS } from '@/lib/config';
+import { lookupGoogle } from '@/lib/api';
+import { TOOL_REVALIDATION_INTERVAL } from '@/lib/config';
 import { formatDate } from '@/lib/format';
-import { api } from '@/trpc/server';
 import type { EmailCardProps } from '@/types/tools/email';
 
 const getCachedGoogleLookup = unstable_cache(
@@ -12,10 +12,10 @@ const getCachedGoogleLookup = unstable_cache(
     if (email === 'react_devtools_backend_compact.js.map') {
       return { success: false } as const;
     }
-    return api.lookup.google.mutate({ email });
+    return lookupGoogle(email);
   },
-  ['email_google_lookup'],
-  { revalidate: CACHE_REVALIDATE_SECONDS }
+  ['lookup_email_google'],
+  { revalidate: TOOL_REVALIDATION_INTERVAL }
 );
 
 export async function GoogleAccountTable({ email }: EmailCardProps) {

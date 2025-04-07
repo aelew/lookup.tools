@@ -4,8 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { Card } from '@/components/ui/card';
-import { CACHE_REVALIDATE_SECONDS } from '@/lib/config';
-import { api } from '@/trpc/server';
+import { lookupAccounts } from '@/lib/api';
+import { TOOL_REVALIDATION_INTERVAL } from '@/lib/config';
 import type { EmailCardProps } from '@/types/tools/email';
 
 const getCachedAccountsLookup = unstable_cache(
@@ -13,10 +13,10 @@ const getCachedAccountsLookup = unstable_cache(
     if (email === 'react_devtools_backend_compact.js.map') {
       return { success: false } as const;
     }
-    return api.lookup.accounts.mutate({ email });
+    return lookupAccounts(email);
   },
-  ['email_accounts_lookup'],
-  { revalidate: CACHE_REVALIDATE_SECONDS }
+  ['lookup_email_accounts'],
+  { revalidate: TOOL_REVALIDATION_INTERVAL }
 );
 
 export async function RegisteredWebsites({ email }: EmailCardProps) {

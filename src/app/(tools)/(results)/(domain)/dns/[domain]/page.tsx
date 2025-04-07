@@ -15,12 +15,12 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
-import { CACHE_REVALIDATE_SECONDS } from '@/lib/config';
+import { lookupDNS } from '@/lib/api';
+import { TOOL_REVALIDATION_INTERVAL } from '@/lib/config';
 import { formatDuration } from '@/lib/format';
 import { SERVICES } from '@/lib/resources/services';
 import { TOOLS } from '@/lib/resources/tools';
 import { cn, parseDomain } from '@/lib/utils';
-import { api } from '@/trpc/server';
 import { DomainNotRegistered } from '../../_components/domain-not-registered';
 import { CopyButton } from '../../../../../../components/copy-button';
 
@@ -29,9 +29,9 @@ interface DNSLookupResultPageProps {
 }
 
 const getCachedDNSLookup = unstable_cache(
-  async (domain: string) => api.lookup.dns.mutate({ domain }),
-  ['dns_lookup'],
-  { revalidate: CACHE_REVALIDATE_SECONDS }
+  async (domain: string) => lookupDNS(domain),
+  ['lookup_dns'],
+  { revalidate: TOOL_REVALIDATION_INTERVAL }
 );
 
 export async function generateMetadata(props: DNSLookupResultPageProps) {

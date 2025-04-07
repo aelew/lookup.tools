@@ -22,6 +22,7 @@ interface EmailLookupResultPageProps {
 export async function generateMetadata(props: EmailLookupResultPageProps) {
   const params = await props.params;
   const email = decodeURIComponent(params.email).toLowerCase();
+
   return {
     title: `Email Lookup for ${email}`,
     description: TOOLS.find((tool) => tool.slug === 'email')?.description
@@ -34,6 +35,7 @@ export default async function EmailLookupResultPage(
   const params = await props.params;
   const email = decodeURIComponent(params.email).toLowerCase();
   const domain = parseDomain(email);
+
   return (
     <>
       <div className="my-4 flex flex-col items-center justify-between gap-2 sm:flex-row">

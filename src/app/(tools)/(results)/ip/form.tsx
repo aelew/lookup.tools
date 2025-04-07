@@ -17,17 +17,14 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { api } from '@/trpc/react';
 import type { Events } from '@/types';
 import { ipSchema } from '../../schema';
 
 interface IPLookupFormProps {
-  showCurrentIPButton?: boolean;
+  clientIpAddress?: string | null;
 }
 
-export function IPLookupForm({ showCurrentIPButton }: IPLookupFormProps) {
-  const { data: ip } = api.client.ip.useQuery();
-
+export function IPLookupForm({ clientIpAddress }: IPLookupFormProps) {
   const [loading, setLoading] = useState(false);
   const plausible = usePlausible<Events>();
   const router = useRouter();
@@ -78,9 +75,9 @@ export function IPLookupForm({ showCurrentIPButton }: IPLookupFormProps) {
           )}
         />
       </form>
-      {showCurrentIPButton && (
+      {clientIpAddress && (
         <Button
-          onClick={() => form.setValue('ip', ip?.data ?? '')}
+          onClick={() => form.setValue('ip', clientIpAddress)}
           className="self-center"
           variant="secondary"
         >
