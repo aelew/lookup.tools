@@ -20,7 +20,7 @@ import type { ContactInfo } from '@/types/tools/whois';
 import { DomainNotRegistered } from '../../_components/domain-not-registered';
 
 interface WhoisLookupResultPageProps {
-  params: { domain: string };
+  params: Promise<{ domain: string }>;
 }
 
 const getCachedWhoisLookup = unstable_cache(
@@ -29,7 +29,8 @@ const getCachedWhoisLookup = unstable_cache(
   { revalidate: CACHE_REVALIDATE_SECONDS }
 );
 
-export async function generateMetadata({ params }: WhoisLookupResultPageProps) {
+export async function generateMetadata(props: WhoisLookupResultPageProps) {
+  const params = await props.params;
   const domain = parseDomain(params.domain);
   if (!domain) {
     notFound();
@@ -42,9 +43,10 @@ export async function generateMetadata({ params }: WhoisLookupResultPageProps) {
   } satisfies Metadata;
 }
 
-export default async function WhoisLookupResultPage({
-  params
-}: WhoisLookupResultPageProps) {
+export default async function WhoisLookupResultPage(
+  props: WhoisLookupResultPageProps
+) {
+  const params = await props.params;
   const domain = parseDomain(params.domain);
   if (!domain) {
     notFound();

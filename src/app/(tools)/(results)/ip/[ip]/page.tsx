@@ -23,7 +23,7 @@ import { IPLookupForm } from '../form';
 import { Map } from './_components/map';
 
 interface IPLookupResultPageProps {
-  params: { ip: string };
+  params: Promise<{ ip: string }>;
 }
 
 const getCachedIPLookup = unstable_cache(
@@ -32,7 +32,8 @@ const getCachedIPLookup = unstable_cache(
   { revalidate: CACHE_REVALIDATE_SECONDS }
 );
 
-export async function generateMetadata({ params }: IPLookupResultPageProps) {
+export async function generateMetadata(props: IPLookupResultPageProps) {
+  const params = await props.params;
   const ip = decodeURIComponent(params.ip).toLowerCase();
   const result = await getCachedIPLookup(ip);
   if (!result) {
@@ -44,9 +45,10 @@ export async function generateMetadata({ params }: IPLookupResultPageProps) {
   } satisfies Metadata;
 }
 
-export default async function IPLookupResultPage({
-  params
-}: IPLookupResultPageProps) {
+export default async function IPLookupResultPage(
+  props: IPLookupResultPageProps
+) {
+  const params = await props.params;
   const ip = decodeURIComponent(params.ip).toLowerCase();
   const result = await getCachedIPLookup(ip);
   if (!result.success) {

@@ -14,5 +14,5 @@ export type Events = {
 export interface InfoTable {
   name: string;
   icon?: LucideIcon;
-  keys: Record<string, () => ReactNode | JSX.Element | undefined>;
+  keys: Record<string, () => ReactNode | undefined>;
 }

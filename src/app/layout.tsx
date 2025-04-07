@@ -1,9 +1,9 @@
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata, Viewport } from 'next';
 import PlausibleProvider from 'next-plausible';
+import { ThemeProvider } from 'next-themes';
 import type { PropsWithChildren } from 'react';
 
-import { ThemeProvider } from '@/components/ui/theme-provider';
 import { env } from '@/env';
 import { AnimatedMain } from '@/lib/framer';
 import { cn } from '@/lib/utils';

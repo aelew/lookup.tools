@@ -21,7 +21,7 @@ import { cn, parseDomain } from '@/lib/utils';
 import { api } from '@/trpc/server';
 
 interface SubdomainFinderResultPageProps {
-  params: { domain: string };
+  params: Promise<{ domain: string }>;
 }
 
 const getCachedSubdomainScan = unstable_cache(
@@ -30,9 +30,8 @@ const getCachedSubdomainScan = unstable_cache(
   { revalidate: CACHE_REVALIDATE_SECONDS }
 );
 
-export async function generateMetadata({
-  params
-}: SubdomainFinderResultPageProps) {
+export async function generateMetadata(props: SubdomainFinderResultPageProps) {
+  const params = await props.params;
   const domain = parseDomain(params.domain);
   if (!domain) {
     notFound();
@@ -45,9 +44,10 @@ export async function generateMetadata({
   } satisfies Metadata;
 }
 
-export default async function SubdomainFinderResultPage({
-  params
-}: SubdomainFinderResultPageProps) {
+export default async function SubdomainFinderResultPage(
+  props: SubdomainFinderResultPageProps
+) {
+  const params = await props.params;
   const domain = parseDomain(params.domain);
   if (!domain) {
     notFound();

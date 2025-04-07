@@ -16,10 +16,11 @@ import { AccountsCard } from './_components/accounts/card';
 import { GoogleCard } from './_components/google/card';
 
 interface EmailLookupResultPageProps {
-  params: { email: string };
+  params: Promise<{ email: string }>;
 }
 
-export async function generateMetadata({ params }: EmailLookupResultPageProps) {
+export async function generateMetadata(props: EmailLookupResultPageProps) {
+  const params = await props.params;
   const email = decodeURIComponent(params.email).toLowerCase();
   return {
     title: `Email Lookup for ${email}`,
@@ -27,9 +28,10 @@ export async function generateMetadata({ params }: EmailLookupResultPageProps) {
   } satisfies Metadata;
 }
 
-export default async function EmailLookupResultPage({
-  params
-}: EmailLookupResultPageProps) {
+export default async function EmailLookupResultPage(
+  props: EmailLookupResultPageProps
+) {
+  const params = await props.params;
   const email = decodeURIComponent(params.email).toLowerCase();
   const domain = parseDomain(email);
   return (

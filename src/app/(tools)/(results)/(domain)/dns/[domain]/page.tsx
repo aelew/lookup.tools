@@ -25,7 +25,7 @@ import { DomainNotRegistered } from '../../_components/domain-not-registered';
 import { CopyButton } from '../../../../../../components/copy-button';
 
 interface DNSLookupResultPageProps {
-  params: { domain: string };
+  params: Promise<{ domain: string }>;
 }
 
 const getCachedDNSLookup = unstable_cache(
@@ -34,7 +34,8 @@ const getCachedDNSLookup = unstable_cache(
   { revalidate: CACHE_REVALIDATE_SECONDS }
 );
 
-export async function generateMetadata({ params }: DNSLookupResultPageProps) {
+export async function generateMetadata(props: DNSLookupResultPageProps) {
+  const params = await props.params;
   const domain = parseDomain(params.domain);
   if (!domain) {
     notFound();
@@ -47,9 +48,10 @@ export async function generateMetadata({ params }: DNSLookupResultPageProps) {
   } satisfies Metadata;
 }
 
-export default async function DNSLookupResultPage({
-  params
-}: DNSLookupResultPageProps) {
+export default async function DNSLookupResultPage(
+  props: DNSLookupResultPageProps
+) {
+  const params = await props.params;
   const domain = parseDomain(params.domain);
   if (!domain) {
     notFound();
