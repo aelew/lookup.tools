@@ -42,7 +42,7 @@
     "react-hook-form": "^7.55.0",
     "server-only": "^0.0.1",
     "superjson": "^2.2.2",
-    "tailwind-merge": "^2.6.0",
+    "tailwind-merge": "^3.0.0",
     "tailwindcss-animate": "^1.0.7",
     "tldts": "^6.1.85",
     "ts-pattern": "^5.7.0",
