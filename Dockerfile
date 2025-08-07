@@ -16,7 +16,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN bun run build
 
 # Production image, copy all the files and run next
-FROM node:21-alpine AS runner
+FROM node:22-alpine AS runner
 WORKDIR /app
 
 # Mark environment as production
