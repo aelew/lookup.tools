@@ -12,10 +12,10 @@ from urllib3 import Retry
 from exceptions import HTTPException
 from utils import is_cloudflare_ip, ping
 
-v1_router = SubRouter(__file__, prefix="/v1")
+router = SubRouter(__file__, prefix="/v1")
 
 
-@v1_router.exception
+@router.exception
 def handle_exception(error: Exception):
     if isinstance(error, HTTPException):
         status_code = error.status_code
@@ -33,7 +33,7 @@ def handle_exception(error: Exception):
     )
 
 
-@v1_router.get("/resolve/subdomains")
+@router.get("/resolve/subdomains")
 async def resolve_subdomains(query_params: QueryParams):
     domain = query_params.get("domain", None)
 
