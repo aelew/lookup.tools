@@ -1,12 +1,10 @@
 from robyn import Robyn
 
+from routers.v1 import v1_router
+
 app = Robyn(__file__)
 
 
-@app.get("/")
-def index():
-    return "Hello World!"
-
-
 if __name__ == "__main__":
-    app.start(host="0.0.0.0", port=8080)
+    app.include_router(v1_router)
+    app.start(port=8080)
