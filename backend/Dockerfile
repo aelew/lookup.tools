@@ -49,4 +49,4 @@ EXPOSE 8080
 
 # Run the application by default
 # Uses `uv run` to sync dependencies on startup, respecting UV_NO_DEV
-CMD ["uv", "run", "app.py", "--log-level=DEBUG"]
+CMD ["uv", "run", "app.py", "--log-level=WARN"]
