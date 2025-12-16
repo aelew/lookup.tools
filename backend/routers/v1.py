@@ -1,17 +1,19 @@
 import asyncio
 import json
+import os
 import traceback
 from http import HTTPStatus
+from ipaddress import ip_address
 
 import httpx
 import niquests
 import tldextract
+from asyncwhois import aio_rdap, aio_whois
 from email_validator import EmailNotValidError, validate_email
 from holehe.core import get_functions, import_submodules, launch_module
 from robyn import Response, SubRouter, status_codes
 from robyn.robyn import QueryParams
 from urllib3 import Retry
-from asyncwhois import aio_whois, aio_rdap
 
 from exceptions import HTTPException
 from utils.dns import CloudflareDNSResolver
@@ -114,7 +116,7 @@ async def resolve_subdomains(query_params: QueryParams):
     if not response.ok:
         raise HTTPException(
             status_codes.HTTP_500_INTERNAL_SERVER_ERROR,
-            "Third-party scan failed",
+            f"Third-party lookup failed (status_code={response.status_code})",
         )
 
     certs = response.json()
@@ -153,6 +155,40 @@ async def resolve_subdomains(query_params: QueryParams):
     ]
 
     return {"domain": root_domain, "data": data}
+
+
+@router.get("/resolve/ip")
+async def resolve_ip(query_params: QueryParams):
+    ip = query_params.get("ip", None)
+
+    if not ip:
+        raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "IP is required")
+
+    try:
+        ip_address(ip)
+    except ValueError:
+        raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "IP is invalid")
+
+    res = await niquests.aget(
+        f"https://api.ipdata.co/v1/{ip}",
+        params={"api-key": os.getenv("IPDATA_API_KEY")},
+    )
+
+    if not res.ok:
+        raise HTTPException(
+            status_codes.HTTP_500_INTERNAL_SERVER_ERROR,
+            f"Third-party lookup failed (status_code={res.status_code})",
+        )
+
+    data = res.json()
+
+    try:
+        del data["ip"]
+        del data["count"]
+    except KeyError:
+        pass
+
+    return {"ip": ip, "data": data}
 
 
 @router.get("/resolve/accounts")

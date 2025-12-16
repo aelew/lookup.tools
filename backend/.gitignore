@@ -156,6 +156,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+robyn.env
 
 # Spyder project settings
 .spyderproject
