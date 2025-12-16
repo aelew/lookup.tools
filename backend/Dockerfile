@@ -44,8 +44,9 @@ ENTRYPOINT []
 # Use the non-root user to run our application
 USER nonroot
 
+# Expose the port the application listens on
 EXPOSE 8080
 
-# Run the FastAPI application by default
+# Run the application by default
 # Uses `uv run` to sync dependencies on startup, respecting UV_NO_DEV
 CMD ["uv", "run", "app.py", "--log-level=DEBUG"]
