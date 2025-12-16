@@ -11,6 +11,7 @@ from holehe.core import get_functions, import_submodules, launch_module
 from robyn import Response, SubRouter, status_codes
 from robyn.robyn import QueryParams
 from urllib3 import Retry
+from asyncwhois import aio_whois, aio_rdap
 
 from exceptions import HTTPException
 from utils.dns import CloudflareDNSResolver
@@ -53,7 +54,42 @@ async def resolve_dns(query_params: QueryParams):
     resolver = CloudflareDNSResolver()
     records = await resolver.resolve_records(root_domain)
 
-    return {"domain": domain, "data": records}
+    return {"domain": root_domain, "data": records}
+
+
+@router.get("/resolve/whois")
+async def resolve_whois(query_params: QueryParams):
+    domain = query_params.get("domain", None)
+
+    if not domain:
+        raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "Domain is required")
+
+    extract_result = tldextract.extract(domain)
+    root_domain = extract_result.top_domain_under_public_suffix
+
+    if root_domain == "":
+        raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "Domain is invalid")
+
+    raw_output, normalized_output = await aio_whois(root_domain)
+
+    # fallback to RDAP
+    if normalized_output["domain_name"] is None:
+        raw_output, normalized_output = await aio_rdap(root_domain)
+
+    del normalized_output["domain_name"]
+
+    return Response(
+        status_code=200,
+        description=json.dumps(
+            {
+                "domain": root_domain,
+                "data": normalized_output,
+                "raw": raw_output.strip(),
+            },
+            default=str,
+        ),
+        headers={"Content-Type": "application/json"},
+    )
 
 
 @router.get("/resolve/subdomains")
@@ -116,7 +152,7 @@ async def resolve_subdomains(query_params: QueryParams):
         if ip
     ]
 
-    return {"domain": domain, "data": data}
+    return {"domain": root_domain, "data": data}
 
 
 @router.get("/resolve/accounts")
