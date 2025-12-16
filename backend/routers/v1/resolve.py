@@ -27,8 +27,8 @@ class DomainRequestParams(QueryParams):
     domain: str
 
 
-class IPRequestParams(QueryParams):
-    ip: str
+class AddressRequestParams(QueryParams):
+    address: str
 
 
 class EmailRequestParams(QueryParams):
@@ -171,19 +171,19 @@ async def resolve_subdomains(query_params: DomainRequestParams):
 
 
 @router.get("/ip")
-async def resolve_ip(query_params: IPRequestParams):
-    ip = query_params.get("ip", None)
+async def resolve_ip(query_params: AddressRequestParams):
+    address = query_params.get("address", None)
 
-    if not ip:
-        raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "IP is required")
+    if not address:
+        raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "Address is required")
 
     try:
-        ip_address(ip)
+        ip_address(address)
     except ValueError:
-        raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "IP is invalid")
+        raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "Address is invalid")
 
     res = await niquests.aget(
-        f"https://api.ipdata.co/v1/{ip}",
+        f"https://api.ipdata.co/v1/{address}",
         params={"api-key": os.getenv("IPDATA_API_KEY")},
     )
 
@@ -201,7 +201,7 @@ async def resolve_ip(query_params: IPRequestParams):
     except KeyError:
         pass
 
-    return {"ip": ip, "data": data}
+    return {"address": address, "data": data}
 
 
 @router.get("/accounts")
