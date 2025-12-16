@@ -31,4 +31,4 @@ app.include_router(v1_resolve_router)
 
 
 if __name__ == "__main__":
-    app.start(port=8080)
+    app.start(host="0.0.0.0", port=8080)
