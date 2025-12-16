@@ -94,7 +94,7 @@ async def resolve_whois(query_params: DomainRequestParams):
     del normalized_output["domain_name"]
 
     return Response(
-        status_code=200,
+        status_code=status_codes.HTTP_200_OK,
         description=json.dumps(
             {
                 "domain": root_domain,

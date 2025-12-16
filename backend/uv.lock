@@ -48,6 +48,7 @@ dependencies = [
     { name = "holehe" },
     { name = "niquests" },
     { name = "robyn" },
+    { name = "robyn-rate-limits" },
     { name = "tldextract" },
 ]
 
@@ -63,6 +64,7 @@ requires-dist = [
     { name = "holehe", git = "https://github.com/megadose/holehe" },
     { name = "niquests", specifier = ">=3.15.2" },
     { name = "robyn", specifier = ">=0.72.2" },
+    { name = "robyn-rate-limits", specifier = ">=0.4.0" },
     { name = "tldextract", specifier = ">=5.3.0" },
 ]
 
@@ -92,6 +94,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/c9/aa/4acaf814ff901145da37332e05bb510452ebed97bc9602695059dd46ef39/bs4-0.0.2.tar.gz", hash = "sha256:a48685c58f50fe127722417bae83fe6badf500d54b55f7e39ffe43b798653925", size = 698, upload-time = "2024-01-17T18:15:47.371Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/51/bb/bf7aab772a159614954d84aa832c129624ba6c32faa559dfb200a534e50b/bs4-0.0.2-py2.py3-none-any.whl", hash = "sha256:abf8742c0805ef7f662dce4b51cca104cffe52b835238afc169142ab9b3fbccc", size = 1189, upload-time = "2024-01-17T18:15:48.613Z" },
+]
+
+[[package]]
+name = "cachetools"
+version = "6.2.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/bc/1d/ede8680603f6016887c062a2cf4fc8fdba905866a3ab8831aa8aa651320c/cachetools-6.2.4.tar.gz", hash = "sha256:82c5c05585e70b6ba2d3ae09ea60b79548872185d2f24ae1f2709d37299fd607", size = 31731, upload-time = "2025-12-15T18:24:53.744Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2c/fc/1d7b80d0eb7b714984ce40efc78859c022cd930e402f599d8ca9e39c78a4/cachetools-6.2.4-py3-none-any.whl", hash = "sha256:69a7a52634fed8b8bf6e24a050fb60bff1c9bd8f6d24572b99c32d4e71e62a51", size = 11551, upload-time = "2025-12-15T18:24:52.332Z" },
 ]
 
 [[package]]
@@ -504,6 +515,19 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/65/29/f092f2d93554f420ab058bf8a9cc63ee0c32349d11df37d3721f8840f7d8/robyn-0.72.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e97c7e11c649bb8a0368526f8b7dd747d91d68fd3ee0b918bb4dd39617218a4d", size = 1824264, upload-time = "2025-09-06T04:33:00.849Z" },
     { url = "https://files.pythonhosted.org/packages/02/c6/a9debb1fe0f3e4f444a195887e84c5f910242d63bade09a12ccb3c4b921c/robyn-0.72.2-cp313-none-win32.whl", hash = "sha256:db7adb9c6beca7c592a9d96590208239039ec3ab210230319372f41b5a6f9ee9", size = 1635329, upload-time = "2025-09-06T04:33:02.318Z" },
     { url = "https://files.pythonhosted.org/packages/54/19/38ec4c88a99ed0887e4cc5ee71025db081863a1402548905956f25a930f6/robyn-0.72.2-cp313-none-win_amd64.whl", hash = "sha256:ae839a512613eccf95c6197692d73200bc20deec28247aa714ace0e429340e24", size = 1704588, upload-time = "2025-09-06T04:33:03.686Z" },
+]
+
+[[package]]
+name = "robyn-rate-limits"
+version = "0.4.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cachetools" },
+    { name = "robyn" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/0f/b1/68dc63b06d2757d9c7ebcf5bb03350fd26b8a0c720e34c186a2c8c82cb6f/robyn_rate_limits-0.4.0.tar.gz", hash = "sha256:ed0100b152b4397002ac9bb579f29e44ad1814abda12c98d6787179945f3631b", size = 53203, upload-time = "2025-10-01T15:42:24.361Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9b/be/cf35cea8c89c1facfcc0988dab498fd7bd446467d6c65519442b7f9e4ba9/robyn_rate_limits-0.4.0-py3-none-any.whl", hash = "sha256:e039a92ff6378e2266fdc7f16f18539a8024a85186c98ae017a01db3b58ce140", size = 7017, upload-time = "2025-10-01T15:42:23.327Z" },
 ]
 
 [[package]]

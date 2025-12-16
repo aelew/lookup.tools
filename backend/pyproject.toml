@@ -8,6 +8,7 @@ dependencies = [
     "holehe",
     "niquests>=3.15.2",
     "robyn>=0.72.2",
+    "robyn-rate-limits>=0.4.0",
     "tldextract>=5.3.0",
 ]
 
