@@ -20,7 +20,19 @@ from exceptions import HTTPException
 from utils.dns import CloudflareDNSResolver
 from utils.net import is_cloudflare_ip, ping
 
-router = SubRouter(__file__, prefix="/v1")
+router = SubRouter(__file__, prefix="/v1/resolve")
+
+
+class DomainRequestParams(QueryParams):
+    domain: str
+
+
+class IPRequestParams(QueryParams):
+    ip: str
+
+
+class EmailRequestParams(QueryParams):
+    email: str
 
 
 @router.exception
@@ -41,8 +53,8 @@ def handle_exception(error: Exception):
     )
 
 
-@router.get("/resolve/dns")
-async def resolve_dns(query_params: QueryParams):
+@router.get("/dns")
+async def resolve_dns(query_params: DomainRequestParams):
     domain = query_params.get("domain", None)
 
     if not domain:
@@ -60,8 +72,8 @@ async def resolve_dns(query_params: QueryParams):
     return {"domain": root_domain, "data": records}
 
 
-@router.get("/resolve/whois")
-async def resolve_whois(query_params: QueryParams):
+@router.get("/whois")
+async def resolve_whois(query_params: DomainRequestParams):
     domain = query_params.get("domain", None)
 
     if not domain:
@@ -95,8 +107,8 @@ async def resolve_whois(query_params: QueryParams):
     )
 
 
-@router.get("/resolve/subdomains")
-async def resolve_subdomains(query_params: QueryParams):
+@router.get("/subdomains")
+async def resolve_subdomains(query_params: DomainRequestParams):
     domain = query_params.get("domain", None)
 
     if not domain:
@@ -158,8 +170,8 @@ async def resolve_subdomains(query_params: QueryParams):
     return {"domain": root_domain, "data": data}
 
 
-@router.get("/resolve/ip")
-async def resolve_ip(query_params: QueryParams):
+@router.get("/ip")
+async def resolve_ip(query_params: IPRequestParams):
     ip = query_params.get("ip", None)
 
     if not ip:
@@ -192,8 +204,8 @@ async def resolve_ip(query_params: QueryParams):
     return {"ip": ip, "data": data}
 
 
-@router.get("/resolve/accounts")
-async def resolve_accounts(query_params: QueryParams):
+@router.get("/accounts")
+async def resolve_accounts(query_params: EmailRequestParams):
     email = query_params.get("email", None)
 
     if not email:
