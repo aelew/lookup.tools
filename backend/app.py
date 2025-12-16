@@ -27,6 +27,13 @@ def middleware(request: Request):
     return limiter.handle_request(app, request)
 
 
+@app.get("/health", const=True)
+def health():
+    return Response(
+        status_code=status_codes.HTTP_204_NO_CONTENT, description="", headers={}
+    )
+
+
 app.include_router(v1_resolve_router)
 
 
