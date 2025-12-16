@@ -3,14 +3,17 @@ import json
 import traceback
 from http import HTTPStatus
 
+import httpx
 import niquests
 import tldextract
+from email_validator import EmailNotValidError, validate_email
+from holehe.core import get_functions, import_submodules, launch_module
 from robyn import Response, SubRouter, status_codes
 from robyn.robyn import QueryParams
 from urllib3 import Retry
 
 from exceptions import HTTPException
-from utils import is_cloudflare_ip, ping
+from utils.net import is_cloudflare_ip, ping
 
 router = SubRouter(__file__, prefix="/v1")
 
@@ -94,3 +97,35 @@ async def resolve_subdomains(query_params: QueryParams):
     ]
 
     return {"domain": domain, "data": data}
+
+
+@router.get("/resolve/accounts")
+async def resolve_accounts(query_params: QueryParams):
+    email = query_params.get("email", None)
+
+    if not email:
+        raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "Email is required")
+
+    try:
+        validation_result = validate_email(email, check_deliverability=False)
+        email = validation_result.normalized
+    except EmailNotValidError as e:
+        raise HTTPException(
+            status_codes.HTTP_400_BAD_REQUEST, f"Invalid email address — {str(e)}"
+        )
+
+    modules = import_submodules("holehe.modules")
+    websites = get_functions(modules)
+
+    client = httpx.AsyncClient(timeout=10)
+    out = []
+
+    await asyncio.gather(*[launch_module(w, email, client, out) for w in websites])
+    await client.aclose()
+
+    data = {}
+    for w in sorted(out, key=lambda w: w["name"]):
+        if not w["rateLimit"]:
+            data[w["domain"]] = w["exists"]
+
+    return {"email": email, "data": data}
