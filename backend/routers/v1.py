@@ -13,6 +13,7 @@ from robyn.robyn import QueryParams
 from urllib3 import Retry
 
 from exceptions import HTTPException
+from utils.dns import CloudflareDNSResolver
 from utils.net import is_cloudflare_ip, ping
 
 router = SubRouter(__file__, prefix="/v1")
@@ -34,6 +35,25 @@ def handle_exception(error: Exception):
         description=json.dumps({"error": detail}),
         headers={"Content-Type": "application/json"},
     )
+
+
+@router.get("/resolve/dns")
+async def resolve_dns(query_params: QueryParams):
+    domain = query_params.get("domain", None)
+
+    if not domain:
+        raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "Domain is required")
+
+    extract_result = tldextract.extract(domain)
+    root_domain = extract_result.top_domain_under_public_suffix
+
+    if root_domain == "":
+        raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "Domain is invalid")
+
+    resolver = CloudflareDNSResolver()
+    records = await resolver.resolve_records(root_domain)
+
+    return {"domain": domain, "data": records}
 
 
 @router.get("/resolve/subdomains")
