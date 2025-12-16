@@ -4,6 +4,7 @@ import os
 import traceback
 from http import HTTPStatus
 from ipaddress import ip_address
+from urllib.parse import unquote
 
 import httpx
 import niquests
@@ -197,6 +198,8 @@ async def resolve_accounts(query_params: QueryParams):
 
     if not email:
         raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "Email is required")
+
+    email = unquote(email)
 
     try:
         validation_result = validate_email(email, check_deliverability=False)
