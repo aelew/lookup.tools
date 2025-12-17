@@ -1,5 +1,10 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
-import { CornerDownLeftIcon, EthernetPortIcon } from 'lucide-react';
+import {
+  CheckCircle2Icon,
+  CornerDownLeftIcon,
+  EthernetPortIcon,
+  XCircleIcon
+} from 'lucide-react';
 import type { FormEvent } from 'react';
 
 import { ToolHero } from '@/components/tool/hero';
@@ -11,6 +16,7 @@ import {
   InputGroupButton,
   InputGroupInput
 } from '@/components/ui/input-group';
+import { Spinner } from '@/components/ui/spinner';
 import {
   Table,
   TableBody,
@@ -103,12 +109,17 @@ function SubdomainScanResult() {
     <article className="grid gap-2 sm:gap-0">
       <header className="grid gap-2 pt-3">
         <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
-          <h1 className="text-center text-lg/tight font-semibold tracking-tight sm:text-left">
-            <Link to="/subdomain">Subdomain Finder</Link>{' '}
-            <span className="block font-normal opacity-60 sm:ml-1 sm:inline">
+          <div className="flex flex-col items-center text-center leading-tight sm:flex-row sm:items-baseline sm:gap-2 sm:text-left">
+            <Link to="/subdomain">
+              <h1 className="text-lg/tight font-semibold tracking-tight whitespace-nowrap">
+                Subdomain Finder
+              </h1>
+            </Link>
+            <p className="text-muted-foreground max-w-[50dvw] truncate">
               {domain}
-            </span>
-          </h1>
+            </p>
+          </div>
+
           <div className="w-full max-w-64">
             <DomainForm mode="existing" />
           </div>
@@ -118,9 +129,18 @@ function SubdomainScanResult() {
       <Tabs value="subdomain" className="overflow-x-auto">
         <div className="overflow-x-auto">
           <TabsList className="my-2">
-            <TabsTrigger value="dns">DNS Lookup</TabsTrigger>
-            <TabsTrigger value="whois">WHOIS Lookup</TabsTrigger>
-            <TabsTrigger value="subdomain">Subdomain Finder</TabsTrigger>
+            <TabsTrigger value="dns">
+              <CheckCircle2Icon className="text-green-500/50" />
+              DNS Lookup
+            </TabsTrigger>
+            <TabsTrigger value="whois">
+              <XCircleIcon className="text-red-500/50" />
+              WHOIS Lookup
+            </TabsTrigger>
+            <TabsTrigger value="subdomain">
+              <Spinner className="opacity-50" />
+              Subdomain Finder
+            </TabsTrigger>
           </TabsList>
         </div>
         <TabsContent value="subdomain">
