@@ -1,10 +1,9 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { CornerDownLeftIcon, EthernetPortIcon } from 'lucide-react';
-import { useId } from 'react';
 import type { FormEvent } from 'react';
 
 import { ToolHero } from '@/components/tool/hero';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import {
   InputGroup,
@@ -12,6 +11,15 @@ import {
   InputGroupButton,
   InputGroupInput
 } from '@/components/ui/input-group';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { domainSchema } from '@/lib/schema';
 
 export const Route = createFileRoute('/subdomain')({
@@ -65,13 +73,13 @@ function DomainForm({ mode }: { mode: 'new' | 'existing' }) {
           {mode === 'new' && <FieldLabel htmlFor="domain">Domain</FieldLabel>}
           <InputGroup>
             <InputGroupAddon>
-              <EthernetPortIcon />
+              <EthernetPortIcon className="mr-0.5" />
             </InputGroupAddon>
             <InputGroupInput
               type="text"
               id="domain"
               name="domain"
-              placeholder="lookup.tools"
+              placeholder="example.com"
               autoFocus={mode === 'new'}
             />
             <InputGroupButton type="submit">
@@ -92,16 +100,114 @@ function SubdomainScanResult() {
   }
 
   return (
-    <article>
-      <header className="flex flex-col items-center justify-between gap-2 border-b py-3 sm:flex-row">
-        <h1 className="text-lg font-semibold tracking-tight">
-          <Link to="/subdomain">Subdomain Finder</Link>{' '}
-          <span className="ml-1 font-normal opacity-60">{domain}</span>
-        </h1>
-        <div className="w-full max-w-64">
-          <DomainForm mode="existing" />
-        </div>
-      </header>
+    <article className="grid gap-4">
+      <Tabs value="subdomain">
+        <header className="grid gap-2 border-b py-3">
+          <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
+            <h1 className="text-lg font-semibold tracking-tight">
+              <Link to="/subdomain">Subdomain Finder</Link>{' '}
+              <span className="ml-1 font-normal opacity-60">{domain}</span>
+            </h1>
+            <div className="w-full max-w-64">
+              <DomainForm mode="existing" />
+            </div>
+          </div>
+
+          <TabsList>
+            <TabsTrigger value="dns">DNS Lookup</TabsTrigger>
+            <TabsTrigger value="whois">WHOIS Lookup</TabsTrigger>
+            <TabsTrigger value="subdomain">Subdomain Finder</TabsTrigger>
+          </TabsList>
+        </header>
+
+        <TabsContent value="subdomain">
+          <section className="flex flex-col-reverse gap-4 md:grid md:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Scan Results</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Subdomain</TableHead>
+                      <TableHead>IP Address</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>subdomain1.example.com</TableCell>
+                      <TableCell>127.0.0.1</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+
+            <div className="grid gap-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Summary</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell className="w-36 font-medium">
+                          Subdomains found
+                        </TableCell>
+                        <TableCell className="tabular-nums">0</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell className="w-36 font-medium">
+                          Most common IP
+                        </TableCell>
+                        <TableCell>
+                          {/* {mostCommonIp ? (
+                        <div className="flex items-center">
+                          <Link
+                            className="whitespace-nowrap tabular-nums hover:underline"
+                            href={`/ip/${mostCommonIp}`}
+                          >
+                            {mostCommonIp}
+                          </Link>
+                          <CopyButton text={mostCommonIp} />
+                        </div>
+                      ) : (
+                        'N/A'
+                      )} */}
+                          N/A
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>IP Addresses</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>IP Address</TableHead>
+                        <TableHead>Occurrences</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>127.0.0.1</TableCell>
+                        <TableCell>1</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
+        </TabsContent>
+      </Tabs>
     </article>
   );
 }
