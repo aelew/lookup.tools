@@ -100,26 +100,29 @@ function SubdomainScanResult() {
   }
 
   return (
-    <article className="grid gap-4">
-      <Tabs value="subdomain">
-        <header className="grid gap-2 border-b py-3">
-          <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
-            <h1 className="text-lg font-semibold tracking-tight">
-              <Link to="/subdomain">Subdomain Finder</Link>{' '}
-              <span className="ml-1 font-normal opacity-60">{domain}</span>
-            </h1>
-            <div className="w-full max-w-64">
-              <DomainForm mode="existing" />
-            </div>
+    <article className="grid gap-2 sm:gap-0">
+      <header className="grid gap-2 pt-3">
+        <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
+          <h1 className="text-center text-lg/tight font-semibold tracking-tight sm:text-left">
+            <Link to="/subdomain">Subdomain Finder</Link>{' '}
+            <span className="block font-normal opacity-60 sm:ml-1 sm:inline">
+              {domain}
+            </span>
+          </h1>
+          <div className="w-full max-w-64">
+            <DomainForm mode="existing" />
           </div>
+        </div>
+      </header>
 
-          <TabsList>
+      <Tabs value="subdomain" className="overflow-x-auto">
+        <div className="overflow-x-auto">
+          <TabsList className="my-2">
             <TabsTrigger value="dns">DNS Lookup</TabsTrigger>
             <TabsTrigger value="whois">WHOIS Lookup</TabsTrigger>
             <TabsTrigger value="subdomain">Subdomain Finder</TabsTrigger>
           </TabsList>
-        </header>
-
+        </div>
         <TabsContent value="subdomain">
           <section className="flex flex-col-reverse gap-4 md:grid md:grid-cols-2">
             <Card>

@@ -4,7 +4,8 @@ export function Footer() {
   return (
     <footer className="text-muted-foreground mt-6 flex h-14 items-center justify-between border-t text-sm">
       <p className="flex items-center gap-1">
-        Made with <HeartIcon className="fill-muted-foreground/40 size-3.5" /> by{' '}
+        Made with{' '}
+        <HeartIcon className="fill-muted-foreground/40 size-3.5 shrink-0" /> by{' '}
         <a
           className="decoration-muted-foreground/40 hover:text-muted-foreground/80 hover:decoration-muted-foreground/30 underline decoration-wavy underline-offset-[3px] transition-colors"
           href="https://aelew.com"

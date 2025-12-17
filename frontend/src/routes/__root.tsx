@@ -1,6 +1,4 @@
-import { TanStackDevtools } from '@tanstack/react-devtools';
 import { createRootRoute, HeadContent, Scripts } from '@tanstack/react-router';
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { ThemeProvider } from 'tanstack-theme-kit';
 
 import { Footer } from '@/components/layout/footer';
@@ -41,7 +39,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
-          <TanStackDevtools
+          {/* <TanStackDevtools
             config={{ position: 'bottom-right' }}
             plugins={[
               {
@@ -49,7 +47,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                 render: <TanStackRouterDevtoolsPanel />
               }
             ]}
-          />
+          /> */}
           <Scripts />
           <Logo className="pointer-events-none absolute top-1/6 left-1/3 -z-50 size-48 opacity-5 select-none sm:size-64 lg:top-1/10 lg:size-128" />
         </ThemeProvider>
