@@ -9,9 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SubdomainRouteImport } from './routes/subdomain'
 import { Route as ExampleRouteImport } from './routes/example'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SubdomainRoute = SubdomainRouteImport.update({
+  id: '/subdomain',
+  path: '/subdomain',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExampleRoute = ExampleRouteImport.update({
   id: '/example',
   path: '/example',
@@ -26,31 +32,42 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/example': typeof ExampleRoute
+  '/subdomain': typeof SubdomainRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/example': typeof ExampleRoute
+  '/subdomain': typeof SubdomainRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/example': typeof ExampleRoute
+  '/subdomain': typeof SubdomainRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/example'
+  fullPaths: '/' | '/example' | '/subdomain'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/example'
-  id: '__root__' | '/' | '/example'
+  to: '/' | '/example' | '/subdomain'
+  id: '__root__' | '/' | '/example' | '/subdomain'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ExampleRoute: typeof ExampleRoute
+  SubdomainRoute: typeof SubdomainRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/subdomain': {
+      id: '/subdomain'
+      path: '/subdomain'
+      fullPath: '/subdomain'
+      preLoaderRoute: typeof SubdomainRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/example': {
       id: '/example'
       path: '/example'
@@ -71,6 +88,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExampleRoute: ExampleRoute,
+  SubdomainRoute: SubdomainRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

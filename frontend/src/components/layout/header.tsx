@@ -1,6 +1,5 @@
 import { Link } from '@tanstack/react-router';
 import { Moon, Sun } from 'lucide-react';
-import GitHubButton from 'react-github-btn';
 import { useTheme } from 'tanstack-theme-kit';
 
 import { Button } from '../ui/button';
@@ -27,7 +26,7 @@ export function Header() {
         </span>
       </Link>
       <div className="flex items-center gap-2">
-        <div className="h-7">
+        {/* <div className="h-7">
           <GitHubButton
             href="https://github.com/aelew/lookup.tools"
             data-color-scheme="no-preference: light; light: light; dark: dark;"
@@ -37,7 +36,7 @@ export function Header() {
           >
             <span className="sr-only">Star</span>
           </GitHubButton>
-        </div>
+        </div> */}
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
