@@ -1,7 +1,7 @@
 import json
 from http import HTTPStatus
 
-from robyn import Request, Response, Robyn, status_codes
+from robyn import ALLOW_CORS, Request, Response, Robyn, status_codes
 from robyn.logger import logger
 from robyn_rate_limits import InMemoryStore, RateLimiter
 
@@ -19,6 +19,8 @@ limiter = RateLimiter(
         headers={"Content-Type": "application/json"},
     ),
 )
+
+ALLOW_CORS(app, origins=["http://localhost:3000/", "https://lookup.tools/"])
 
 
 @app.before_request()
