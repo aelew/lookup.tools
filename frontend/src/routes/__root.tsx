@@ -1,12 +1,22 @@
-import { createRootRoute, HeadContent, Scripts } from '@tanstack/react-router';
-import { ThemeProvider } from 'tanstack-theme-kit';
+import { type QueryClient } from '@tanstack/react-query';
+import {
+  createRootRouteWithContext,
+  HeadContent,
+  Scripts
+} from '@tanstack/react-router';
+import type { PropsWithChildren } from 'react';
 
 import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';
 import { Logo } from '@/components/layout/logo';
-import appCss from '../styles.css?url';
+import { Providers } from '@/components/providers';
+import styles from '../styles.css?url';
 
-export const Route = createRootRoute({
+interface RootRouteContext {
+  queryClient: QueryClient;
+}
+
+export const Route = createRootRouteWithContext<RootRouteContext>()({
   shellComponent: RootDocument,
   head: () => ({
     meta: [
@@ -17,40 +27,28 @@ export const Route = createRootRoute({
     links: [
       {
         rel: 'stylesheet',
-        href: appCss
+        href: styles
       }
     ]
   })
 });
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootDocument({ children }: PropsWithChildren) {
+  const { queryClient } = Route.useRouteContext();
+
   return (
-    <html suppressHydrationWarning={import.meta.env.DEV} lang="en">
+    <html lang="en" suppressHydrationWarning={import.meta.env.DEV}>
       <head>
         <HeadContent />
       </head>
       <body className="relative flex min-h-screen flex-col">
-        <ThemeProvider
-          enableSystem
-          attribute="class"
-          defaultTheme="system"
-          disableTransitionOnChange
-        >
+        <Providers queryClient={queryClient}>
           <Header />
           <main className="container-layout flex-1">{children}</main>
           <Footer />
-          {/* <TanStackDevtools
-            config={{ position: 'bottom-right' }}
-            plugins={[
-              {
-                name: 'Tanstack Router',
-                render: <TanStackRouterDevtoolsPanel />
-              }
-            ]}
-          /> */}
-          <Scripts />
-          <Logo className="pointer-events-none fixed top-1/6 left-1/3 -z-50 size-48 opacity-5 select-none sm:size-64 lg:top-1/10 lg:size-128" />
-        </ThemeProvider>
+        </Providers>
+        <Logo className="pointer-events-none fixed top-1/6 left-1/3 -z-50 size-48 opacity-5 select-none sm:size-64 lg:top-1/10 lg:size-128" />
+        <Scripts />
       </body>
     </html>
   );

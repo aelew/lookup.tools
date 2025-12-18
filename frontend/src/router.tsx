@@ -9,8 +9,8 @@ export function getRouter() {
     defaultOptions: {
       queries: {
         retry: 1,
-        staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 10 // cache time
+        staleTime: 1000 * 60 * 5, // 5m
+        gcTime: 1000 * 60 * 60 * 24 // 24h - cache time
       }
     }
   });
@@ -26,7 +26,7 @@ export function getRouter() {
   setupRouterSsrQueryIntegration({
     router,
     queryClient,
-    wrapQueryClient: true
+    wrapQueryClient: false
   });
 
   return router;

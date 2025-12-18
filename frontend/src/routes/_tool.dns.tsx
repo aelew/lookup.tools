@@ -60,6 +60,7 @@ function RouteComponent() {
         if (!records.length) {
           return null;
         }
+
         return (
           <Card key={type}>
             <CardHeader className="pbs-2">
