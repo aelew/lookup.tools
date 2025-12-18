@@ -6,6 +6,8 @@ from typing import TypedDict
 
 import niquests
 
+from utils.net import is_cloudflare_ip
+
 DNS_RECORD_TYPES_BY_DECIMAL = {
     1: "A",
     28: "AAAA",
@@ -60,10 +62,16 @@ class CloudflareDNSResolver(DNSResolver):
             if data_len >= 2 and data[0] == '"' and data[data_len - 1] == '"':
                 data = data[1 : data_len - 1]
 
+        attributes = {}
+        if type == "A" or type == "AAAA":
+            attributes["cloudflare"] = is_cloudflare_ip(data)
+
         return {
             "type": type,
+            "name": record["name"],
             "data": data,
             "ttl": record["TTL"],
+            "attributes": attributes,
         }
 
     async def resolve_record(self, domain: str, type: str) -> DNSRecord:
