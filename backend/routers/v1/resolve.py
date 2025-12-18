@@ -8,12 +8,12 @@ from urllib.parse import unquote
 
 import httpx
 import niquests
-from robyn.logger import logger
 import tldextract
 from asyncwhois import aio_rdap, aio_whois
 from email_validator import EmailNotValidError, validate_email
 from holehe.core import get_functions, import_submodules, launch_module
 from robyn import Response, SubRouter, status_codes
+from robyn.logger import logger
 from robyn.robyn import QueryParams
 from urllib3 import Retry
 
