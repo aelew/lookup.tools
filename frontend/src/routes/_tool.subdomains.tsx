@@ -1,6 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, notFound } from '@tanstack/react-router';
+import { useMemo } from 'react';
 
+import { CopyButton } from '@/components/copy-button';
+import { CloudflareIcon } from '@/components/icons/cloudflare';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
@@ -11,6 +14,7 @@ import {
   TableRow
 } from '@/components/ui/table';
 import { getQueryOptions } from '@/lib/query';
+import { cn } from '@/lib/utils';
 
 interface ResolveSubdomainsResponse {
   q: string;
@@ -39,6 +43,31 @@ function RouteComponent() {
 
   const subdomains = query.data?.data;
 
+  const addressOccurrences = useMemo(() => {
+    if (!subdomains?.length) {
+      return null;
+    }
+
+    const occurrences = new Map<string, number>();
+    subdomains.forEach((s) => {
+      occurrences.set(s.ip, (occurrences.get(s.ip) ?? 0) + 1);
+    });
+
+    return occurrences;
+  }, [subdomains]);
+
+  const mostCommonAddress = useMemo(() => {
+    if (!addressOccurrences) {
+      return null;
+    }
+
+    return Array.from(addressOccurrences.entries()).reduce((max, curr) =>
+      curr[1] > max[1] ? curr : max
+    )[0];
+  }, [addressOccurrences]);
+
+  console.log({ addressOccurrences, mostCommonAddress });
+
   return (
     <section className="flex flex-col-reverse gap-4 md:grid md:grid-cols-2">
       <Card className="h-fit">
@@ -54,10 +83,10 @@ function RouteComponent() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {subdomains?.map((subdomain) => (
-                <TableRow key={subdomain.fqdn}>
-                  <TableCell>{subdomain.fqdn}</TableCell>
-                  <TableCell>{subdomain.ip}</TableCell>
+              {subdomains?.map((record) => (
+                <TableRow key={record.fqdn}>
+                  <TableCell>{record.fqdn}</TableCell>
+                  <TableCell className="tabular-nums">{record.ip}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -65,8 +94,8 @@ function RouteComponent() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-4">
-        <Card className="h-fit">
+      <div className="flex flex-col gap-4">
+        <Card>
           <CardHeader>
             <CardTitle>Summary</CardTitle>
           </CardHeader>
@@ -86,27 +115,28 @@ function RouteComponent() {
                     Most common IP
                   </TableCell>
                   <TableCell>
-                    {/* {mostCommonIp ? (
-                <div className="flex items-center">
-                  <Link
-                    className="whitespace-nowrap tabular-nums hover:underline"
-                    href={`/ip/${mostCommonIp}`}
-                  >
-                    {mostCommonIp}
-                  </Link>
-                  <CopyButton text={mostCommonIp} />
-                </div>
-              ) : (
-                'N/A'
-              )} */}
-                    N/A
+                    {mostCommonAddress ? (
+                      <div className="flex items-center">
+                        {/* <Link
+                          className="whitespace-nowrap tabular-nums hover:underline"
+                          search={{ q: mostCommonAddress }}
+                          to="/ip"
+                        >
+                          {mostCommonAddress}
+                        </Link> */}
+                        {mostCommonAddress}
+                        <CopyButton text={mostCommonAddress} />
+                      </div>
+                    ) : (
+                      'N/A'
+                    )}
                   </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
           </CardContent>
         </Card>
-        <Card className="h-fit">
+        <Card>
           <CardHeader>
             <CardTitle>IP Addresses</CardTitle>
           </CardHeader>
@@ -119,10 +149,34 @@ function RouteComponent() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow>
-                  <TableCell>127.0.0.1</TableCell>
-                  <TableCell>1</TableCell>
-                </TableRow>
+                {addressOccurrences &&
+                  Array.from(addressOccurrences)
+                    .sort(([_, a], [__, b]) => b - a)
+                    .map(([address, occurrences]) => (
+                      <TableRow key={address} className="tabular-nums">
+                        <TableCell>
+                          <div className="flex items-center">
+                            <CloudflareIcon
+                              className={cn(
+                                'mr-1.5 size-5 shrink-0',
+                                !subdomains?.find((r) => r.ip === address)
+                                  ?.attributes.cloudflare && 'grayscale'
+                              )}
+                            />
+                            {/* <Link
+                              className="whitespace-nowrap hover:underline"
+                              search={{ q: address }}
+                              to="/ip"
+                            >
+                              {address}
+                            </Link> */}
+                            {address}
+                            <CopyButton text={address} />
+                          </div>
+                        </TableCell>
+                        <TableCell>{occurrences}</TableCell>
+                      </TableRow>
+                    ))}
               </TableBody>
             </Table>
           </CardContent>

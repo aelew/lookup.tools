@@ -2,7 +2,7 @@ import { HeartIcon } from 'lucide-react';
 
 export function Footer() {
   return (
-    <footer className="text-muted-foreground mt-6 flex h-14 items-center justify-between border-t text-sm">
+    <footer className="container-layout text-muted-foreground mt-6 flex h-14 items-center justify-between border-t text-sm">
       <p className="flex items-center gap-1">
         Made with{' '}
         <HeartIcon className="fill-muted-foreground/40 size-3.5 shrink-0" /> by{' '}

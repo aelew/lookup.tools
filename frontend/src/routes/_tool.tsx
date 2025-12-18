@@ -7,12 +7,7 @@ import {
   useLocation,
   useNavigate
 } from '@tanstack/react-router';
-import {
-  CheckCircle2Icon,
-  CornerDownLeftIcon,
-  EthernetPortIcon,
-  XCircleIcon
-} from 'lucide-react';
+import { CircleIcon, CornerDownLeftIcon, EthernetPortIcon } from 'lucide-react';
 import type { FormEvent } from 'react';
 
 import { Card, CardContent } from '@/components/ui/card';
@@ -90,10 +85,18 @@ function ToolLayoutRouteComponent() {
                 let icon;
                 switch (query.status) {
                   case 'error':
-                    icon = <XCircleIcon className="text-red-500" />;
+                    icon = (
+                      <div className="flex size-4 items-center justify-center">
+                        <CircleIcon className="size-2 fill-red-500 text-red-600" />
+                      </div>
+                    );
                     break;
                   case 'success':
-                    icon = <CheckCircle2Icon className="text-green-500" />;
+                    icon = (
+                      <div className="flex size-4 items-center justify-center">
+                        <CircleIcon className="size-2 fill-green-500 text-green-600" />
+                      </div>
+                    );
                     break;
                   default:
                     icon = <Spinner className="opacity-50" />;
@@ -117,7 +120,7 @@ function ToolLayoutRouteComponent() {
             </TabsList>
           </div>
 
-          <TabsContent value={tkey}>
+          <TabsContent className="grid gap-4" value={tkey}>
             <Outlet />
           </TabsContent>
         </Tabs>

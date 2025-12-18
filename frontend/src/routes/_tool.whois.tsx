@@ -26,5 +26,5 @@ function RouteComponent() {
     return null;
   }
 
-  return <pre>{JSON.stringify(JSON.parse(raw), null, 4)}</pre>;
+  return <pre className="break-all">{raw}</pre>;
 }

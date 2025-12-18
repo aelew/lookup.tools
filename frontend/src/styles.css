@@ -134,6 +134,13 @@
   }
 }
 
+@media (min-width: 1000px) {
+  body:not([style*='pointer-events: none']) {
+    overflow-x: hidden;
+    margin-right: calc(-1 * (100vw - 100%));
+  }
+}
+
 @font-face {
   font-family: OpenRunde;
   font-style: normal;

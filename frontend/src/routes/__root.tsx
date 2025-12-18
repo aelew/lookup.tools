@@ -29,7 +29,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="container-layout relative flex min-h-screen flex-col">
+      <body className="relative flex min-h-screen flex-col">
         <ThemeProvider
           enableSystem
           attribute="class"
@@ -37,7 +37,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           disableTransitionOnChange
         >
           <Header />
-          <main className="flex-1">{children}</main>
+          <main className="container-layout flex-1">{children}</main>
           <Footer />
           {/* <TanStackDevtools
             config={{ position: 'bottom-right' }}

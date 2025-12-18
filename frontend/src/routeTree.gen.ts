@@ -14,6 +14,7 @@ import { Route as ToolRouteImport } from './routes/_tool'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ToolWhoisRouteImport } from './routes/_tool.whois'
 import { Route as ToolSubdomainsRouteImport } from './routes/_tool.subdomains'
+import { Route as ToolIpRouteImport } from './routes/_tool.ip'
 import { Route as ToolDnsRouteImport } from './routes/_tool.dns'
 
 const ExampleRoute = ExampleRouteImport.update({
@@ -40,6 +41,11 @@ const ToolSubdomainsRoute = ToolSubdomainsRouteImport.update({
   path: '/subdomains',
   getParentRoute: () => ToolRoute,
 } as any)
+const ToolIpRoute = ToolIpRouteImport.update({
+  id: '/ip',
+  path: '/ip',
+  getParentRoute: () => ToolRoute,
+} as any)
 const ToolDnsRoute = ToolDnsRouteImport.update({
   id: '/dns',
   path: '/dns',
@@ -50,6 +56,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/example': typeof ExampleRoute
   '/dns': typeof ToolDnsRoute
+  '/ip': typeof ToolIpRoute
   '/subdomains': typeof ToolSubdomainsRoute
   '/whois': typeof ToolWhoisRoute
 }
@@ -57,6 +64,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/example': typeof ExampleRoute
   '/dns': typeof ToolDnsRoute
+  '/ip': typeof ToolIpRoute
   '/subdomains': typeof ToolSubdomainsRoute
   '/whois': typeof ToolWhoisRoute
 }
@@ -66,20 +74,22 @@ export interface FileRoutesById {
   '/_tool': typeof ToolRouteWithChildren
   '/example': typeof ExampleRoute
   '/_tool/dns': typeof ToolDnsRoute
+  '/_tool/ip': typeof ToolIpRoute
   '/_tool/subdomains': typeof ToolSubdomainsRoute
   '/_tool/whois': typeof ToolWhoisRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/example' | '/dns' | '/subdomains' | '/whois'
+  fullPaths: '/' | '/example' | '/dns' | '/ip' | '/subdomains' | '/whois'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/example' | '/dns' | '/subdomains' | '/whois'
+  to: '/' | '/example' | '/dns' | '/ip' | '/subdomains' | '/whois'
   id:
     | '__root__'
     | '/'
     | '/_tool'
     | '/example'
     | '/_tool/dns'
+    | '/_tool/ip'
     | '/_tool/subdomains'
     | '/_tool/whois'
   fileRoutesById: FileRoutesById
@@ -127,6 +137,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolSubdomainsRouteImport
       parentRoute: typeof ToolRoute
     }
+    '/_tool/ip': {
+      id: '/_tool/ip'
+      path: '/ip'
+      fullPath: '/ip'
+      preLoaderRoute: typeof ToolIpRouteImport
+      parentRoute: typeof ToolRoute
+    }
     '/_tool/dns': {
       id: '/_tool/dns'
       path: '/dns'
@@ -139,12 +156,14 @@ declare module '@tanstack/react-router' {
 
 interface ToolRouteChildren {
   ToolDnsRoute: typeof ToolDnsRoute
+  ToolIpRoute: typeof ToolIpRoute
   ToolSubdomainsRoute: typeof ToolSubdomainsRoute
   ToolWhoisRoute: typeof ToolWhoisRoute
 }
 
 const ToolRouteChildren: ToolRouteChildren = {
   ToolDnsRoute: ToolDnsRoute,
+  ToolIpRoute: ToolIpRoute,
   ToolSubdomainsRoute: ToolSubdomainsRoute,
   ToolWhoisRoute: ToolWhoisRoute,
 }

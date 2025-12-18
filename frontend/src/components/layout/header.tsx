@@ -15,7 +15,7 @@ export function Header() {
   const { setTheme } = useTheme();
 
   return (
-    <header className="flex h-14 items-center justify-between border-b">
+    <header className="container-layout flex h-14 items-center justify-between border-b">
       <Link
         className="flex items-center gap-2 transition-opacity hover:opacity-80"
         to="/"
