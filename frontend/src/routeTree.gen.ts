@@ -9,18 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SubdomainRouteImport } from './routes/subdomain'
 import { Route as ExampleRouteImport } from './routes/example'
+import { Route as ToolRouteImport } from './routes/_tool'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ToolWhoisRouteImport } from './routes/_tool.whois'
+import { Route as ToolSubdomainsRouteImport } from './routes/_tool.subdomains'
+import { Route as ToolDnsRouteImport } from './routes/_tool.dns'
 
-const SubdomainRoute = SubdomainRouteImport.update({
-  id: '/subdomain',
-  path: '/subdomain',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ExampleRoute = ExampleRouteImport.update({
   id: '/example',
   path: '/example',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolRoute = ToolRouteImport.update({
+  id: '/_tool',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -28,51 +30,80 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ToolWhoisRoute = ToolWhoisRouteImport.update({
+  id: '/whois',
+  path: '/whois',
+  getParentRoute: () => ToolRoute,
+} as any)
+const ToolSubdomainsRoute = ToolSubdomainsRouteImport.update({
+  id: '/subdomains',
+  path: '/subdomains',
+  getParentRoute: () => ToolRoute,
+} as any)
+const ToolDnsRoute = ToolDnsRouteImport.update({
+  id: '/dns',
+  path: '/dns',
+  getParentRoute: () => ToolRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/example': typeof ExampleRoute
-  '/subdomain': typeof SubdomainRoute
+  '/dns': typeof ToolDnsRoute
+  '/subdomains': typeof ToolSubdomainsRoute
+  '/whois': typeof ToolWhoisRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/example': typeof ExampleRoute
-  '/subdomain': typeof SubdomainRoute
+  '/dns': typeof ToolDnsRoute
+  '/subdomains': typeof ToolSubdomainsRoute
+  '/whois': typeof ToolWhoisRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_tool': typeof ToolRouteWithChildren
   '/example': typeof ExampleRoute
-  '/subdomain': typeof SubdomainRoute
+  '/_tool/dns': typeof ToolDnsRoute
+  '/_tool/subdomains': typeof ToolSubdomainsRoute
+  '/_tool/whois': typeof ToolWhoisRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/example' | '/subdomain'
+  fullPaths: '/' | '/example' | '/dns' | '/subdomains' | '/whois'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/example' | '/subdomain'
-  id: '__root__' | '/' | '/example' | '/subdomain'
+  to: '/' | '/example' | '/dns' | '/subdomains' | '/whois'
+  id:
+    | '__root__'
+    | '/'
+    | '/_tool'
+    | '/example'
+    | '/_tool/dns'
+    | '/_tool/subdomains'
+    | '/_tool/whois'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ToolRoute: typeof ToolRouteWithChildren
   ExampleRoute: typeof ExampleRoute
-  SubdomainRoute: typeof SubdomainRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/subdomain': {
-      id: '/subdomain'
-      path: '/subdomain'
-      fullPath: '/subdomain'
-      preLoaderRoute: typeof SubdomainRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/example': {
       id: '/example'
       path: '/example'
       fullPath: '/example'
       preLoaderRoute: typeof ExampleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_tool': {
+      id: '/_tool'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof ToolRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -82,13 +113,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_tool/whois': {
+      id: '/_tool/whois'
+      path: '/whois'
+      fullPath: '/whois'
+      preLoaderRoute: typeof ToolWhoisRouteImport
+      parentRoute: typeof ToolRoute
+    }
+    '/_tool/subdomains': {
+      id: '/_tool/subdomains'
+      path: '/subdomains'
+      fullPath: '/subdomains'
+      preLoaderRoute: typeof ToolSubdomainsRouteImport
+      parentRoute: typeof ToolRoute
+    }
+    '/_tool/dns': {
+      id: '/_tool/dns'
+      path: '/dns'
+      fullPath: '/dns'
+      preLoaderRoute: typeof ToolDnsRouteImport
+      parentRoute: typeof ToolRoute
+    }
   }
 }
 
+interface ToolRouteChildren {
+  ToolDnsRoute: typeof ToolDnsRoute
+  ToolSubdomainsRoute: typeof ToolSubdomainsRoute
+  ToolWhoisRoute: typeof ToolWhoisRoute
+}
+
+const ToolRouteChildren: ToolRouteChildren = {
+  ToolDnsRoute: ToolDnsRoute,
+  ToolSubdomainsRoute: ToolSubdomainsRoute,
+  ToolWhoisRoute: ToolWhoisRoute,
+}
+
+const ToolRouteWithChildren = ToolRoute._addFileChildren(ToolRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ToolRoute: ToolRouteWithChildren,
   ExampleRoute: ExampleRoute,
-  SubdomainRoute: SubdomainRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

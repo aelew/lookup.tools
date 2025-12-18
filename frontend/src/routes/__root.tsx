@@ -7,6 +7,7 @@ import { Logo } from '@/components/layout/logo';
 import appCss from '../styles.css?url';
 
 export const Route = createRootRoute({
+  shellComponent: RootDocument,
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
@@ -19,13 +20,12 @@ export const Route = createRootRoute({
         href: appCss
       }
     ]
-  }),
-  shellComponent: RootDocument
+  })
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html suppressHydrationWarning={import.meta.env.DEV} lang="en">
       <head>
         <HeadContent />
       </head>
