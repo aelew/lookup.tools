@@ -7,22 +7,25 @@ import {
   ContextMenuTrigger
 } from '@/components/ui/context-menu';
 import type { QueryType } from '@/lib/meta';
+import { cn } from '@/lib/utils';
 
 export type DataContextMenuType = QueryType | 'text';
 
 interface DataContextMenuProps extends PropsWithChildren {
   type?: DataContextMenuType;
+  className?: string;
   value: string;
 }
 
 export function DataContextMenu({
   type = 'text',
+  className,
   value,
   children
 }: DataContextMenuProps) {
   return (
     <ContextMenu>
-      <ContextMenuTrigger className="whitespace-nowrap">
+      <ContextMenuTrigger className={cn('whitespace-nowrap', className)}>
         {children}
       </ContextMenuTrigger>
       <ContextMenuContent>
@@ -39,10 +42,17 @@ export function DataContextMenu({
           <ContextMenuItem
             onClick={() => {
               let url = value;
+
               if (!value.startsWith('http')) {
-                url =
-                  type === 'domain' ? `https://${value}` : `http://${value}`;
+                if (type === 'domain') {
+                  url = `https://${value}`;
+                } else if (type === 'ip') {
+                  url = value.includes('::')
+                    ? `http://[${value}]`
+                    : `http://${value}`;
+                }
               }
+
               window.open(url, '_blank');
             }}
           >

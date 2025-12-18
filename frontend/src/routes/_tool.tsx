@@ -120,7 +120,7 @@ function ToolLayoutRouteComponent() {
             </TabsList>
           </div>
 
-          <TabsContent className="grid gap-4" value={tkey}>
+          <TabsContent className="m-px grid gap-4 pb-4" value={tkey}>
             <Outlet />
           </TabsContent>
         </Tabs>
@@ -178,7 +178,7 @@ function DomainForm({ mode }: { mode: 'new' | 'existing' }) {
         <Field>
           {mode === 'new' && <FieldLabel htmlFor="q">Domain</FieldLabel>}
 
-          <InputGroup>
+          <InputGroup className="shadow-lg/5">
             <InputGroupAddon>
               <EthernetPortIcon className="mr-0.5" />
             </InputGroupAddon>

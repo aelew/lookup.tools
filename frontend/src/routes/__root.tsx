@@ -49,7 +49,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             ]}
           /> */}
           <Scripts />
-          <Logo className="pointer-events-none absolute top-1/6 left-1/3 -z-50 size-48 opacity-5 select-none sm:size-64 lg:top-1/10 lg:size-128" />
+          <Logo className="pointer-events-none fixed top-1/6 left-1/3 -z-50 size-48 opacity-5 select-none sm:size-64 lg:top-1/10 lg:size-128" />
         </ThemeProvider>
       </body>
     </html>
