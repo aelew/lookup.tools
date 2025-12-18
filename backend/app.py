@@ -20,7 +20,7 @@ limiter = RateLimiter(
     ),
 )
 
-ALLOW_CORS(app, origins=["http://localhost:3000/", "https://lookup.tools/"])
+ALLOW_CORS(app, origins=["http://localhost:3000", "https://lookup.tools"])
 
 
 @app.before_request()
