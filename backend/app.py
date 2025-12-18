@@ -25,7 +25,15 @@ ALLOW_CORS(app, origins=["http://localhost:3000", "https://lookup.tools"])
 
 @app.before_request()
 def middleware(request: Request):
-    logger.info(f"{request.method} {request.url.path}")
+    path = request.url.path
+    if request.query_params:
+        params = "&".join(
+            f"{key}={values[0]}"
+            for key, values in request.query_params.to_dict().items()
+        )
+        path = f"{path}?{params}"
+
+    logger.info(f"{request.method} {path}")
     return limiter.handle_request(app, request)
 
 
