@@ -1,4 +1,4 @@
-type QueryType = 'domain' | 'ip' | 'email';
+export type QueryType = 'domain' | 'ip' | 'email';
 
 export const TOOL_METADATA = {
   dns: {

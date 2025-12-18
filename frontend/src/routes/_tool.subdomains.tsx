@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, notFound } from '@tanstack/react-router';
 import { useMemo } from 'react';
 
-import { CopyButton } from '@/components/copy-button';
+import { DataContextMenu } from '@/components/data-context-menu';
 import { CloudflareIcon } from '@/components/icons/cloudflare';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -85,8 +85,16 @@ function RouteComponent() {
             <TableBody>
               {subdomains?.map((record) => (
                 <TableRow key={record.fqdn}>
-                  <TableCell>{record.fqdn}</TableCell>
-                  <TableCell className="tabular-nums">{record.ip}</TableCell>
+                  <TableCell>
+                    <DataContextMenu type="domain" value={record.fqdn}>
+                      {record.fqdn}
+                    </DataContextMenu>
+                  </TableCell>
+                  <TableCell className="tabular-nums">
+                    <DataContextMenu type="ip" value={record.ip}>
+                      {record.ip}
+                    </DataContextMenu>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -116,17 +124,9 @@ function RouteComponent() {
                   </TableCell>
                   <TableCell>
                     {mostCommonAddress ? (
-                      <div className="flex items-center">
-                        {/* <Link
-                          className="whitespace-nowrap tabular-nums hover:underline"
-                          search={{ q: mostCommonAddress }}
-                          to="/ip"
-                        >
-                          {mostCommonAddress}
-                        </Link> */}
+                      <DataContextMenu type="ip" value={mostCommonAddress}>
                         {mostCommonAddress}
-                        <CopyButton text={mostCommonAddress} />
-                      </div>
+                      </DataContextMenu>
                     ) : (
                       'N/A'
                     )}
@@ -155,23 +155,17 @@ function RouteComponent() {
                     .map(([address, occurrences]) => (
                       <TableRow key={address} className="tabular-nums">
                         <TableCell>
-                          <div className="flex items-center">
+                          <div className="flex items-center gap-1.5">
                             <CloudflareIcon
                               className={cn(
-                                'mr-1.5 size-5 shrink-0',
+                                'size-5 shrink-0',
                                 !subdomains?.find((r) => r.ip === address)
                                   ?.attributes.cloudflare && 'grayscale'
                               )}
                             />
-                            {/* <Link
-                              className="whitespace-nowrap hover:underline"
-                              search={{ q: address }}
-                              to="/ip"
-                            >
+                            <DataContextMenu type="ip" value={address}>
                               {address}
-                            </Link> */}
-                            {address}
-                            <CopyButton text={address} />
+                            </DataContextMenu>
                           </div>
                         </TableCell>
                         <TableCell>{occurrences}</TableCell>

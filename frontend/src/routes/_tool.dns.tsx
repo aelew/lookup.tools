@@ -1,8 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { createFileRoute, Link, notFound } from '@tanstack/react-router';
+import { createFileRoute, notFound } from '@tanstack/react-router';
 import { match } from 'ts-pattern';
 
-import { CopyButton } from '@/components/copy-button';
+import {
+  DataContextMenu,
+  type DataContextMenuType
+} from '@/components/data-context-menu';
 import { CloudflareIcon } from '@/components/icons/cloudflare';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,7 +18,7 @@ import {
   TableRow
 } from '@/components/ui/table';
 import { getQueryOptions } from '@/lib/query';
-import { parseDomain, type DNSRecordType } from '@/lib/utils';
+import { type DNSRecordType } from '@/lib/utils';
 
 interface ResolveDNSResponse {
   q: string;
@@ -65,7 +68,7 @@ function RouteComponent() {
             <TableHeader>
               <TableRow>
                 <TableHead className="w-72">Name</TableHead>
-                <TableHead className="w-16 text-center">TTL</TableHead>
+                <TableHead className="w-16 pr-3 text-center">TTL</TableHead>
                 <TableHead>Data</TableHead>
               </TableRow>
             </TableHeader>
@@ -94,51 +97,31 @@ function RouteComponent() {
                 return (
                   <TableRow key={record.name + record.data}>
                     <TableCell>
-                      <a
-                        className="hover:underline hover:underline-offset-4"
-                        href={`https://${record.name}`}
-                        rel="nofollow noopener"
-                        target="_blank"
-                      >
+                      <DataContextMenu type="domain" value={record.name}>
                         {record.name}
-                      </a>
+                      </DataContextMenu>
                     </TableCell>
                     <TableCell>
-                      <Badge className="gap-0" variant="secondary">
-                        <span className="whitespace-nowrap">
-                          {/* {formatDuration(Number(record.ttl))} */}
+                      <DataContextMenu value={record.ttl.toString()}>
+                        <Badge className="gap-0" variant="secondary">
                           {record.ttl}
-                        </span>
-                        <CopyButton text={record.ttl.toString()} />
-                      </Badge>
+                        </Badge>
+                      </DataContextMenu>
                     </TableCell>
-                    <TableCell className="flex items-center">
-                      {Icon && <Icon className="mr-1.5 size-5 shrink-0" />}
-                      {match(record.type)
-                        .with('A', 'AAAA', () => (
-                          <Link
-                            className="whitespace-nowrap tabular-nums hover:underline"
-                            search={{ q: record.data }}
-                            to="/ip"
-                          >
-                            {record.data}
-                          </Link>
-                        ))
-                        .with('NS', () => (
-                          <Link
-                            className="whitespace-nowrap hover:underline"
-                            search={{ q: parseDomain(record.data) }}
-                            to="/whois"
-                          >
-                            {record.data}
-                          </Link>
-                        ))
-                        .otherwise(() => (
-                          <span className="whitespace-nowrap">
-                            {record.data}
-                          </span>
-                        ))}
-                      <CopyButton text={record.data} />
+                    <TableCell className="flex items-center gap-1.5">
+                      {Icon && <Icon className="size-5 shrink-0" />}
+
+                      <DataContextMenu
+                        value={record.data}
+                        type={match<DNSRecordType, DataContextMenuType>(
+                          record.type
+                        )
+                          .with('A', 'AAAA', () => 'ip')
+                          .with('NS', () => 'domain')
+                          .otherwise(() => 'text')}
+                      >
+                        {record.data}
+                      </DataContextMenu>
                     </TableCell>
                   </TableRow>
                 );

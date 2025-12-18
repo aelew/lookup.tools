@@ -126,6 +126,9 @@
   button {
     @apply cursor-pointer;
   }
+  strong {
+    @apply font-medium;
+  }
 }
 
 @layer utilities {
