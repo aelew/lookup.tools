@@ -41,7 +41,7 @@ function RouteComponent() {
 
   return (
     <section className="flex flex-col-reverse gap-4 md:grid md:grid-cols-2">
-      <Card>
+      <Card className="h-fit">
         <CardHeader>
           <CardTitle>Scan Results</CardTitle>
         </CardHeader>
@@ -66,7 +66,7 @@ function RouteComponent() {
       </Card>
 
       <div className="grid gap-4">
-        <Card>
+        <Card className="h-fit">
           <CardHeader>
             <CardTitle>Summary</CardTitle>
           </CardHeader>
@@ -106,7 +106,7 @@ function RouteComponent() {
             </Table>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="h-fit">
           <CardHeader>
             <CardTitle>IP Addresses</CardTitle>
           </CardHeader>
