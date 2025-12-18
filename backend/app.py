@@ -1,10 +1,10 @@
-from http import HTTPStatus
 import json
-from robyn import Request, Response, Robyn, status_codes
+from http import HTTPStatus
 
+from robyn import Request, Response, Robyn, status_codes
 from robyn.logger import logger
-from robyn_rate_limits import InMemoryStore
-from robyn_rate_limits import RateLimiter
+from robyn_rate_limits import InMemoryStore, RateLimiter
+
 from routers.v1.resolve import router as v1_resolve_router
 
 app = Robyn(__file__)

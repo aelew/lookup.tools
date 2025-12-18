@@ -23,16 +23,8 @@ from utils.net import is_cloudflare_ip, ping
 router = SubRouter(__file__, prefix="/v1/resolve")
 
 
-class DomainRequestParams(QueryParams):
-    domain: str
-
-
-class AddressRequestParams(QueryParams):
-    address: str
-
-
-class EmailRequestParams(QueryParams):
-    email: str
+class QueryRequestParams(QueryParams):
+    q: str
 
 
 @router.exception
@@ -54,13 +46,13 @@ def handle_exception(error: Exception):
 
 
 @router.get("/dns")
-async def resolve_dns(query_params: DomainRequestParams):
-    domain = query_params.get("domain", None)
+async def resolve_dns(query_params: QueryRequestParams):
+    query = query_params.get("q", None)
 
-    if not domain:
+    if not query:
         raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "Domain is required")
 
-    extract_result = tldextract.extract(domain)
+    extract_result = tldextract.extract(query)
     root_domain = extract_result.top_domain_under_public_suffix
 
     if root_domain == "":
@@ -69,17 +61,17 @@ async def resolve_dns(query_params: DomainRequestParams):
     resolver = CloudflareDNSResolver()
     records = await resolver.resolve_records(root_domain)
 
-    return {"domain": root_domain, "data": records}
+    return {"q": root_domain, "data": records}
 
 
 @router.get("/whois")
-async def resolve_whois(query_params: DomainRequestParams):
-    domain = query_params.get("domain", None)
+async def resolve_whois(query_params: QueryRequestParams):
+    query = query_params.get("q", None)
 
-    if not domain:
+    if not query:
         raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "Domain is required")
 
-    extract_result = tldextract.extract(domain)
+    extract_result = tldextract.extract(query)
     root_domain = extract_result.top_domain_under_public_suffix
 
     if root_domain == "":
@@ -97,7 +89,7 @@ async def resolve_whois(query_params: DomainRequestParams):
         status_code=status_codes.HTTP_200_OK,
         description=json.dumps(
             {
-                "domain": root_domain,
+                "q": root_domain,
                 "data": normalized_output,
                 "raw": raw_output.strip(),
             },
@@ -108,13 +100,13 @@ async def resolve_whois(query_params: DomainRequestParams):
 
 
 @router.get("/subdomains")
-async def resolve_subdomains(query_params: DomainRequestParams):
-    domain = query_params.get("domain", None)
+async def resolve_subdomains(query_params: QueryRequestParams):
+    query = query_params.get("q", None)
 
-    if not domain:
+    if not query:
         raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "Domain is required")
 
-    extract_result = tldextract.extract(domain)
+    extract_result = tldextract.extract(query)
     root_domain = extract_result.top_domain_under_public_suffix
 
     if root_domain == "":
@@ -167,23 +159,23 @@ async def resolve_subdomains(query_params: DomainRequestParams):
         if ip
     ]
 
-    return {"domain": root_domain, "data": data}
+    return {"q": root_domain, "data": data}
 
 
 @router.get("/ip")
-async def resolve_ip(query_params: AddressRequestParams):
-    address = query_params.get("address", None)
+async def resolve_ip(query_params: QueryRequestParams):
+    query = query_params.get("q", None)
 
-    if not address:
+    if not query:
         raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "Address is required")
 
     try:
-        ip_address(address)
+        ip_address(query)
     except ValueError:
         raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "Address is invalid")
 
     res = await niquests.aget(
-        f"https://api.ipdata.co/v1/{address}",
+        f"https://api.ipdata.co/v1/{query}",
         params={"api-key": os.getenv("IPDATA_API_KEY")},
     )
 
@@ -201,21 +193,21 @@ async def resolve_ip(query_params: AddressRequestParams):
     except KeyError:
         pass
 
-    return {"address": address, "data": data}
+    return {"q": query, "data": data}
 
 
 @router.get("/accounts")
-async def resolve_accounts(query_params: EmailRequestParams):
-    email = query_params.get("email", None)
+async def resolve_accounts(query_params: QueryRequestParams):
+    query = query_params.get("q", None)
 
-    if not email:
+    if not query:
         raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "Email is required")
 
-    email = unquote(email)
+    query = unquote(query)
 
     try:
-        validation_result = validate_email(email, check_deliverability=False)
-        email = validation_result.normalized
+        validation_result = validate_email(query, check_deliverability=False)
+        query = validation_result.normalized
     except EmailNotValidError as e:
         raise HTTPException(
             status_codes.HTTP_400_BAD_REQUEST, f"Invalid email address — {str(e)}"
@@ -227,7 +219,7 @@ async def resolve_accounts(query_params: EmailRequestParams):
     client = httpx.AsyncClient(timeout=10)
     out = []
 
-    await asyncio.gather(*[launch_module(w, email, client, out) for w in websites])
+    await asyncio.gather(*[launch_module(w, query, client, out) for w in websites])
     await client.aclose()
 
     data = {}
@@ -235,4 +227,4 @@ async def resolve_accounts(query_params: EmailRequestParams):
         if not w["rateLimit"]:
             data[w["domain"]] = w["exists"]
 
-    return {"email": email, "data": data}
+    return {"q": query, "data": data}
