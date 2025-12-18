@@ -3,6 +3,15 @@ revision = 3
 requires-python = "==3.13.*"
 
 [[package]]
+name = "aiocache"
+version = "0.12.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/7a/64/b945b8025a9d1e6e2138845f4022165d3b337f55f50984fbc6a4c0a1e355/aiocache-0.12.3.tar.gz", hash = "sha256:f528b27bf4d436b497a1d0d1a8f59a542c153ab1e37c3621713cb376d44c4713", size = 132196, upload-time = "2024-09-25T13:20:23.823Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/37/d7/15d67e05b235d1ed8c3ce61688fe4d84130e72af1657acadfaac3479f4cf/aiocache-0.12.3-py2.py3-none-any.whl", hash = "sha256:889086fc24710f431937b87ad3720a289f7fc31c4fd8b68e9f918b9bacd8270d", size = 28199, upload-time = "2024-09-25T13:20:22.688Z" },
+]
+
+[[package]]
 name = "anyio"
 version = "4.12.0"
 source = { registry = "https://pypi.org/simple" }
@@ -43,10 +52,12 @@ name = "backend"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "aiocache" },
     { name = "asyncwhois" },
     { name = "email-validator" },
     { name = "holehe" },
     { name = "niquests" },
+    { name = "orjson" },
     { name = "robyn" },
     { name = "robyn-rate-limits" },
     { name = "tldextract" },
@@ -59,10 +70,12 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "aiocache", specifier = ">=0.12.3" },
     { name = "asyncwhois", specifier = ">=1.1.12" },
     { name = "email-validator", specifier = ">=2.3.0" },
     { name = "holehe", git = "https://github.com/megadose/holehe" },
     { name = "niquests", specifier = ">=3.15.2" },
+    { name = "orjson", specifier = ">=3.11.0" },
     { name = "robyn", specifier = ">=0.72.2" },
     { name = "robyn-rate-limits", specifier = ">=0.4.0" },
     { name = "tldextract", specifier = ">=5.3.0" },
