@@ -8,6 +8,7 @@ from urllib.parse import unquote
 
 import httpx
 import niquests
+from robyn.logger import logger
 import tldextract
 from asyncwhois import aio_rdap, aio_whois
 from email_validator import EmailNotValidError, validate_email
@@ -77,11 +78,26 @@ async def resolve_whois(query_params: QueryRequestParams):
     if root_domain == "":
         raise HTTPException(status_codes.HTTP_400_BAD_REQUEST, "Domain is invalid")
 
-    raw_output, normalized_output = await aio_whois(root_domain)
+    normalized_output = None
+
+    # resolve with WHOIS
+    try:
+        raw_output, normalized_output = await aio_whois(root_domain)
+    except Exception:
+        pass
 
     # fallback to RDAP
-    if normalized_output["domain_name"] is None:
-        raw_output, normalized_output = await aio_rdap(root_domain)
+    if normalized_output is None or normalized_output["domain_name"] is None:
+        try:
+            raw_output, normalized_output = await aio_rdap(root_domain)
+        except Exception as e:
+            logger.error(f"Failed to resolve WHOIS and RDAP for {root_domain}", e)
+
+    if normalized_output is None:
+        raise HTTPException(
+            status_codes.HTTP_500_INTERNAL_SERVER_ERROR,
+            f"Failed to resolve {root_domain}",
+        )
 
     del normalized_output["domain_name"]
 

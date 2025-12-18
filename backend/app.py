@@ -11,7 +11,7 @@ app = Robyn(__file__)
 
 limiter = RateLimiter(
     store=InMemoryStore,
-    calls_limit=10,
+    calls_limit=30,
     limit_ttl=60,
     exceeded_response=Response(
         status_code=status_codes.HTTP_429_TOO_MANY_REQUESTS,
