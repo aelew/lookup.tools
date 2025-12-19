@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
-import { getQueryOptions } from '@/lib/query';
+import { getToolQueryOptions } from '@/lib/query';
 
 export const Route = createFileRoute('/_tool/dns')({
   component: RouteComponent
@@ -29,7 +29,7 @@ function RouteComponent() {
     throw notFound();
   }
 
-  const query = useQuery(getQueryOptions<DNSLookupResponse>('dns', q));
+  const query = useQuery(getToolQueryOptions<DNSLookupResponse>('dns', q));
   const data = query.data?.data;
 
   if (!data) {

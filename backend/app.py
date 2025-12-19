@@ -1,4 +1,5 @@
 from http import HTTPStatus
+import os
 
 import orjson
 from robyn import ALLOW_CORS, Request, Response, Robyn, status_codes
@@ -21,7 +22,10 @@ limiter = RateLimiter(
     ),
 )
 
-ALLOW_CORS(app, origins=["http://localhost:3000", "https://lookup.tools"])
+allowed_origins = os.getenv("ALLOWED_ORIGINS")
+allowed_origins = allowed_origins.split(",") if allowed_origins else []
+
+ALLOW_CORS(app, allowed_origins)
 
 
 @app.before_request()

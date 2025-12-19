@@ -150,8 +150,8 @@
   font-display: swap;
   font-weight: 400;
   src:
-    url('/_static/fonts/OpenRunde-Regular.woff2') format('woff2'),
-    url('/_static/fonts/OpenRunde-Regular.woff') format('woff');
+    url('/assets/fonts/OpenRunde-Regular.woff2') format('woff2'),
+    url('/assets/fonts/OpenRunde-Regular.woff') format('woff');
 }
 
 @font-face {
@@ -160,8 +160,8 @@
   font-display: swap;
   font-weight: 500;
   src:
-    url('/_static/fonts/OpenRunde-Medium.woff2') format('woff2'),
-    url('/_static/fonts/OpenRunde-Medium.woff') format('woff');
+    url('/assets/fonts/OpenRunde-Medium.woff2') format('woff2'),
+    url('/assets/fonts/OpenRunde-Medium.woff') format('woff');
 }
 
 @font-face {
@@ -170,8 +170,8 @@
   font-weight: 600;
   font-display: swap;
   src:
-    url('/_static/fonts/OpenRunde-Semibold.woff2') format('woff2'),
-    url('/_static/fonts/OpenRunde-Semibold.woff') format('woff');
+    url('/assets/fonts/OpenRunde-Semibold.woff2') format('woff2'),
+    url('/assets/fonts/OpenRunde-Semibold.woff') format('woff');
 }
 
 @font-face {
@@ -180,6 +180,6 @@
   font-display: swap;
   font-weight: 700;
   src:
-    url('/_static/fonts/OpenRunde-Bold.woff2') format('woff2'),
-    url('/_static/fonts/OpenRunde-Bold.woff') format('woff');
+    url('/assets/fonts/OpenRunde-Bold.woff2') format('woff2'),
+    url('/assets/fonts/OpenRunde-Bold.woff') format('woff');
 }

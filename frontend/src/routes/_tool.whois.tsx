@@ -7,7 +7,7 @@ import { DataContextMenu } from '@/components/data-context-menu';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
-import { getQueryOptions } from '@/lib/query';
+import { getToolQueryOptions } from '@/lib/query';
 import { parseDomain } from '@/lib/utils';
 import type { WHOISLookupResponse } from '@/types/tools/whois';
 
@@ -47,7 +47,7 @@ function RouteComponent() {
     throw notFound();
   }
 
-  const query = useQuery(getQueryOptions<WHOISLookupResponse>('whois', q));
+  const query = useQuery(getToolQueryOptions<WHOISLookupResponse>('whois', q));
   const [viewMode, setViewMode] = useState<'normalized' | 'raw'>('normalized');
 
   const result = query.data?.data;

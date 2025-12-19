@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
-import { getQueryOptions } from '@/lib/query';
+import { getToolQueryOptions } from '@/lib/query';
 import { cn } from '@/lib/utils';
 import type { SubdomainsLookupResponse } from '@/types/tools/subdomains';
 
@@ -28,7 +28,7 @@ function RouteComponent() {
   }
 
   const query = useQuery(
-    getQueryOptions<SubdomainsLookupResponse>('subdomains', q)
+    getToolQueryOptions<SubdomainsLookupResponse>('subdomains', q)
   );
 
   const subdomains = query.data?.data;

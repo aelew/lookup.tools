@@ -36,7 +36,7 @@ import {
   type ToolKey,
   type ToolMetadataEntries
 } from '@/lib/meta';
-import { getQueryOptions } from '@/lib/query';
+import { getToolQueryOptions } from '@/lib/query';
 import { QUERY_SCHEMAS, type QueryType } from '@/lib/schema';
 import { cn } from '@/lib/utils';
 
@@ -66,7 +66,7 @@ function ToolLayoutRouteComponent() {
   ) as ToolMetadataEntries;
 
   const queries = useQueries({
-    queries: toolsOfQueryType.map(([k]) => getQueryOptions(k, search.q))
+    queries: toolsOfQueryType.map(([k]) => getToolQueryOptions(k, search.q))
   });
 
   if (search.q) {

@@ -7,7 +7,7 @@ export const api = ky.create({
   prefixUrl: import.meta.env.VITE_API_BASE_URL
 });
 
-export function getQueryOptions<T>(tkey: ToolKey, q?: string) {
+export function getToolQueryOptions<T>(tkey: ToolKey, q?: string) {
   return queryOptions({
     enabled: !!q,
     queryKey: [tkey, q],

@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
-import { getQueryOptions } from '@/lib/query';
+import { getToolQueryOptions } from '@/lib/query';
 import { cn } from '@/lib/utils';
 import type { IPAddressLookupResponse } from '@/types/tools/ip';
 
@@ -28,7 +28,7 @@ function RouteComponent() {
     throw notFound();
   }
 
-  const query = useQuery(getQueryOptions<IPAddressLookupResponse>('ip', q));
+  const query = useQuery(getToolQueryOptions<IPAddressLookupResponse>('ip', q));
   const result = query.data?.data;
 
   if (!result) {
