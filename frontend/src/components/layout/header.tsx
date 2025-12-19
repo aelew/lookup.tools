@@ -22,7 +22,7 @@ export function Header() {
       >
         <Logo className="size-5" />
         <span className="text-lg font-medium tracking-tighter whitespace-nowrap">
-          lookup<span className="opacity-80">.</span>tools
+          lookup<span className="opacity-60">.</span>tools
         </span>
       </Link>
       <div className="flex items-center gap-2">
