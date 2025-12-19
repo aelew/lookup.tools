@@ -3,7 +3,7 @@ import ky from 'ky';
 
 import type { ToolKey } from './meta';
 
-const api = ky.create({
+export const api = ky.create({
   prefixUrl: import.meta.env.VITE_API_BASE_URL
 });
 

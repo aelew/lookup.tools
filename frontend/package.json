@@ -9,7 +9,7 @@
     "test": "vitest run",
     "lint": "eslint",
     "format": "prettier",
-    "check": "prettier --write . && eslint --fix"
+    "check": "prettier --write . && eslint --fix && tsc --noEmit"
   },
   "dependencies": {
     "@base-ui/react": "^1.0.0",
@@ -30,6 +30,7 @@
     "lucide-react": "^0.561.0",
     "motion": "^12.23.26",
     "nitro": "latest",
+    "pigeon-maps": "^0.22.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-github-btn": "^1.4.0",

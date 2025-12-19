@@ -7,9 +7,18 @@ import {
   useLocation,
   useNavigate
 } from '@tanstack/react-router';
-import { CircleIcon, CornerDownLeftIcon, EthernetPortIcon } from 'lucide-react';
+import {
+  CircleIcon,
+  CornerDownLeftIcon,
+  EthernetPortIcon,
+  MailIcon,
+  MapPinIcon
+} from 'lucide-react';
 import type { FormEvent } from 'react';
+import { match } from 'ts-pattern';
+import z from 'zod';
 
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import {
@@ -20,17 +29,21 @@ import {
 } from '@/components/ui/input-group';
 import { Spinner } from '@/components/ui/spinner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useVisitorIPQuery } from '@/hooks/use-visitor-ip-query';
 import {
   TOOL_METADATA,
   type ToolKey,
   type ToolMetadataEntries
 } from '@/lib/meta';
 import { getQueryOptions } from '@/lib/query';
-import { domainSchema } from '@/lib/schema';
+import { QUERY_SCHEMAS, type QueryType } from '@/lib/schema';
+import { cn } from '@/lib/utils';
 
 export const Route = createFileRoute('/_tool')({
   component: ToolLayoutRouteComponent,
-  validateSearch: domainSchema.partial()
+  validateSearch: z
+    .object({ q: z.union(Object.values(QUERY_SCHEMAS)) })
+    .partial()
 });
 
 function ToolLayoutRouteComponent() {
@@ -45,12 +58,12 @@ function ToolLayoutRouteComponent() {
 
   const search = Route.useSearch();
 
-  const toolsOfType = Object.entries(TOOL_METADATA).filter(
-    ([_, t]) => t.type === tool.type
+  const toolsOfQueryType = Object.entries(TOOL_METADATA).filter(
+    ([_, t]) => t.queryType === tool.queryType
   ) as ToolMetadataEntries;
 
   const queries = useQueries({
-    queries: toolsOfType.map(([k]) => getQueryOptions(k, search.q))
+    queries: toolsOfQueryType.map(([k]) => getQueryOptions(k, search.q))
   });
 
   if (search.q) {
@@ -59,7 +72,6 @@ function ToolLayoutRouteComponent() {
         <header className="grid gap-2 pt-3">
           <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
             <div className="flex flex-col items-center text-center leading-tight sm:flex-row sm:items-baseline sm:gap-2 sm:text-left">
-              {/* @ts-expect-error impl wip */}
               <Link to={`/${tkey}`}>
                 <h1 className="text-lg/tight font-semibold tracking-tight whitespace-nowrap">
                   {tool.name}
@@ -71,56 +83,63 @@ function ToolLayoutRouteComponent() {
             </div>
 
             <div className="w-full max-w-64">
-              <DomainForm mode="existing" />
+              <ToolForm variant="compact" queryType={tool.queryType} />
             </div>
           </div>
         </header>
 
         <Tabs value={tkey} className="overflow-x-auto">
-          <div className="overflow-x-auto">
-            <TabsList className="my-2">
-              {toolsOfType.map(([key, t], i) => {
-                const query = queries[i];
+          {toolsOfQueryType.length > 1 && (
+            <div className="overflow-x-auto py-2">
+              <TabsList>
+                {toolsOfQueryType.map(([key, t], i) => {
+                  const query = queries[i];
 
-                let icon;
-                switch (query.status) {
-                  case 'error':
-                    icon = (
-                      <div className="flex size-4 items-center justify-center">
-                        <CircleIcon className="size-2 fill-red-500 text-red-600" />
-                      </div>
-                    );
-                    break;
-                  case 'success':
-                    icon = (
-                      <div className="flex size-4 items-center justify-center">
-                        <CircleIcon className="size-2 fill-green-500 text-green-600" />
-                      </div>
-                    );
-                    break;
-                  default:
-                    icon = <Spinner className="opacity-50" />;
-                    break;
-                }
+                  let icon;
+                  switch (query.status) {
+                    case 'error':
+                      icon = (
+                        <div className="flex size-4 items-center justify-center">
+                          <CircleIcon className="size-2 fill-red-500 text-red-600" />
+                        </div>
+                      );
+                      break;
+                    case 'success':
+                      icon = (
+                        <div className="flex size-4 items-center justify-center">
+                          <CircleIcon className="size-2 fill-green-500 text-green-600" />
+                        </div>
+                      );
+                      break;
+                    default:
+                      icon = <Spinner className="opacity-50" />;
+                      break;
+                  }
 
-                return (
-                  <TabsTrigger
-                    key={key}
-                    value={key}
-                    nativeButton={false}
-                    render={
-                      // @ts-expect-error impl wip
-                      <Link to={`/${key}`} search={{ q: search.q }}>
-                        {icon} {t.name}
-                      </Link>
-                    }
-                  />
-                );
-              })}
-            </TabsList>
-          </div>
+                  return (
+                    <TabsTrigger
+                      key={key}
+                      value={key}
+                      nativeButton={false}
+                      render={
+                        <Link to={`/${key}`} search={{ q: search.q }}>
+                          {icon} {t.name}
+                        </Link>
+                      }
+                    />
+                  );
+                })}
+              </TabsList>
+            </div>
+          )}
 
-          <TabsContent className="m-px grid gap-4 pb-4" value={tkey}>
+          <TabsContent
+            value={tkey}
+            className={cn(
+              'm-px grid gap-4 pb-4',
+              toolsOfQueryType.length <= 1 && 'mt-3'
+            )}
+          >
             <Outlet />
           </TabsContent>
         </Tabs>
@@ -141,14 +160,21 @@ function ToolLayoutRouteComponent() {
 
       <Card className="mx-auto w-full max-w-sm">
         <CardContent>
-          <DomainForm mode="new" />
+          <ToolForm queryType={tool.queryType} />
         </CardContent>
       </Card>
+
+      {tool.queryType === 'ip' && <UseMyIPAddressButton />}
     </section>
   );
 }
 
-function DomainForm({ mode }: { mode: 'new' | 'existing' }) {
+interface ToolFormProps {
+  queryType: QueryType;
+  variant?: 'default' | 'compact';
+}
+
+function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -157,9 +183,9 @@ function DomainForm({ mode }: { mode: 'new' | 'existing' }) {
 
     const formData = new FormData(e.currentTarget);
 
-    const parseResult = domainSchema.safeParse({
-      q: formData.get('q')
-    });
+    const parseResult = z
+      .object({ q: QUERY_SCHEMAS[queryType] })
+      .safeParse({ q: formData.get('q') });
 
     if (!parseResult.success) {
       alert(parseResult.error.issues[0].message);
@@ -174,29 +200,105 @@ function DomainForm({ mode }: { mode: 'new' | 'existing' }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <FieldGroup>
-        <Field>
-          {mode === 'new' && <FieldLabel htmlFor="q">Domain</FieldLabel>}
+      {match(queryType)
+        .with('domain', () => (
+          <FieldGroup>
+            <Field>
+              {variant === 'default' && (
+                <FieldLabel htmlFor="domain">Domain</FieldLabel>
+              )}
 
-          <InputGroup className="shadow-lg/5">
-            <InputGroupAddon>
-              <EthernetPortIcon className="mr-0.5" />
-            </InputGroupAddon>
+              <InputGroup className="shadow-lg/5">
+                <InputGroupAddon>
+                  <EthernetPortIcon className="mr-0.5" />
+                </InputGroupAddon>
 
-            <InputGroupInput
-              type="text"
-              id="q"
-              name="q"
-              placeholder="example.com"
-              autoFocus={mode === 'new'}
-            />
+                <InputGroupInput
+                  autoFocus={variant === 'default'}
+                  placeholder="example.com"
+                  type="text"
+                  id="domain"
+                  name="q"
+                />
 
-            <InputGroupButton type="submit">
-              <CornerDownLeftIcon />
-            </InputGroupButton>
-          </InputGroup>
-        </Field>
-      </FieldGroup>
+                <InputGroupButton type="submit">
+                  <CornerDownLeftIcon />
+                </InputGroupButton>
+              </InputGroup>
+            </Field>
+          </FieldGroup>
+        ))
+        .with('ip', () => (
+          <FieldGroup>
+            <Field>
+              {variant === 'default' && (
+                <FieldLabel htmlFor="ip">IP Address</FieldLabel>
+              )}
+
+              <InputGroup className="shadow-lg/5">
+                <InputGroupAddon>
+                  <MapPinIcon className="mr-0.5" />
+                </InputGroupAddon>
+
+                <InputGroupInput
+                  autoFocus={variant === 'default'}
+                  placeholder="1.1.1.1"
+                  type="text"
+                  id="ip"
+                  name="q"
+                />
+
+                <InputGroupButton type="submit">
+                  <CornerDownLeftIcon />
+                </InputGroupButton>
+              </InputGroup>
+            </Field>
+          </FieldGroup>
+        ))
+        .with('email', () => (
+          <FieldGroup>
+            <Field>
+              {variant === 'default' && (
+                <FieldLabel htmlFor="email">Email Address</FieldLabel>
+              )}
+
+              <InputGroup className="shadow-lg/5">
+                <InputGroupAddon>
+                  <MailIcon className="mr-0.5" />
+                </InputGroupAddon>
+
+                <InputGroupInput
+                  autoFocus={variant === 'default'}
+                  placeholder="me@example.com"
+                  type="email"
+                  id="email"
+                  name="q"
+                />
+
+                <InputGroupButton type="submit">
+                  <CornerDownLeftIcon />
+                </InputGroupButton>
+              </InputGroup>
+            </Field>
+          </FieldGroup>
+        ))
+        .exhaustive()}
     </form>
+  );
+}
+
+function UseMyIPAddressButton() {
+  const { data } = useVisitorIPQuery();
+  const ip = data?.ip;
+
+  return (
+    <Button
+      render={<Link to="/ip" search={{ q: ip }} />}
+      className="mx-auto w-fit"
+      variant="secondary"
+      disabled={!ip}
+    >
+      Use my IP address
+    </Button>
   );
 }

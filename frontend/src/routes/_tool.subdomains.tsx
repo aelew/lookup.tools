@@ -15,17 +15,7 @@ import {
 } from '@/components/ui/table';
 import { getQueryOptions } from '@/lib/query';
 import { cn } from '@/lib/utils';
-
-interface ResolveSubdomainsResponse {
-  q: string;
-  data: Array<{
-    fqdn: string;
-    ip: string;
-    attributes: {
-      cloudflare: boolean;
-    };
-  }>;
-}
+import type { SubdomainsLookupResponse } from '@/types/tools/subdomains';
 
 export const Route = createFileRoute('/_tool/subdomains')({
   component: RouteComponent
@@ -38,7 +28,7 @@ function RouteComponent() {
   }
 
   const query = useQuery(
-    getQueryOptions<ResolveSubdomainsResponse>('subdomains', q)
+    getQueryOptions<SubdomainsLookupResponse>('subdomains', q)
   );
 
   const subdomains = query.data?.data;
@@ -65,8 +55,6 @@ function RouteComponent() {
       curr[1] > max[1] ? curr : max
     )[0];
   }, [addressOccurrences]);
-
-  console.log({ addressOccurrences, mostCommonAddress });
 
   return (
     <section className="flex flex-col-reverse gap-4 md:grid md:grid-cols-2">

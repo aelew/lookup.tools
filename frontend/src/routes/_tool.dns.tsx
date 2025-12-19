@@ -18,23 +18,6 @@ import {
   TableRow
 } from '@/components/ui/table';
 import { getQueryOptions } from '@/lib/query';
-import { type DNSRecordType } from '@/lib/utils';
-
-interface ResolveDNSResponse {
-  q: string;
-  data: Record<
-    DNSRecordType,
-    Array<{
-      type: DNSRecordType;
-      name: string;
-      data: string;
-      ttl: number;
-      attributes: {
-        cloudflare?: boolean;
-      };
-    }>
-  >;
-}
 
 export const Route = createFileRoute('/_tool/dns')({
   component: RouteComponent
@@ -46,8 +29,7 @@ function RouteComponent() {
     throw notFound();
   }
 
-  const query = useQuery(getQueryOptions<ResolveDNSResponse>('dns', q));
-
+  const query = useQuery(getQueryOptions<DNSLookupResponse>('dns', q));
   const data = query.data?.data;
 
   if (!data) {
@@ -76,7 +58,7 @@ function RouteComponent() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {records.map((record) => {
+                  {records.map((record, idx) => {
                     let Icon = null;
 
                     if (
@@ -98,7 +80,7 @@ function RouteComponent() {
                     }
 
                     return (
-                      <TableRow key={record.name + record.data}>
+                      <TableRow key={record.name + record.data + idx}>
                         <TableCell>
                           <DataContextMenu type="domain" value={record.name}>
                             {record.name}

@@ -6,7 +6,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger
 } from '@/components/ui/context-menu';
-import type { QueryType } from '@/lib/meta';
+import type { QueryType } from '@/lib/schema';
 import { cn } from '@/lib/utils';
 
 export type DataContextMenuType = QueryType | 'text';

@@ -8,67 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { getQueryOptions } from '@/lib/query';
 import { parseDomain } from '@/lib/utils';
-
-interface ResolveWHOISResponse {
-  q: string;
-  data: Partial<{
-    created: string;
-    updated: string;
-    expires: string;
-    registrar: string;
-    registrar_iana_id: string;
-    registrar_url: string;
-    registrar_abuse_email: string;
-    registrar_abuse_phone: string;
-    registrant_name: string;
-    registrant_organization: string;
-    registrant_address: string;
-    registrant_city: string;
-    registrant_state: string;
-    registrant_zipcode: string;
-    registrant_country: string;
-    registrant_email: string;
-    registrant_phone: string;
-    registrant_fax: string;
-    dnssec: string;
-    status: Array<string>;
-    name_servers: Array<string>;
-    admin_name: string;
-    admin_id: string;
-    admin_organization: string;
-    admin_city: string;
-    admin_address: string;
-    admin_state: string;
-    admin_zipcode: string;
-    admin_country: string;
-    admin_phone: string;
-    admin_fax: string;
-    admin_email: string;
-    billing_name: string;
-    billing_id: string;
-    billing_organization: string;
-    billing_city: string;
-    billing_address: string;
-    billing_state: string;
-    billing_zipcode: string;
-    billing_country: string;
-    billing_phone: string;
-    billing_fax: string;
-    billing_email: string;
-    tech_name: string;
-    tech_id: string;
-    tech_organization: string;
-    tech_city: string;
-    tech_address: string;
-    tech_state: string;
-    tech_zipcode: string;
-    tech_country: string;
-    tech_phone: string;
-    tech_fax: string;
-    tech_email: string;
-  }>;
-  raw: string;
-}
+import type { WHOISLookupResponse } from '@/types/tools/whois';
 
 const EPP_STATUS_CODES = [
   'addPeriod',
@@ -106,7 +46,7 @@ function RouteComponent() {
     throw notFound();
   }
 
-  const query = useQuery(getQueryOptions<ResolveWHOISResponse>('whois', q));
+  const query = useQuery(getQueryOptions<WHOISLookupResponse>('whois', q));
   const [viewMode, setViewMode] = useState<'normalized' | 'raw'>('normalized');
 
   const result = query.data?.data;

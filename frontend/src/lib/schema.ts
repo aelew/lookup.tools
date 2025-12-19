@@ -5,14 +5,24 @@ const DOMAIN_REGEX =
 
 const m = (type: string) => `Please enter a valid ${type}.`;
 
-export const domainSchema = z.object({
-  q: z.string().refine((d) => DOMAIN_REGEX.test(d), { error: m('domain') })
-});
+export const QUERY_SCHEMAS = {
+  domain: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .refine((d) => DOMAIN_REGEX.test(d), { error: m('domain') }),
 
-export const ipSchema = z.object({
-  q: z.union([z.ipv4(), z.ipv6()], { error: m('IP address') })
-});
+  email: z
+    .email({
+      message: m('email address')
+    })
+    .trim()
+    .toLowerCase(),
 
-export const emailSchema = z.object({
-  q: z.email({ message: m('email address') })
-});
+  ip: z.union(
+    [z.ipv4(), z.ipv6()], //
+    { error: m('IP address') }
+  )
+};
+
+export type QueryType = keyof typeof QUERY_SCHEMAS;
