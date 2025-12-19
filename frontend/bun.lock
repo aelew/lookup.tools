@@ -7,6 +7,7 @@
       "dependencies": {
         "@base-ui/react": "^1.0.0",
         "@fontsource-variable/inter": "^5.2.8",
+        "@suyalcinkaya/gauge": "^0.1.0",
         "@tailwindcss/vite": "^4.1.18",
         "@tanstack/query-async-storage-persister": "^5.90.14",
         "@tanstack/react-devtools": "^0.8.4",
@@ -434,6 +435,8 @@
     "@speed-highlight/core": ["@speed-highlight/core@1.2.12", "", {}, "sha512-uilwrK0Ygyri5dToHYdZSjcvpS2ZwX0w5aSt3GCEN9hrjxWCoeV4Z2DTXuxjwbntaLQIEEAlCeNQss5SoHvAEA=="],
 
     "@stylistic/eslint-plugin": ["@stylistic/eslint-plugin@5.6.1", "", { "dependencies": { "@eslint-community/eslint-utils": "^4.9.0", "@typescript-eslint/types": "^8.47.0", "eslint-visitor-keys": "^4.2.1", "espree": "^10.4.0", "estraverse": "^5.3.0", "picomatch": "^4.0.3" }, "peerDependencies": { "eslint": ">=9.0.0" } }, "sha512-JCs+MqoXfXrRPGbGmho/zGS/jMcn3ieKl/A8YImqib76C8kjgZwq5uUFzc30lJkMvcchuRn6/v8IApLxli3Jyw=="],
+
+    "@suyalcinkaya/gauge": ["@suyalcinkaya/gauge@0.1.0", "", { "peerDependencies": { "react": "^16.8 || ^17.0 || ^18.0", "react-dom": "^16.8 || ^17.0 || ^18.0" } }, "sha512-DjjcinO+9YjBXalsIcdNERf2oikvoCh9rI4zH1an74JSxpFYKE3fKL22lkjfvLkW2SVggQBuFIf9Gavs3s1bWQ=="],
 
     "@tailwindcss/node": ["@tailwindcss/node@4.1.18", "", { "dependencies": { "@jridgewell/remapping": "^2.3.4", "enhanced-resolve": "^5.18.3", "jiti": "^2.6.1", "lightningcss": "1.30.2", "magic-string": "^0.30.21", "source-map-js": "^1.2.1", "tailwindcss": "4.1.18" } }, "sha512-DoR7U1P7iYhw16qJ49fgXUlry1t4CpXeErJHnQ44JgTSKMaZUdf17cfn5mHchfJ4KRBZRFA/Coo+MUF5+gOaCQ=="],
 

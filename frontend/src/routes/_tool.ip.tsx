@@ -1,3 +1,4 @@
+import { Gauge } from '@suyalcinkaya/gauge';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, notFound } from '@tanstack/react-router';
 import { CheckIcon, MinusIcon } from 'lucide-react';
@@ -180,7 +181,35 @@ function RouteComponent() {
         {result.threat && (
           <Card>
             <CardHeader>
-              <CardTitle>Threat Analysis</CardTitle>
+              <CardTitle className="flex items-center justify-between gap-2">
+                Threat Analysis
+                <Gauge
+                  size="xs"
+                  variant="ascending"
+                  gapPercent={5}
+                  strokeWidth={10}
+                  showValue
+                  showAnimation
+                  primary={{
+                    '0': 'hsl(131 41% 46%)',
+                    '30': 'hsl(39 100% 57%)',
+                    '60': 'hsl(358 75% 59%)'
+                  }}
+                  // const threatEntries = Object.entries(result.threat).filter(([k]) => k.startsWith('is_'));
+                  // const trueCount = threatEntries.filter(([_, value]) => value === true).length;
+                  // const threatScore = (trueCount / threatEntries.length) * 100;
+                  value={Object.entries(result.threat)
+                    .filter(([k]) => k.startsWith('is_'))
+                    .reduce(
+                      // uhh yeah
+                      (acc, [_, v], i, arr) =>
+                        i === arr.length - 1
+                          ? ((acc + (v ? 1 : 0)) / arr.length) * 100
+                          : acc + (v ? 1 : 0),
+                      0
+                    )}
+                />
+              </CardTitle>
             </CardHeader>
             <CardContent className="grid gap-5">
               <div className="grid grid-cols-2 gap-1 md:grid-cols-3">
