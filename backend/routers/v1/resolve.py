@@ -1,17 +1,17 @@
 import asyncio
-import json
 import os
 import traceback
 from http import HTTPStatus
 from ipaddress import ip_address
 from urllib.parse import unquote
 
+from asyncwhois.client import DomainClient
+from asyncwhois.errors import NotFoundError
 import httpx
 import niquests
 import orjson
 import tldextract
 from aiocache import Cache
-from asyncwhois import aio_rdap, aio_whois
 from email_validator import EmailNotValidError, validate_email
 from holehe.core import get_functions, import_submodules, launch_module
 from robyn import Response, SubRouter, status_codes
@@ -33,6 +33,8 @@ cache = Cache(
     ttl=60 * 15,  # 15m
 )
 
+domain_client = DomainClient(timeout=15)
+
 
 class QueryRequestParams(QueryParams):
     q: str
@@ -51,7 +53,7 @@ def handle_exception(error: Exception):
 
     return Response(
         status_code=status_code,
-        description=json.dumps({"error": detail}),
+        description=orjson.dumps({"error": detail}),
         headers={"Content-Type": "application/json"},
     )
 
@@ -99,20 +101,34 @@ async def resolve_whois(query_params: QueryRequestParams):
     response = await cache.get(key)
 
     if not response:
-        normalized_output = None
+        raw_output, normalized_output = None, None
+        whois_exc = None
 
         # resolve with WHOIS
         try:
-            raw_output, normalized_output = await aio_whois(root_domain)
-        except Exception:
-            pass
+            raw_output, normalized_output = await domain_client.aio_whois(root_domain)
+        except NotFoundError:
+            raise HTTPException(status_codes.HTTP_404_NOT_FOUND, "Domain not found")
+        except Exception as exc:
+            whois_exc = exc
 
         # fallback to RDAP
-        if normalized_output is None or normalized_output["domain_name"] is None:
+        if (
+            raw_output is None
+            or normalized_output is None
+            or normalized_output["domain_name"] is None
+        ):
             try:
-                raw_output, normalized_output = await aio_rdap(root_domain)
-            except Exception as e:
-                logger.error(f"Failed to resolve WHOIS and RDAP for {root_domain}", e)
+                raw_output, normalized_output = await domain_client.aio_rdap(
+                    root_domain
+                )
+            except Exception as rdap_exc:
+                if whois_exc is not None:
+                    logger.error(f"Failed to resolve WHOIS for {root_domain}")
+                    logger.logger.exception("", exc_info=whois_exc)
+
+                logger.error(f"Failed to resolve RDAP for {root_domain}")
+                logger.logger.exception("", exc_info=rdap_exc)
 
         if normalized_output is None:
             raise HTTPException(

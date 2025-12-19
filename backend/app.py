@@ -1,6 +1,6 @@
-import json
 from http import HTTPStatus
 
+import orjson
 from robyn import ALLOW_CORS, Request, Response, Robyn, status_codes
 from robyn.logger import logger
 from robyn_rate_limits import InMemoryStore, RateLimiter
@@ -16,7 +16,7 @@ limiter = RateLimiter(
     limit_ttl=60,
     exceeded_response=Response(
         status_code=status_codes.HTTP_429_TOO_MANY_REQUESTS,
-        description=json.dumps({"error": HTTPStatus.TOO_MANY_REQUESTS.phrase}),
+        description=orjson.dumps({"error": HTTPStatus.TOO_MANY_REQUESTS.phrase}),
         headers={"Content-Type": "application/json"},
     ),
 )
