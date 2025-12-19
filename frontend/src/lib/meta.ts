@@ -3,31 +3,36 @@ export const TOOL_METADATA = {
     queryType: 'domain',
     name: 'DNS Lookup',
     description:
-      "Discover a domain's DNS records, including IP address, name servers, and MX records."
+      "Discover a domain's DNS records, including IP address, name servers, and MX records.",
+    disableUniversalLookup: false
   },
   whois: {
     queryType: 'domain',
     name: 'WHOIS Lookup',
     description:
-      'Look up information on domain owners, registration dates, nameservers, and more.'
+      'Look up information on domain owners, registration dates, nameservers, and more.',
+    disableUniversalLookup: false
   },
   subdomains: {
     queryType: 'domain',
     name: 'Subdomain Finder',
     description:
-      'Scan all live subdomains of a domain, including IP addresses and server information.'
+      'Scan all live subdomains of a domain, including IP addresses and server information.',
+    disableUniversalLookup: false
   },
   ip: {
     queryType: 'ip',
     name: 'IP Address Lookup',
     description:
-      'Find information about an IP address, including its ASN, geolocation, and threat level.'
+      'Find information about an IP address, including its ASN, geolocation, and threat level.',
+    disableUniversalLookup: false
   },
   email: {
     queryType: 'email',
     name: 'Email Address Lookup',
     description:
-      'Locate sites with created accounts and other information associated with an email address.'
+      'Locate sites with created accounts and other information associated with an email address.',
+    disableUniversalLookup: true
   }
 } as const;
 

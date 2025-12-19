@@ -59,7 +59,9 @@ function ToolLayoutRouteComponent() {
   const search = Route.useSearch();
 
   const toolsOfQueryType = Object.entries(TOOL_METADATA).filter(
-    ([_, t]) => t.queryType === tool.queryType
+    ([_, t]) =>
+      t.queryType === tool.queryType && //
+      !t.disableUniversalLookup
   ) as ToolMetadataEntries;
 
   const queries = useQueries({

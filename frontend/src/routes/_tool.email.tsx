@@ -66,7 +66,7 @@ function RouteComponent() {
                     registered ? 'ring-green-500' : 'opacity-50 ring-red-500/50'
                   )}
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex min-w-0 items-center gap-2">
                     <div className="ring-muted-foreground/25 relative size-5 bg-white shadow ring-1">
                       <img
                         className="aspect-square rounded-lg object-contain p-0.5 select-none"
@@ -75,9 +75,9 @@ function RouteComponent() {
                         alt=""
                       />
                     </div>
-                    <p>{website}</p>
+                    <p className="truncate">{website}</p>
                   </div>
-                  <ExternalLinkIcon className="mr-1.5 size-4" />
+                  <ExternalLinkIcon className="mr-0.5 size-4 shrink-0" />
                 </Card>
               </a>
             ))}
