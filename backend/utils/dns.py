@@ -35,6 +35,12 @@ class DNSRecord(TypedDict):
 
 
 class DNSResolver:
+    def _soa_sort(self, record: DNSRecord):
+        if "." not in record["name"]:
+            return (0, record["name"])
+
+        return (1, record["name"])
+
     async def resolve_record(self, _domain: str, _type: str) -> DNSRecord:
         raise NotImplementedError
 
@@ -48,6 +54,9 @@ class DNSResolver:
         result = defaultdict(list)
         for r in records:
             result[r["type"]].append(r)
+
+        if "SOA" in result:
+            result["SOA"].sort(key=self._soa_sort)
 
         return result
 
