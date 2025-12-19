@@ -29,6 +29,7 @@ import {
 } from '@/components/ui/input-group';
 import { Spinner } from '@/components/ui/spinner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import useMediaQuery from '@/hooks/use-media-query';
 import { useVisitorIPQuery } from '@/hooks/use-visitor-ip-query';
 import {
   TOOL_METADATA,
@@ -72,7 +73,7 @@ function ToolLayoutRouteComponent() {
     return (
       <article className="grid gap-2 sm:gap-0">
         <header className="grid gap-2 pt-3">
-          <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
+          <div className="flex flex-col items-center justify-between gap-2.5 sm:flex-row">
             <div className="flex flex-col items-center text-center leading-tight sm:flex-row sm:items-baseline sm:gap-2 sm:text-left">
               <Link to={`/${tkey}`}>
                 <h1 className="text-lg/tight font-semibold tracking-tight whitespace-nowrap">
@@ -155,7 +156,7 @@ function ToolLayoutRouteComponent() {
         <h1 className="text-5xl font-semibold tracking-tighter md:text-6xl">
           {tool.name}
         </h1>
-        <p className="text-muted-foreground mx-auto max-w-md text-sm sm:text-base">
+        <p className="text-muted-foreground mx-auto max-w-md text-base">
           {tool.description}
         </p>
       </hgroup>
@@ -179,6 +180,9 @@ interface ToolFormProps {
 function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { isDesktop } = useMediaQuery();
+
+  const shouldAutoFocus = variant === 'default' && isDesktop;
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -216,7 +220,7 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
                 </InputGroupAddon>
 
                 <InputGroupInput
-                  autoFocus={variant === 'default'}
+                  autoFocus={shouldAutoFocus}
                   placeholder="example.com"
                   type="text"
                   id="domain"
@@ -243,7 +247,7 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
                 </InputGroupAddon>
 
                 <InputGroupInput
-                  autoFocus={variant === 'default'}
+                  autoFocus={shouldAutoFocus}
                   placeholder="1.1.1.1"
                   type="text"
                   id="ip"
@@ -270,7 +274,7 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
                 </InputGroupAddon>
 
                 <InputGroupInput
-                  autoFocus={variant === 'default'}
+                  autoFocus={shouldAutoFocus}
                   placeholder="me@example.com"
                   data-form-type="other"
                   data-1p-ignore="true"

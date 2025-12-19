@@ -21,8 +21,12 @@ export function Header() {
         to="/"
       >
         <Logo className="size-5" />
-        <span className="text-lg font-medium tracking-tighter whitespace-nowrap">
-          lookup<span className="opacity-60">.</span>tools
+        <span className="text-lg font-medium tracking-tighter whitespace-nowrap lowercase">
+          Lookup
+          <span className="-mr-1 before:opacity-60 before:content-['.']">
+            {' '}
+          </span>
+          Tools
         </span>
       </Link>
       <div className="flex items-center gap-2">

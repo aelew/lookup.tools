@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { SearchIcon } from 'lucide-react';
 import { useState } from 'react';
 
+import { Logo } from '@/components/layout/logo';
 import {
   Card,
   CardDescription,
@@ -13,6 +14,7 @@ import {
   InputGroupAddon,
   InputGroupInput
 } from '@/components/ui/input-group';
+import useMediaQuery from '@/hooks/use-media-query';
 import { TOOL_METADATA } from '@/lib/meta';
 import type { ToolKey } from '@/lib/meta';
 
@@ -22,18 +24,26 @@ export const Route = createFileRoute('/')({
 
 function RouteComponent() {
   const [search, setSearch] = useState('');
+  const { isDesktop } = useMediaQuery();
 
   return (
     <>
       <section className="grid gap-6 py-12 sm:py-24">
         {/* hero */}
         <hgroup className="grid gap-4 text-center">
-          <h1 className="text-5xl font-semibold tracking-tighter md:text-6xl">
-            Lookup Tools
+          <h1 className="flex items-center justify-center gap-4 text-5xl font-semibold tracking-tighter md:text-6xl">
+            <Logo className="size-12 sm:size-16" />
+            <span className="lowercase">
+              Lookup
+              <span className="-mr-2.75 before:opacity-60 before:content-['.']">
+                {' '}
+              </span>
+              Tools
+            </span>
           </h1>
-          <p className="text-muted-foreground mx-auto max-w-lg text-sm sm:text-base">
+          <p className="text-muted-foreground mx-auto max-w-lg text-base text-pretty">
             The cyber swiss army knife of lookup tools. Research information on
-            domains, IP addresses, email addresses, and more.
+            domains, IP&nbsp;addresses, email addresses, and more.
           </p>
         </hgroup>
 
@@ -43,9 +53,9 @@ function RouteComponent() {
             <SearchIcon />
           </InputGroupAddon>
           <InputGroupInput
-            autoFocus
             type="search"
             placeholder="Search tools..."
+            autoFocus={isDesktop}
             onChange={(e) => setSearch(e.target.value.trim().toLowerCase())}
           />
         </InputGroup>
