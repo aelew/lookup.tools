@@ -290,7 +290,13 @@ function RouteComponent() {
           </CardHeader>
           <CardContent>
             <div className="bg-secondary px-2 py-1.5">
-              <code className="whitespace-pre-line">{raw}</code>
+              <code className="wrap-break-word whitespace-pre-wrap">
+                {raw
+                  ? raw.startsWith('{')
+                    ? JSON.stringify(JSON.parse(raw), null, 2)
+                    : raw
+                  : 'No data available'}
+              </code>
             </div>
           </CardContent>
         </Card>
