@@ -5,6 +5,7 @@ from robyn import ALLOW_CORS, Request, Response, Robyn, status_codes
 from robyn.logger import logger
 from robyn_rate_limits import InMemoryStore, RateLimiter
 
+from exceptions import HTTPException
 from routers.v1.resolve import router as v1_resolve_router
 
 app = Robyn(__file__)
@@ -26,7 +27,7 @@ ALLOW_CORS(app, origins=["http://localhost:3000", "https://lookup.tools"])
 @app.before_request()
 def middleware(request: Request):
     path = request.url.path
-    if request.query_params:
+    if not request.query_params.empty():
         params = "&".join(
             f"{key}={values[0]}"
             for key, values in request.query_params.to_dict().items()
@@ -42,6 +43,23 @@ def health():
     return Response(
         status_code=status_codes.HTTP_204_NO_CONTENT, description="", headers={}
     )
+
+
+@app.get("/visitor")
+def visitor(request: Request):
+    visitor_ip = (
+        request.headers.get("cf-connecting-ip")
+        or request.headers.get("x-forwarded-for")
+        or request.ip_addr
+    )
+
+    if not visitor_ip:
+        raise HTTPException(
+            status_codes.HTTP_500_INTERNAL_SERVER_ERROR,
+            "Failed to get visitor IP",
+        )
+
+    return {"ip": visitor_ip}
 
 
 app.include_router(v1_resolve_router)
