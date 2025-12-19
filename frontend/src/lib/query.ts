@@ -9,15 +9,11 @@ export const api = ky.create({
 
 export function getQueryOptions<T>(tkey: ToolKey, q?: string) {
   return queryOptions({
-    queryKey: [tkey, q],
     enabled: !!q,
+    queryKey: [tkey, q],
     queryFn: () =>
       api
-        .get(`v1/resolve/${tkey}`, {
-          searchParams: {
-            q
-          }
-        })
+        .get(`v1/resolve/${tkey}`, { searchParams: { q } }) //
         .json<T>()
   });
 }
