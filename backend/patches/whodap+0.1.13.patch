@@ -1,0 +1,16 @@
+diff --git a/whodap/client.py b/whodap/client.py
+index 8b768f0..cc6ba01 100644
+--- a/whodap/client.py
++++ b/whodap/client.py
+@@ -242,6 +242,11 @@ class RDAPClient:
+                 return None
+             else:
+                 raise
++        except MalformedQueryError:
++            if depth != 0:
++                return None
++            else:
++                raise
+         try:
+             # If for some reason the response is invalid json, then just return None.
+             # This may happen if we request an authoritative href that is not actually
