@@ -5,5 +5,5 @@ export const Route = createFileRoute('/_tool/email')({
 });
 
 function RouteComponent() {
-  return <div>Hello "/_tool/email"!</div>;
+  return <div>WIP</div>;
 }

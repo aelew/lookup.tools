@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { createFileRoute, Link, notFound } from '@tanstack/react-router';
+import { createFileRoute, notFound } from '@tanstack/react-router';
 import { EyeIcon } from 'lucide-react';
 import { useState } from 'react';
 
+import { DataContextMenu } from '@/components/data-context-menu';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
@@ -110,28 +111,37 @@ function RouteComponent() {
       keys: {
         Registrar: () => result.registrar,
         Registered: () => {
-          const dateTime = result.created;
-          return dateTime ? (
-            <time dateTime={dateTime}>
-              {new Date(dateTime).toLocaleDateString()}
+          if (!result.created) {
+            return null;
+          }
+
+          return (
+            <time dateTime={result.created}>
+              {new Date(result.created).toLocaleString()}
             </time>
-          ) : null;
+          );
         },
         Expires: () => {
-          const dateTime = result.expires;
-          return dateTime ? (
-            <time dateTime={dateTime}>
-              {new Date(dateTime).toLocaleDateString()}
+          if (!result.expires) {
+            return null;
+          }
+
+          return (
+            <time dateTime={result.expires}>
+              {new Date(result.expires).toLocaleString()}
             </time>
-          ) : null;
+          );
         },
         Updated: () => {
-          const dateTime = result.updated;
-          return dateTime ? (
-            <time dateTime={dateTime}>
-              {new Date(dateTime).toLocaleDateString()}
+          if (!result.updated) {
+            return null;
+          }
+
+          return (
+            <time dateTime={result.updated}>
+              {new Date(result.updated).toLocaleString()}
             </time>
-          ) : null;
+          );
         },
         Status: () => {
           if (!result.status?.length) {
@@ -192,14 +202,9 @@ function RouteComponent() {
                         alt=""
                       />
                     </div>
-                    <Link
-                      className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                      search={{ q: nsDomain }}
-                      to="/whois"
-                      key={ns}
-                    >
+                    <DataContextMenu type="domain" value={nsDomain}>
                       {ns}
-                    </Link>
+                    </DataContextMenu>
                   </div>
                 );
               })}

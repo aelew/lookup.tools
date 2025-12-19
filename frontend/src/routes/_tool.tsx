@@ -270,6 +270,11 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
                 <InputGroupInput
                   autoFocus={variant === 'default'}
                   placeholder="me@example.com"
+                  data-form-type="other"
+                  data-1p-ignore="true"
+                  data-bwignore="true"
+                  data-lpignore="true"
+                  autoComplete="off"
                   type="email"
                   id="email"
                   name="q"
