@@ -75,7 +75,7 @@ function RouteComponent() {
       {/* tools */}
       <section className="flex flex-wrap justify-center gap-8 pb-12">
         {Object.entries(TOOL_METADATA)
-          .filter(([, t]) => t.name.toLowerCase().includes(search))
+          .filter(([, tool]) => tool.name.toLowerCase().includes(search))
           .map(([key, tool]) => (
             <Card
               className="focus-within:ring-primary relative w-full gap-0 transition-opacity hover:opacity-75 md:max-w-77 dark:hover:opacity-90"

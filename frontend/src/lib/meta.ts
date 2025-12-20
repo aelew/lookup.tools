@@ -5,7 +5,7 @@ export const TOOL_METADATA = {
     queryType: 'domain',
     name: 'DNS Lookup',
     description:
-      "Discover a domain's DNS\xa0records, including IP\xa0addresses, name servers, and MX\xa0records.",
+      "Discover a domain's DNS records, including IP addresses, name servers, and MX records.",
     disableUniversalLookup: false
   },
   whois: {
@@ -19,14 +19,14 @@ export const TOOL_METADATA = {
     queryType: 'domain',
     name: 'Subdomain Finder',
     description:
-      'Scan all live subdomains of a domain, including IP\xa0addresses and server information.',
+      'Scan all live subdomains of a domain, including IP addresses and server information.',
     disableUniversalLookup: false
   },
   ip: {
     queryType: 'ip',
     name: 'IP Address Lookup',
     description:
-      'Find information about an IP\xa0address, including its ASN, geolocation, and threat level.',
+      'Find information about an IP address, including its ASN, geolocation, and threat level.',
     disableUniversalLookup: false
   },
   email: {
