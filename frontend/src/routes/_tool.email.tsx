@@ -2,6 +2,7 @@ import { useQueries } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { ExternalLinkIcon } from 'lucide-react';
 
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { api } from '@/lib/query';
 import { cn } from '@/lib/utils';
@@ -53,33 +54,36 @@ function RouteComponent() {
               return websiteA.localeCompare(websiteB);
             })
             .map(([website, registered]) => (
-              <a
-                rel="nofollow noopener noreferrer"
-                href={`https://${website}`}
-                className="contents"
-                target="_blank"
+              <Button
                 key={website}
+                variant="secondary"
+                className={cn(
+                  'h-auto justify-between p-2 font-normal',
+                  registered
+                    ? 'border-green-600'
+                    : 'border-red-500/50 opacity-65'
+                )}
+                render={
+                  <a
+                    rel="nofollow noopener noreferrer"
+                    href={`https://${website}`}
+                    target="_blank"
+                  />
+                }
               >
-                <Card
-                  className={cn(
-                    'transition-color-transform hover:bg-accent/80 relative flex flex-row items-center justify-between p-2 shadow-md ring-1',
-                    registered ? 'ring-green-500' : 'opacity-50 ring-red-500/50'
-                  )}
-                >
-                  <div className="flex min-w-0 items-center gap-2">
-                    <div className="ring-muted-foreground/25 relative size-5 bg-white shadow ring-1">
-                      <img
-                        className="aspect-square rounded-lg object-contain p-0.5 select-none"
-                        src={`https://api.favicon.victr.me/blob/https://${website}`}
-                        draggable={false}
-                        alt=""
-                      />
-                    </div>
-                    <p className="truncate">{website}</p>
-                  </div>
-                  <ExternalLinkIcon className="mr-0.5 size-4 shrink-0" />
-                </Card>
-              </a>
+                <p className="flex min-w-0 items-center gap-2">
+                  <span className="ring-muted-foreground/25 relative size-5 bg-white shadow ring-1">
+                    <img
+                      className="aspect-square rounded-lg object-contain p-0.5 select-none"
+                      src={`https://api.favicon.victr.me/blob/https://${website}`}
+                      draggable={false}
+                      alt=""
+                    />
+                  </span>
+                  <span className="truncate">{website}</span>
+                </p>
+                <ExternalLinkIcon className="mr-0.5 size-4 shrink-0 opacity-50" />
+              </Button>
             ))}
         </CardContent>
       </Card>

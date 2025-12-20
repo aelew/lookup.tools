@@ -193,10 +193,16 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
       .object({ q: QUERY_SCHEMAS[queryType] })
       .safeParse({ q: formData.get('q') });
 
+    const input =
+      e.currentTarget.querySelector<HTMLInputElement>('input[name="q"]');
+
     if (!parseResult.success) {
-      alert(parseResult.error.issues[0].message);
+      console.log(parseResult.error.issues[0].message);
+      input?.setAttribute('aria-invalid', 'true');
       return;
     }
+
+    input?.setAttribute('aria-invalid', 'false');
 
     navigate({
       to: pathname,
