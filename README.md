@@ -1,44 +1,26 @@
 # 🔎 lookup.tools
 
-The cyber swiss army knife of lookup tools. Research information on domains, IPs, email addresses, and more.
+The cyber swiss army knife of lookup tools. Research information on domains, IPs, email addresses, and more!
 
-Check out the hosted version here: [lookup.tools](https://lookup.tools)  
-Roadmap: https://github.com/users/aelew/projects/1/views/2
+Check it out in action at https://lookup.tools!
 
 ## Built with
 
-- [create-t3-app](https://create.t3.gg): The best way to start a full-stack, typesafe Next.js app
-- [Bun](https://bun.sh/): An all-in-one JavaScript runtime & toolkit designed for speed
-- [Next.js](https://nextjs.org): The React framework for the web
-- [Tailwind CSS](https://tailwindcss.com): A utility-first CSS framework
-- [shadcn/ui](https://ui.shadcn.com): Beautifully designed components
+### Frontend
+
+- [Cloudflare Workers](https://workers.cloudflare.com): Serverless platform for building and deploying apps
+- [TanStack Start](https://tanstack.com/start): Full-stack framework powered by TanStack Router
+- [React](https://react.dev): Frontend library for web and native user interfaces
+- [Bun](https://bun.sh/): All-in-one JavaScript toolkit designed for speed
+- [Tailwind CSS](https://tailwindcss.com): Utility-first CSS framework
+- [shadcn/ui](https://ui.shadcn.com): Customizable component library
 - [Pigeon Maps](https://pigeon-maps.js.org): Maps without external dependencies
 
-## Development
+### Backend
 
-Clone the project
-
-```bash
-git clone https://github.com/aelew/lookup.tools.git
-```
-
-Go to the project directory
-
-```bash
-cd lookup.tools
-```
-
-Install dependencies
-
-```bash
-bun i
-```
-
-Start the local development server on http://localhost:3000
-
-```bash
-bun dev
-```
+- [Robyn](https://robyn.tech): Fast Python web framework built in Rust
+- [asyncwhois](https://github.com/pogzyb/asyncwhois): Python utility for WHOIS and RDAP queries
+- [holehe](https://github.com/megadose/holehe): Python utility for checking registered accounts
 
 ## License
 
