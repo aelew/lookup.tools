@@ -4,12 +4,16 @@ import { ExternalLinkIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getToolMetadata } from '@/lib/meta';
 import { api } from '@/lib/query';
 import { cn } from '@/lib/utils';
 import type { EmailAccountsLookupResponse } from '@/types/tools/email';
 
 export const Route = createFileRoute('/_tool/email')({
-  component: RouteComponent
+  component: RouteComponent,
+  head: ({ match: { search } }) => ({
+    meta: getToolMetadata('email', !!search.q)
+  })
 });
 
 function RouteComponent() {

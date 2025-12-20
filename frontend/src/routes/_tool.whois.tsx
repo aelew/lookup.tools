@@ -7,6 +7,7 @@ import { DataContextMenu } from '@/components/data-context-menu';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import { getToolMetadata } from '@/lib/meta';
 import { getToolQueryOptions } from '@/lib/query';
 import { parseDomain } from '@/lib/utils';
 import type { WHOISLookupResponse } from '@/types/tools/whois';
@@ -38,7 +39,10 @@ const EPP_STATUS_CODES = [
 ];
 
 export const Route = createFileRoute('/_tool/whois')({
-  component: RouteComponent
+  component: RouteComponent,
+  head: ({ match: { search } }) => ({
+    meta: getToolMetadata('whois', !!search.q)
+  })
 });
 
 function RouteComponent() {

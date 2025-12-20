@@ -15,12 +15,16 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
+import { getToolMetadata } from '@/lib/meta';
 import { getToolQueryOptions } from '@/lib/query';
 import { cn } from '@/lib/utils';
 import type { IPAddressLookupResponse } from '@/types/tools/ip';
 
 export const Route = createFileRoute('/_tool/ip')({
-  component: RouteComponent
+  component: RouteComponent,
+  head: ({ match: { search } }) => ({
+    meta: getToolMetadata('ip', !!search.q)
+  })
 });
 
 function RouteComponent() {

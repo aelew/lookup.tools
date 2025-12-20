@@ -1,3 +1,5 @@
+import type { AnyRouteMatch } from '@tanstack/react-router';
+
 export const TOOL_METADATA = {
   dns: {
     queryType: 'domain',
@@ -41,3 +43,24 @@ export type ToolMetadata = (typeof TOOL_METADATA)[ToolKey];
 
 type Entries<T> = Array<{ [K in keyof T]: [K, T[K]] }[keyof T]>;
 export type ToolMetadataEntries = Entries<typeof TOOL_METADATA>;
+
+export const APP_NAME = 'Lookup Tools';
+export const APP_DESCRIPTION =
+  'The cyber swiss army knife of lookup tools. Research information on domains, IP addresses, email addresses, and more.';
+
+export function t(s?: string) {
+  return s ? `${s} | ${APP_NAME}` : APP_NAME;
+}
+
+export function getToolMetadata(
+  tkey: ToolKey,
+  query: boolean
+): AnyRouteMatch['meta'] {
+  const tool = TOOL_METADATA[tkey];
+
+  return [
+    { title: t(tool.name) },
+    { name: 'description', content: tool.description },
+    ...(query ? [{ name: 'robots', content: 'noindex' }] : [])
+  ];
+}

@@ -15,11 +15,17 @@ import {
   InputGroupInput
 } from '@/components/ui/input-group';
 import useMediaQuery from '@/hooks/use-media-query';
-import { TOOL_METADATA } from '@/lib/meta';
+import { APP_DESCRIPTION, t, TOOL_METADATA } from '@/lib/meta';
 import type { ToolKey } from '@/lib/meta';
 
 export const Route = createFileRoute('/')({
-  component: RouteComponent
+  component: RouteComponent,
+  head: () => ({
+    meta: [
+      { title: t('Domain, IP, & Email Intelligence') },
+      { name: 'description', content: APP_DESCRIPTION }
+    ]
+  })
 });
 
 function RouteComponent() {

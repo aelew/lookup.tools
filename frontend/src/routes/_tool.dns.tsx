@@ -17,10 +17,14 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
+import { getToolMetadata } from '@/lib/meta';
 import { getToolQueryOptions } from '@/lib/query';
 
 export const Route = createFileRoute('/_tool/dns')({
-  component: RouteComponent
+  component: RouteComponent,
+  head: ({ match: { search } }) => ({
+    meta: getToolMetadata('dns', !!search.q)
+  })
 });
 
 function RouteComponent() {

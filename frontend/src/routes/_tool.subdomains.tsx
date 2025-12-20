@@ -13,12 +13,16 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
+import { getToolMetadata } from '@/lib/meta';
 import { getToolQueryOptions } from '@/lib/query';
 import { cn } from '@/lib/utils';
 import type { SubdomainsLookupResponse } from '@/types/tools/subdomains';
 
 export const Route = createFileRoute('/_tool/subdomains')({
-  component: RouteComponent
+  component: RouteComponent,
+  head: ({ match: { search } }) => ({
+    meta: getToolMetadata('subdomains', !!search.q)
+  })
 });
 
 function RouteComponent() {

@@ -10,6 +10,7 @@ import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';
 import { Logo } from '@/components/layout/logo';
 import { Providers } from '@/components/providers';
+import { t } from '@/lib/meta';
 import styles from '../styles.css?url';
 
 interface RootRouteContext {
@@ -20,8 +21,8 @@ export const Route = createRootRouteWithContext<RootRouteContext>()({
   shellComponent: RootDocument,
   head: () => ({
     meta: [
+      { title: t() },
       { charSet: 'utf-8' },
-      { title: 'Lookup Tools' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' }
     ],
     links: [
