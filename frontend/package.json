@@ -1,7 +1,11 @@
 {
   "name": "frontend",
   "type": "module",
-  "private": true,
+  "license": "MIT",
+  "author": {
+    "name": "Andre Lew",
+    "url": "https://aelew.com"
+  },
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
