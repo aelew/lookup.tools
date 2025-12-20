@@ -6,10 +6,12 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "bun run build && wrangler deploy",
-    "typegen": "wrangler types",
     "lint": "eslint",
-    "check": "prettier --write . && eslint --fix && tsc --noEmit"
+    "check": "prettier --write . && eslint --fix && tsc --noEmit",
+    "deploy:production": "bun run build && wrangler deploy -e production",
+    "deploy:staging": "bun run build && wrangler deploy -e staging",
+    "typegen": "wrangler types",
+    "postinstall": "bun run typegen"
   },
   "dependencies": {
     "@base-ui/react": "^1.0.0",
@@ -30,7 +32,6 @@
     "clsx": "^2.1.1",
     "ky": "^1.14.1",
     "lucide-react": "^0.562.0",
-    "motion": "^12.23.26",
     "pigeon-maps": "^0.22.1",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",

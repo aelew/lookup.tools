@@ -1,5 +1,5 @@
 {
-  "projectName": "start-app",
+  "projectName": "lookup-tools",
   "mode": "file-router",
   "typescript": true,
   "tailwind": true,
