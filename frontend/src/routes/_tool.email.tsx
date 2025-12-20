@@ -57,6 +57,7 @@ function RouteComponent() {
               <Button
                 key={website}
                 variant="secondary"
+                nativeButton={false}
                 className={cn(
                   'h-auto justify-between p-2 font-normal',
                   registered

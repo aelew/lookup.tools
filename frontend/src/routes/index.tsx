@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { SearchIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Logo } from '@/components/layout/logo';
 import {
@@ -25,6 +25,12 @@ export const Route = createFileRoute('/')({
 function RouteComponent() {
   const [search, setSearch] = useState('');
   const { isDesktop } = useMediaQuery();
+
+  useEffect(() => {
+    if (isDesktop) {
+      document.querySelector<HTMLInputElement>('input[type="search"]')?.focus();
+    }
+  }, [isDesktop]);
 
   return (
     <>
@@ -55,7 +61,6 @@ function RouteComponent() {
           <InputGroupInput
             type="search"
             placeholder="Search tools..."
-            autoFocus={isDesktop}
             onChange={(e) => setSearch(e.target.value.trim().toLowerCase())}
           />
         </InputGroup>

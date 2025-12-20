@@ -195,6 +195,7 @@ function RouteComponent() {
                     '30': 'hsl(39 100% 57%)',
                     '60': 'hsl(358 75% 59%)'
                   }}
+                  secondary="color-mix(in oklab, var(--input) 80%, transparent)"
                   // const threatEntries = Object.entries(result.threat).filter(([k]) => k.startsWith('is_'));
                   // const trueCount = threatEntries.filter(([_, value]) => value === true).length;
                   // const threatScore = (trueCount / threatEntries.length) * 100;

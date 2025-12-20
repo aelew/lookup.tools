@@ -14,7 +14,7 @@ import {
   MailIcon,
   MapPinIcon
 } from 'lucide-react';
-import type { FormEvent } from 'react';
+import { useEffect, type FormEvent } from 'react';
 import { match } from 'ts-pattern';
 import z from 'zod';
 
@@ -75,7 +75,10 @@ function ToolLayoutRouteComponent() {
         <header className="grid gap-2 pt-3">
           <div className="flex flex-col items-center justify-between gap-2.5 sm:flex-row">
             <div className="flex flex-col items-center text-center leading-tight sm:flex-row sm:items-baseline sm:gap-2 sm:text-left">
-              <Link to={`/${tkey}`}>
+              <Link
+                className="transition-opacity hover:opacity-75 dark:hover:opacity-90"
+                to={`/${tkey}`}
+              >
                 <h1 className="text-lg/tight font-semibold tracking-tight whitespace-nowrap">
                   {tool.name}
                 </h1>
@@ -182,8 +185,6 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
   const { pathname } = useLocation();
   const { isDesktop } = useMediaQuery();
 
-  const shouldAutoFocus = variant === 'default' && isDesktop;
-
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -210,6 +211,12 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
     });
   }
 
+  useEffect(() => {
+    if (variant === 'default' && isDesktop) {
+      document.querySelector<HTMLInputElement>('input[name="q"]')?.focus();
+    }
+  }, [variant, isDesktop]);
+
   return (
     <form onSubmit={handleSubmit}>
       {match(queryType)
@@ -226,7 +233,6 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
                 </InputGroupAddon>
 
                 <InputGroupInput
-                  autoFocus={shouldAutoFocus}
                   placeholder="example.com"
                   type="text"
                   id="domain"
@@ -253,7 +259,6 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
                 </InputGroupAddon>
 
                 <InputGroupInput
-                  autoFocus={shouldAutoFocus}
                   placeholder="1.1.1.1"
                   type="text"
                   id="ip"
@@ -280,7 +285,6 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
                 </InputGroupAddon>
 
                 <InputGroupInput
-                  autoFocus={shouldAutoFocus}
                   placeholder="me@example.com"
                   data-form-type="other"
                   data-1p-ignore="true"
@@ -312,7 +316,7 @@ function UseMyIPAddressButton() {
     <Button
       render={<Link to="/ip" search={{ q: ip }} />}
       className="mx-auto w-fit"
-      variant="secondary"
+      nativeButton={false}
       disabled={!ip}
     >
       Use my IP address

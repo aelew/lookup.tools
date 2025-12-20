@@ -1,3 +1,4 @@
+import { SiGithub } from '@icons-pack/react-simple-icons';
 import { Link } from '@tanstack/react-router';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'tanstack-theme-kit';
@@ -30,23 +31,27 @@ export function Header() {
         </span>
       </Link>
       <div className="flex items-center gap-2">
-        {/* <div className="h-7">
-          <GitHubButton
-            href="https://github.com/aelew/lookup.tools"
-            data-color-scheme="no-preference: light; light: light; dark: dark;"
-            aria-label="Star Lookup Tools on GitHub"
-            data-show-count="true"
-            data-size="large"
-          >
-            <span className="sr-only">Star</span>
-          </GitHubButton>
-        </div> */}
+        <Button
+          className="shadow-xs"
+          nativeButton={false}
+          variant="outline"
+          render={
+            <a href="https://github.com/aelew/lookup.tools" target="_blank" />
+          }
+        >
+          <SiGithub /> Star
+        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
-              <Button variant="outline" className="shadow-xs" size="icon">
-                <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-                <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+              <Button
+                className="shadow-xs"
+                variant="outline"
+                type="button"
+                size="icon"
+              >
+                <Sun className="size-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+                <Moon className="absolute size-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
                 <span className="sr-only">Toggle theme</span>
               </Button>
             }
