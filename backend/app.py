@@ -1,5 +1,5 @@
-from http import HTTPStatus
 import os
+from http import HTTPStatus
 
 import orjson
 from robyn import ALLOW_CORS, Request, Response, Robyn, status_codes
@@ -45,7 +45,9 @@ def middleware(request: Request):
 @app.get("/health", const=True)
 def health():
     return Response(
-        status_code=status_codes.HTTP_204_NO_CONTENT, description="", headers={}
+        status_code=status_codes.HTTP_204_NO_CONTENT,
+        description="",
+        headers={},
     )
 
 
