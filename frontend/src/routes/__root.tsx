@@ -69,6 +69,19 @@ function RootDocument({ children }: PropsWithChildren) {
     <html lang="en" suppressHydrationWarning={import.meta.env.DEV}>
       <head>
         <HeadContent />
+        {import.meta.env.VITE_MAIN_INSTANCE === '1' && (
+          <>
+            <script
+              src="https://analytics.aelew.dev/js/pa-riSECZHCgWmjtqo3VRd0P.js"
+              async
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()`
+              }}
+            />
+          </>
+        )}
       </head>
       <body className="relative flex min-h-screen flex-col">
         <Providers queryClient={queryClient}>
