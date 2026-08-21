@@ -99,4 +99,4 @@ class CloudflareDNSResolver(DNSResolver):
         if "Authority" in data:
             return [self._normalize_record(r) for r in data["Authority"]]
 
-        raise Exception(f"Unknown DNS query response (domain={domain}, type={type})")
+        raise RuntimeError(f"Unknown DNS query response (domain={domain}, type={type})")

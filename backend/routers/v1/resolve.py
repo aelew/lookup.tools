@@ -109,7 +109,7 @@ async def resolve_whois(query_params: QueryRequestParams):
             raw_output, normalized_output = await domain_client.aio_whois(root_domain)
         except NotFoundError:
             raise HTTPException(status_codes.HTTP_404_NOT_FOUND, "Domain not found")
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 — any failure should fall through to RDAP
             whois_exc = exc
 
         # fallback to RDAP
@@ -122,7 +122,7 @@ async def resolve_whois(query_params: QueryRequestParams):
                 raw_output, normalized_output = await domain_client.aio_rdap(
                     root_domain
                 )
-            except Exception as rdap_exc:
+            except Exception as rdap_exc:  # noqa: BLE001 — either source failing is a valid outcome
                 if whois_exc is not None:
                     logger.error(f"Failed to resolve WHOIS for {root_domain}")
                     logger.logger.exception("", exc_info=whois_exc)
@@ -189,7 +189,7 @@ async def resolve_subdomains(query_params: QueryRequestParams):
         certs = cert_res.json()
 
         # extract common names and dedupe
-        common_names = set(c.get("common_name") for c in certs if c.get("common_name"))
+        common_names = {c.get("common_name") for c in certs if c.get("common_name")}
 
         # remove wildcard domains and other domains that don't match the input domain
         common_names = [
@@ -282,7 +282,7 @@ async def resolve_accounts(query_params: QueryRequestParams):
         query = validation_result.normalized
     except EmailNotValidError as e:
         raise HTTPException(
-            status_codes.HTTP_400_BAD_REQUEST, f"Invalid email address — {str(e)}"
+            status_codes.HTTP_400_BAD_REQUEST, f"Invalid email address — {e!s}"
         )
 
     key = f"accounts:{query}"

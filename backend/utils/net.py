@@ -16,7 +16,7 @@ async def ping(server: str, port=80, timeout=3) -> str | None:
         await writer.wait_closed()
 
         return addr_info[0]
-    except (OSError, asyncio.TimeoutError):
+    except (TimeoutError, OSError):
         return None
 
 
@@ -25,7 +25,7 @@ def get_cloudflare_ip_ranges():
     res = niquests.get("https://api.cloudflare.com/client/v4/ips")
 
     if not res.ok:
-        raise Exception(
+        raise RuntimeError(
             f"Failed to fetch Cloudflare IP ranges (status_code={res.status_code})"
         )
 
