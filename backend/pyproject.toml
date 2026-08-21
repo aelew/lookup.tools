@@ -4,22 +4,21 @@ version = "1.0.0"
 requires-python = ">=3.13.0, <3.14"
 dependencies = [
     "aiocache>=0.12.3",
-    "asyncwhois>=1.1.12",
+    "asyncwhois>=1.1.13",
     "email-validator>=2.3.0",
     "holehe",
-    "niquests>=3.15.2",
-    "orjson>=3.11.0",
-    "patch-package-py",
-    "robyn>=0.72.2",
+    "niquests>=3.21.0",
+    "orjson>=3.12.0",
+    "patch-package-py>=0.2.1",
+    "robyn>=0.88.0",
     "robyn-rate-limits>=0.4.0",
-    "tldextract>=5.3.0",
+    "tldextract>=5.3.2",
 ]
 
 [dependency-groups]
 dev = [
-    "ruff>=0.14.9",
+    "ruff>=0.16.4",
 ]
 
 [tool.uv.sources]
 holehe = { git = "https://github.com/megadose/holehe" }
-patch-package-py = { git = "https://github.com/nomyfan/patch-package-py" }
