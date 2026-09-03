@@ -5,6 +5,7 @@ import { CheckIcon, MinusIcon } from 'lucide-react';
 
 import { DataContextMenu } from '@/components/data-context-menu';
 import { Map } from '@/components/map';
+import { ToolQueryState } from '@/components/tool-query-state';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -37,7 +38,7 @@ function RouteComponent() {
   const result = query.data?.data;
 
   if (!result) {
-    return null;
+    return <ToolQueryState query={query} />;
   }
 
   const keys = {

@@ -7,6 +7,7 @@ import {
   type DataContextMenuType
 } from '@/components/data-context-menu';
 import { CloudflareIcon } from '@/components/icons/cloudflare';
+import { ToolQueryState } from '@/components/tool-query-state';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -37,7 +38,7 @@ function RouteComponent() {
   const data = query.data?.data;
 
   if (!data) {
-    return null;
+    return <ToolQueryState query={query} />;
   }
 
   return (

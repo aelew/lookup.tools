@@ -14,13 +14,18 @@ import {
   MailIcon,
   MapPinIcon
 } from 'lucide-react';
-import { useEffect, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { match } from 'ts-pattern';
 import z from 'zod';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel
+} from '@/components/ui/field';
 import {
   InputGroup,
   InputGroupAddon,
@@ -184,6 +189,7 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { isDesktop } = useMediaQuery();
+  const [error, setError] = useState<string>();
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -194,16 +200,12 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
       .object({ q: QUERY_SCHEMAS[queryType] })
       .safeParse({ q: formData.get('q') });
 
-    const input =
-      e.currentTarget.querySelector<HTMLInputElement>('input[name="q"]');
-
     if (!parseResult.success) {
-      console.log(parseResult.error.issues[0].message);
-      input?.setAttribute('aria-invalid', 'true');
+      setError(parseResult.error.issues[0].message);
       return;
     }
 
-    input?.setAttribute('aria-invalid', 'false');
+    setError(undefined);
 
     navigate({
       to: pathname,
@@ -222,7 +224,7 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
       {match(queryType)
         .with('domain', () => (
           <FieldGroup>
-            <Field>
+            <Field data-invalid={!!error}>
               {variant === 'default' && (
                 <FieldLabel htmlFor="domain">Domain</FieldLabel>
               )}
@@ -233,22 +235,26 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
                 </InputGroupAddon>
 
                 <InputGroupInput
+                  aria-describedby={error ? 'domain-error' : undefined}
+                  aria-invalid={!!error}
                   placeholder="example.com"
                   type="text"
                   id="domain"
                   name="q"
+                  onChange={() => setError(undefined)}
                 />
 
                 <InputGroupButton type="submit">
                   <CornerDownLeftIcon />
                 </InputGroupButton>
               </InputGroup>
+              <FieldError id="domain-error">{error}</FieldError>
             </Field>
           </FieldGroup>
         ))
         .with('ip', () => (
           <FieldGroup>
-            <Field>
+            <Field data-invalid={!!error}>
               {variant === 'default' && (
                 <FieldLabel htmlFor="ip">IP Address</FieldLabel>
               )}
@@ -259,22 +265,26 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
                 </InputGroupAddon>
 
                 <InputGroupInput
+                  aria-describedby={error ? 'ip-error' : undefined}
+                  aria-invalid={!!error}
                   placeholder="1.1.1.1"
                   type="text"
                   id="ip"
                   name="q"
+                  onChange={() => setError(undefined)}
                 />
 
                 <InputGroupButton type="submit">
                   <CornerDownLeftIcon />
                 </InputGroupButton>
               </InputGroup>
+              <FieldError id="ip-error">{error}</FieldError>
             </Field>
           </FieldGroup>
         ))
         .with('email', () => (
           <FieldGroup>
-            <Field>
+            <Field data-invalid={!!error}>
               {variant === 'default' && (
                 <FieldLabel htmlFor="email">Email Address</FieldLabel>
               )}
@@ -285,6 +295,8 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
                 </InputGroupAddon>
 
                 <InputGroupInput
+                  aria-describedby={error ? 'email-error' : undefined}
+                  aria-invalid={!!error}
                   placeholder="me@example.com"
                   data-form-type="other"
                   data-1p-ignore="true"
@@ -294,12 +306,14 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
                   type="email"
                   id="email"
                   name="q"
+                  onChange={() => setError(undefined)}
                 />
 
                 <InputGroupButton type="submit">
                   <CornerDownLeftIcon />
                 </InputGroupButton>
               </InputGroup>
+              <FieldError id="email-error">{error}</FieldError>
             </Field>
           </FieldGroup>
         ))

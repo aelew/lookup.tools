@@ -4,6 +4,7 @@ import { EyeIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { DataContextMenu } from '@/components/data-context-menu';
+import { ToolQueryState } from '@/components/tool-query-state';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
@@ -58,7 +59,7 @@ function RouteComponent() {
   const raw = query.data?.raw;
 
   if (!result) {
-    return null;
+    return <ToolQueryState query={query} />;
   }
 
   const getContactInfoKeys = (

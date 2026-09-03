@@ -2,6 +2,7 @@ import { useQueries } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { ExternalLinkIcon } from 'lucide-react';
 
+import { ToolQueryState } from '@/components/tool-query-state';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getToolMetadata } from '@/lib/meta';
@@ -38,7 +39,7 @@ function RouteComponent() {
   const accounts = accountsQuery.data?.data;
 
   if (!accounts) {
-    return null;
+    return <ToolQueryState query={accountsQuery} />;
   }
 
   return (

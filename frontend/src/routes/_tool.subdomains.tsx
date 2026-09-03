@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 
 import { DataContextMenu } from '@/components/data-context-menu';
 import { CloudflareIcon } from '@/components/icons/cloudflare';
+import { ToolQueryState } from '@/components/tool-query-state';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
@@ -59,6 +60,10 @@ function RouteComponent() {
       curr[1] > max[1] ? curr : max
     )[0];
   }, [addressOccurrences]);
+
+  if (!subdomains) {
+    return <ToolQueryState query={query} />;
+  }
 
   return (
     <section className="flex flex-col-reverse gap-4 md:grid md:grid-cols-2">
