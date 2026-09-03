@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, notFound } from '@tanstack/react-router';
+import { cn } from 'cn';
 import { useMemo } from 'react';
 
 import { DataContextMenu } from '@/components/data-context-menu';
@@ -16,7 +17,6 @@ import {
 } from '@/components/ui/table';
 import { getToolMetadata } from '@/lib/meta';
 import { getToolQueryOptions } from '@/lib/query';
-import { cn } from 'cn';
 import type { SubdomainsLookupResponse } from '@/types/tools/subdomains';
 
 export const Route = createFileRoute('/_tool/subdomains')({
@@ -83,20 +83,12 @@ function RouteComponent() {
               {subdomains?.map((record) => (
                 <TableRow key={record.fqdn}>
                   <TableCell>
-                    <DataContextMenu
-                      className="w-full"
-                      type="domain"
-                      value={record.fqdn}
-                    >
+                    <DataContextMenu type="domain" value={record.fqdn}>
                       {record.fqdn}
                     </DataContextMenu>
                   </TableCell>
                   <TableCell className="tabular-nums">
-                    <DataContextMenu
-                      className="w-full"
-                      type="ip"
-                      value={record.ip}
-                    >
+                    <DataContextMenu type="ip" value={record.ip}>
                       {record.ip}
                     </DataContextMenu>
                   </TableCell>
@@ -129,11 +121,7 @@ function RouteComponent() {
                   </TableCell>
                   <TableCell>
                     {mostCommonAddress ? (
-                      <DataContextMenu
-                        className="w-full"
-                        type="ip"
-                        value={mostCommonAddress}
-                      >
+                      <DataContextMenu type="ip" value={mostCommonAddress}>
                         {mostCommonAddress}
                       </DataContextMenu>
                     ) : (
@@ -172,11 +160,7 @@ function RouteComponent() {
                                   ?.attributes.cloudflare && 'grayscale'
                               )}
                             />
-                            <DataContextMenu
-                              className="min-w-0 flex-1"
-                              type="ip"
-                              value={address}
-                            >
+                            <DataContextMenu type="ip" value={address}>
                               {address}
                             </DataContextMenu>
                           </div>

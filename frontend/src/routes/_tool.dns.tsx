@@ -3,10 +3,7 @@ import { createFileRoute, notFound } from '@tanstack/react-router';
 import { ChevronDownIcon } from 'lucide-react';
 import { match } from 'ts-pattern';
 
-import {
-  DataContextMenu,
-  type DataContextMenuType
-} from '@/components/data-context-menu';
+import { DataContextMenu } from '@/components/data-context-menu';
 import { CloudflareIcon } from '@/components/icons/cloudflare';
 import { ToolQueryState } from '@/components/tool-query-state';
 import { Badge } from '@/components/ui/badge';
@@ -31,6 +28,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
+import type { DataActionType } from '@/lib/data-actions';
 import { getToolMetadata } from '@/lib/meta';
 import { getToolQueryOptions } from '@/lib/query';
 
@@ -100,7 +98,7 @@ function RouteComponent() {
               aria-label={`Toggle ${type} records`}
               nativeButton={false}
               render={
-                <CardHeader className="hover:bg-muted/50 focus-visible:ring-ring/50 cursor-pointer grid-cols-[1fr_auto] py-4 outline-none transition-colors focus-visible:ring-1 data-[panel-open]:[&_svg]:rotate-180 motion-reduce:transition-none" />
+                <CardHeader className="hover:bg-muted/50 focus-visible:ring-ring/50 cursor-pointer grid-cols-[1fr_auto] py-4 transition-colors outline-none focus-visible:ring-1 motion-reduce:transition-none data-[panel-open]:[&_svg]:rotate-180" />
               }
             >
               <div className="grid gap-1">
@@ -151,11 +149,7 @@ function RouteComponent() {
                       return (
                         <TableRow key={record.name + record.data + idx}>
                           <TableCell>
-                            <DataContextMenu
-                              className="w-full"
-                              type="domain"
-                              value={record.name}
-                            >
+                            <DataContextMenu type="domain" value={record.name}>
                               {record.name}
                             </DataContextMenu>
                           </TableCell>
@@ -174,8 +168,7 @@ function RouteComponent() {
                             {Icon && <Icon className="size-5 shrink-0" />}
 
                             <DataContextMenu
-                              className="min-w-0 flex-1"
-                              type={match<DNSRecordType, DataContextMenuType>(
+                              type={match<DNSRecordType, DataActionType>(
                                 record.type
                               )
                                 .with('A', 'AAAA', () => 'ip')

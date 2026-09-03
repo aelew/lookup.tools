@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router';
+import { cn } from 'cn';
 import {
   CheckIcon,
   CircleAlertIcon,
@@ -24,18 +25,59 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
-import { TOOL_METADATA, type ToolMetadataEntries } from '@/lib/meta';
-import type { QueryType } from '@/lib/schema';
-import { cn } from 'cn';
-
-export type DataContextMenuType = QueryType | 'text';
+import {
+  useDataActions,
+  type DataAction,
+  type DataActionType
+} from '@/lib/data-actions';
 
 interface DataContextMenuProps extends PropsWithChildren {
-  type?: DataContextMenuType;
+  type?: DataActionType;
   className?: string;
   showActions?: boolean;
   value: string;
+}
+
+const ACTION_ICONS = {
+  copy: CopyIcon,
+  lookup: SearchIcon,
+  open: ExternalLinkIcon
+} as const;
+
+interface DataActionItemsProps {
+  actions: Array<DataAction>;
+  menu: 'context' | 'dropdown';
+  perform: ReturnType<typeof useDataActions>['perform'];
+}
+
+function DataActionItems({ actions, menu, perform }: DataActionItemsProps) {
+  return actions.map((action) => {
+    const Icon = ACTION_ICONS[action.kind];
+    const content = (
+      <>
+        <Icon />
+        <span className="max-w-80 truncate whitespace-nowrap">
+          {action.label} <strong>{action.value}</strong>
+        </span>
+      </>
+    );
+    const render =
+      action.kind === 'lookup' ? (
+        <Link to={`/${action.tool}`} search={{ q: action.query }} />
+      ) : undefined;
+    const onClick =
+      action.kind === 'lookup' ? undefined : () => perform(action);
+
+    return menu === 'context' ? (
+      <ContextMenuItem key={action.kind} onClick={onClick} render={render}>
+        {content}
+      </ContextMenuItem>
+    ) : (
+      <DropdownMenuItem key={action.kind} onClick={onClick} render={render}>
+        {content}
+      </DropdownMenuItem>
+    );
+  });
 }
 
 export function DataContextMenu({
@@ -45,34 +87,15 @@ export function DataContextMenu({
   value,
   children
 }: DataContextMenuProps) {
-  const { copy, status } = useCopyToClipboard(1500);
-  const firstToolOfType = (
-    Object.entries(TOOL_METADATA) as ToolMetadataEntries
-  ).find(([, tool]) => tool.queryType === type)?.[0];
-
-  let openUrl: string | undefined;
-
-  if (type === 'domain') {
-    openUrl = value.startsWith('http') ? value : `https://${value}`;
-  } else if (type === 'ip') {
-    openUrl = value.startsWith('http')
-      ? value
-      : value.includes('::')
-        ? `http://[${value}]`
-        : `http://${value}`;
-  }
-
-  const statusMessage =
-    status === 'copied'
-      ? `Copied ${value}`
-      : status === 'error'
-        ? `Couldn't copy ${value}`
-        : '';
+  const { actions, perform, status, statusMessage } = useDataActions(
+    type,
+    value
+  );
 
   return (
     <div
       className={cn(
-        'group/data relative inline-flex max-w-full min-w-0 items-center',
+        'group/data relative flex w-full max-w-full min-w-0 items-center',
         showActions && 'pr-7',
         className
       )}
@@ -83,36 +106,11 @@ export function DataContextMenu({
         </ContextMenuTrigger>
         <ContextMenuContent>
           <ContextMenuGroup>
-            <ContextMenuItem onClick={() => copy(value)}>
-              <CopyIcon />
-              <span className="max-w-80 truncate whitespace-nowrap">
-                Copy <strong>{value}</strong>
-              </span>
-            </ContextMenuItem>
-            {openUrl && (
-              <ContextMenuItem
-                onClick={() => {
-                  window.open(openUrl, '_blank', 'noopener,noreferrer');
-                }}
-              >
-                <ExternalLinkIcon />
-                <span className="max-w-80 truncate whitespace-nowrap">
-                  Open <strong>{value}</strong>
-                </span>
-              </ContextMenuItem>
-            )}
-            {firstToolOfType && (
-              <ContextMenuItem
-                render={
-                  <Link to={`/${firstToolOfType}`} search={{ q: value }} />
-                }
-              >
-                <SearchIcon />
-                <span className="max-w-80 truncate whitespace-nowrap">
-                  Lookup <strong>{value}</strong>
-                </span>
-              </ContextMenuItem>
-            )}
+            <DataActionItems
+              actions={actions}
+              menu="context"
+              perform={perform}
+            />
           </ContextMenuGroup>
         </ContextMenuContent>
       </ContextMenu>
@@ -146,36 +144,11 @@ export function DataContextMenu({
           />
           <DropdownMenuContent align="end" className="w-auto max-w-80">
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => copy(value)}>
-                <CopyIcon />
-                <span className="truncate">
-                  Copy <strong>{value}</strong>
-                </span>
-              </DropdownMenuItem>
-              {openUrl && (
-                <DropdownMenuItem
-                  onClick={() => {
-                    window.open(openUrl, '_blank', 'noopener,noreferrer');
-                  }}
-                >
-                  <ExternalLinkIcon />
-                  <span className="truncate">
-                    Open <strong>{value}</strong>
-                  </span>
-                </DropdownMenuItem>
-              )}
-              {firstToolOfType && (
-                <DropdownMenuItem
-                  render={
-                    <Link to={`/${firstToolOfType}`} search={{ q: value }} />
-                  }
-                >
-                  <SearchIcon />
-                  <span className="truncate">
-                    Lookup <strong>{value}</strong>
-                  </span>
-                </DropdownMenuItem>
-              )}
+              <DataActionItems
+                actions={actions}
+                menu="dropdown"
+                perform={perform}
+              />
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
