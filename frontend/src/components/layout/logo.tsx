@@ -10,6 +10,8 @@ export function Logo({ className, ...props }: SVGProps<SVGSVGElement>) {
       viewBox="0 0 36 36"
       height="1em"
       width="1em"
+      aria-hidden="true"
+      focusable="false"
       {...props}
     >
       <path

@@ -1,12 +1,14 @@
 import { SiGithub } from '@icons-pack/react-simple-icons';
 import { Link } from '@tanstack/react-router';
-import { Moon, Sun } from 'lucide-react';
+import { MonitorIcon, MoonIcon, SunIcon } from 'lucide-react';
 import { useTheme } from 'tanstack-theme-kit';
 
-import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
+import { Button, buttonVariants } from '../ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '../ui/dropdown-menu';
@@ -18,7 +20,7 @@ export function Header() {
   return (
     <header className="container-layout flex h-14 items-center justify-between border-b">
       <Link
-        className="flex items-center gap-2 transition-opacity hover:opacity-80"
+        className="flex items-center gap-2 transition-opacity hover:opacity-80 motion-reduce:transition-none"
         to="/"
       >
         <Logo className="size-5" />
@@ -31,16 +33,14 @@ export function Header() {
         </span>
       </Link>
       <div className="flex items-center gap-2">
-        <Button
-          className="shadow-xs"
-          nativeButton={false}
-          variant="outline"
-          render={
-            <a href="https://github.com/aelew/lookup.tools" target="_blank" />
-          }
+        <a
+          className={cn(buttonVariants({ variant: 'outline' }), 'shadow-xs')}
+          href="https://github.com/aelew/lookup.tools"
+          rel="noopener noreferrer"
+          target="_blank"
         >
-          <SiGithub /> Star
-        </Button>
+          <SiGithub data-icon="inline-start" /> Star
+        </a>
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
@@ -50,22 +50,27 @@ export function Header() {
                 type="button"
                 size="icon"
               >
-                <Sun className="size-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-                <Moon className="absolute size-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+                <SunIcon className="scale-100 rotate-0 transition-all motion-reduce:transition-none dark:scale-0 dark:-rotate-90" />
+                <MoonIcon className="absolute scale-0 rotate-90 transition-all motion-reduce:transition-none dark:scale-100 dark:rotate-0" />
                 <span className="sr-only">Toggle theme</span>
               </Button>
             }
           />
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setTheme('light')}>
-              Light
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme('dark')}>
-              Dark
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme('system')}>
-              System
-            </DropdownMenuItem>
+            <DropdownMenuGroup>
+              <DropdownMenuItem onClick={() => setTheme('light')}>
+                <SunIcon />
+                Light
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme('dark')}>
+                <MoonIcon />
+                Dark
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme('system')}>
+                <MonitorIcon />
+                System
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

@@ -8,7 +8,8 @@ import {
   useNavigate
 } from '@tanstack/react-router';
 import {
-  CircleIcon,
+  CircleAlertIcon,
+  CircleCheckIcon,
   CornerDownLeftIcon,
   EthernetPortIcon,
   MailIcon,
@@ -18,7 +19,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { match } from 'ts-pattern';
 import z from 'zod';
 
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Field,
@@ -107,23 +108,31 @@ function ToolLayoutRouteComponent() {
                   const query = queries[i];
 
                   let icon;
+                  let statusLabel;
                   switch (query.status) {
                     case 'error':
                       icon = (
-                        <div className="flex size-4 items-center justify-center">
-                          <CircleIcon className="size-2 fill-red-500 text-red-600" />
-                        </div>
+                        <CircleAlertIcon
+                          aria-hidden="true"
+                          className="text-destructive"
+                        />
                       );
+                      statusLabel = 'Failed';
                       break;
                     case 'success':
                       icon = (
-                        <div className="flex size-4 items-center justify-center">
-                          <CircleIcon className="size-2 fill-green-500 text-green-600" />
-                        </div>
+                        <CircleCheckIcon
+                          aria-hidden="true"
+                          className="text-green-500"
+                        />
                       );
+                      statusLabel = 'Ready';
                       break;
                     default:
-                      icon = <Spinner className="opacity-50" />;
+                      icon = (
+                        <Spinner aria-hidden="true" className="opacity-50" />
+                      );
+                      statusLabel = 'Loading';
                       break;
                   }
 
@@ -133,7 +142,11 @@ function ToolLayoutRouteComponent() {
                       value={key}
                       nativeButton={false}
                       render={
-                        <Link to={`/${key}`} search={{ q: search.q }}>
+                        <Link
+                          aria-label={`${t.name}, ${statusLabel}`}
+                          to={`/${key}`}
+                          search={{ q: search.q }}
+                        >
                           {icon} {t.name}
                         </Link>
                       }
@@ -225,9 +238,12 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
         .with('domain', () => (
           <FieldGroup>
             <Field data-invalid={!!error}>
-              {variant === 'default' && (
-                <FieldLabel htmlFor="domain">Domain</FieldLabel>
-              )}
+              <FieldLabel
+                className={cn(variant === 'compact' && 'sr-only')}
+                htmlFor="domain"
+              >
+                Domain
+              </FieldLabel>
 
               <InputGroup className="shadow-lg/5">
                 <InputGroupAddon>
@@ -244,7 +260,11 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
                   onChange={() => setError(undefined)}
                 />
 
-                <InputGroupButton type="submit">
+                <InputGroupButton
+                  aria-label="Look up domain"
+                  size="icon-sm"
+                  type="submit"
+                >
                   <CornerDownLeftIcon />
                 </InputGroupButton>
               </InputGroup>
@@ -255,9 +275,12 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
         .with('ip', () => (
           <FieldGroup>
             <Field data-invalid={!!error}>
-              {variant === 'default' && (
-                <FieldLabel htmlFor="ip">IP Address</FieldLabel>
-              )}
+              <FieldLabel
+                className={cn(variant === 'compact' && 'sr-only')}
+                htmlFor="ip"
+              >
+                IP Address
+              </FieldLabel>
 
               <InputGroup className="shadow-lg/5">
                 <InputGroupAddon>
@@ -274,7 +297,11 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
                   onChange={() => setError(undefined)}
                 />
 
-                <InputGroupButton type="submit">
+                <InputGroupButton
+                  aria-label="Look up IP address"
+                  size="icon-sm"
+                  type="submit"
+                >
                   <CornerDownLeftIcon />
                 </InputGroupButton>
               </InputGroup>
@@ -285,9 +312,12 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
         .with('email', () => (
           <FieldGroup>
             <Field data-invalid={!!error}>
-              {variant === 'default' && (
-                <FieldLabel htmlFor="email">Email Address</FieldLabel>
-              )}
+              <FieldLabel
+                className={cn(variant === 'compact' && 'sr-only')}
+                htmlFor="email"
+              >
+                Email Address
+              </FieldLabel>
 
               <InputGroup className="shadow-lg/5">
                 <InputGroupAddon>
@@ -309,7 +339,11 @@ function ToolForm({ queryType, variant = 'default' }: ToolFormProps) {
                   onChange={() => setError(undefined)}
                 />
 
-                <InputGroupButton type="submit">
+                <InputGroupButton
+                  aria-label="Look up email address"
+                  size="icon-sm"
+                  type="submit"
+                >
                   <CornerDownLeftIcon />
                 </InputGroupButton>
               </InputGroup>
@@ -326,14 +360,21 @@ function UseMyIPAddressButton() {
   const { data } = useVisitorIPQuery();
   const ip = data?.ip;
 
+  if (!ip) {
+    return (
+      <Button className="mx-auto w-fit" disabled>
+        Use my IP address
+      </Button>
+    );
+  }
+
   return (
-    <Button
-      render={<Link to="/ip" search={{ q: ip }} />}
-      className="mx-auto w-fit"
-      nativeButton={false}
-      disabled={!ip}
+    <Link
+      className={cn(buttonVariants(), 'mx-auto w-fit')}
+      search={{ q: ip }}
+      to="/ip"
     >
       Use my IP address
-    </Button>
+    </Link>
   );
 }
