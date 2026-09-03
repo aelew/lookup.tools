@@ -68,7 +68,7 @@ function RouteComponent() {
                       result.asn.type === 'isp' ? 'uppercase' : 'capitalize'
                     )}
                   >
-                    {result.asn.type}
+                    {result.asn.type.replaceAll('_', ' ')}
                   </span>
                 </TableCell>
               </TableRow>
