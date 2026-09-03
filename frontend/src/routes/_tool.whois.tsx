@@ -63,51 +63,49 @@ function RouteComponent() {
 
   const getContactInfoKeys = (
     contact: 'registrant' | 'admin' | 'billing' | 'tech'
-  ) => {
-    return {
-      Name: () => result[`${contact}_name`],
-      Organization: () => result[`${contact}_organization`],
-      Street: () => result[`${contact}_address`],
-      City: () => result[`${contact}_city`],
-      State: () => result[`${contact}_state`],
-      'Postal Code': () => result[`${contact}_zipcode`],
-      Country: () => result[`${contact}_country`],
-      Phone: () => result[`${contact}_phone`],
-      Email: () => {
-        const email = result[`${contact}_email`];
+  ) => ({
+    Name: () => result[`${contact}_name`],
+    Organization: () => result[`${contact}_organization`],
+    Street: () => result[`${contact}_address`],
+    City: () => result[`${contact}_city`],
+    State: () => result[`${contact}_state`],
+    'Postal Code': () => result[`${contact}_zipcode`],
+    Country: () => result[`${contact}_country`],
+    Phone: () => result[`${contact}_phone`]?.replace(/^tel:/i, ''),
+    Email: () => {
+      const email = result[`${contact}_email`];
 
-        if (!email) {
-          return null;
-        }
-
-        if (email.includes('@')) {
-          return (
-            <a
-              className="break-all hover:underline hover:underline-offset-4"
-              href={`mailto:${email}`}
-            >
-              {email}
-            </a>
-          );
-        }
-
-        if (email.startsWith('http://') || email.startsWith('https://')) {
-          return (
-            <a
-              className="break-all hover:underline hover:underline-offset-4"
-              rel="nofollow noopener"
-              target="_blank"
-              href={email}
-            >
-              {email}
-            </a>
-          );
-        }
-
-        return <span className="break-all sm:break-normal">{email}</span>;
+      if (!email) {
+        return null;
       }
-    };
-  };
+
+      if (email.includes('@')) {
+        return (
+          <a
+            className="break-all hover:underline hover:underline-offset-4"
+            href={`mailto:${email}`}
+          >
+            {email}
+          </a>
+        );
+      }
+
+      if (email.startsWith('http://') || email.startsWith('https://')) {
+        return (
+          <a
+            className="break-all hover:underline hover:underline-offset-4"
+            rel="nofollow noopener"
+            target="_blank"
+            href={email}
+          >
+            {email}
+          </a>
+        );
+      }
+
+      return <span className="break-all sm:break-normal">{email}</span>;
+    }
+  });
 
   const tables = [
     {
