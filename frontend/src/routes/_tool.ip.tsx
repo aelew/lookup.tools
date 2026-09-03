@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/table';
 import { getToolMetadata } from '@/lib/meta';
 import { getToolQueryOptions } from '@/lib/query';
-import { cn } from '@/lib/utils';
+import { cn } from 'cn';
 import type { IPAddressLookupResponse } from '@/types/tools/ip';
 
 export const Route = createFileRoute('/_tool/ip')({

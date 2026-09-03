@@ -13,20 +13,19 @@
         "@tanstack/react-devtools": "^0.8.4",
         "@tanstack/react-query": "^5.90.12",
         "@tanstack/react-query-persist-client": "^5.90.14",
-        "@tanstack/react-router": "^1.141.6",
-        "@tanstack/react-router-devtools": "^1.141.6",
-        "@tanstack/react-router-ssr-query": "^1.141.6",
-        "@tanstack/react-start": "^1.141.7",
-        "@tanstack/router-plugin": "^1.141.7",
+        "@tanstack/react-router": "^1.141.8",
+        "@tanstack/react-router-devtools": "^1.141.8",
+        "@tanstack/react-router-ssr-query": "^1.141.8",
+        "@tanstack/react-start": "^1.141.8",
+        "@tanstack/router-plugin": "^1.141.8",
         "class-variance-authority": "^0.7.1",
-        "clsx": "^2.1.1",
+        "cn": "^0.2.4",
         "ky": "^1.14.1",
         "lucide-react": "^0.562.0",
         "pigeon-maps": "^0.22.1",
         "react": "^19.2.3",
         "react-dom": "^19.2.3",
         "shadcn": "^3.6.2",
-        "tailwind-merge": "^3.4.0",
         "tailwindcss": "^4.1.18",
         "tanstack-theme-kit": "^0.2.1",
         "tldts": "^7.0.19",
@@ -702,6 +701,8 @@
 
     "clsx": ["clsx@2.1.1", "", {}, "sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA=="],
 
+    "cn": ["cn@0.2.4", "", { "bin": { "cn": "bin/cn.mjs" } }, "sha512-SzQvoh5FwizWtQg9+JueKdjWhlfCZMdu5DqNHm9q1wUlRVmKb9WXlepR9bTTbPwzEOyX1ujJ6lcCppmn3bNUCg=="],
+
     "code-block-writer": ["code-block-writer@13.0.3", "", {}, "sha512-Oofo0pq3IKnsFtuHqSF7TqBfr71aeyZDVJ0HpmqB7FBM2qEigL0iPONSCZSO9pE9dZTAxANe5XHG9Uy0YMv8cg=="],
 
     "color": ["color@4.2.3", "", { "dependencies": { "color-convert": "^2.0.1", "color-string": "^1.9.0" } }, "sha512-1rXeuUUiGGrykh+CeBdu5Ie7OJwinCgQY0bc7GCRxy5xVHy+moaqkpL/jqQq0MtQOeYcrqEz4abc5f0KtU7W4A=="],
@@ -1361,8 +1362,6 @@
     "tabbable": ["tabbable@6.3.0", "", {}, "sha512-EIHvdY5bPLuWForiR/AN2Bxngzpuwn1is4asboytXtpTgsArc+WmSJKVLlhdh71u7jFcryDqB2A8lQvj78MkyQ=="],
 
     "tagged-tag": ["tagged-tag@1.0.0", "", {}, "sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng=="],
-
-    "tailwind-merge": ["tailwind-merge@3.4.0", "", {}, "sha512-uSaO4gnW+b3Y2aWoWfFpX62vn2sR3skfhbjsEnaBI81WD1wBLlHZe5sWf0AqjksNdYTbGBEd0UasQMT3SNV15g=="],
 
     "tailwindcss": ["tailwindcss@4.1.18", "", {}, "sha512-4+Z+0yiYyEtUVCScyfHCxOYP06L5Ne+JiHhY2IjR2KWMIWhJOYZKLSGZaP5HkZ8+bY0cxfzwDE5uOmzFXyIwxw=="],
 

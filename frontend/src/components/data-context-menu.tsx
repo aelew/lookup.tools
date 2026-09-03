@@ -27,7 +27,7 @@ import {
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { TOOL_METADATA, type ToolMetadataEntries } from '@/lib/meta';
 import type { QueryType } from '@/lib/schema';
-import { cn } from '@/lib/utils';
+import { cn } from 'cn';
 
 export type DataContextMenuType = QueryType | 'text';
 

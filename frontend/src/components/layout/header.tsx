@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router';
 import { MonitorIcon, MoonIcon, SunIcon } from 'lucide-react';
 import { useTheme } from 'tanstack-theme-kit';
 
-import { cn } from '@/lib/utils';
+import { cn } from 'cn';
 import { Button, buttonVariants } from '../ui/button';
 import {
   DropdownMenu,

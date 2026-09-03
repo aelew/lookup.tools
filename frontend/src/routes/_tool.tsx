@@ -44,7 +44,7 @@ import {
 } from '@/lib/meta';
 import { getToolQueryOptions } from '@/lib/query';
 import { QUERY_SCHEMAS, type QueryType } from '@/lib/schema';
-import { cn } from '@/lib/utils';
+import { cn } from 'cn';
 
 export const Route = createFileRoute('/_tool')({
   component: ToolLayoutRouteComponent,

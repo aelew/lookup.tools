@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/table';
 import { getToolMetadata } from '@/lib/meta';
 import { getToolQueryOptions } from '@/lib/query';
-import { cn } from '@/lib/utils';
+import { cn } from 'cn';
 import type { SubdomainsLookupResponse } from '@/types/tools/subdomains';
 
 export const Route = createFileRoute('/_tool/subdomains')({
