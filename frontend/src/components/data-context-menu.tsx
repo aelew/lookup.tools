@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import type { PropsWithChildren } from 'react';
 
 import {
@@ -6,6 +7,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger
 } from '@/components/ui/context-menu';
+import { TOOL_METADATA, type ToolMetadataEntries } from '@/lib/meta';
 import type { QueryType } from '@/lib/schema';
 import { cn } from '@/lib/utils';
 
@@ -23,6 +25,10 @@ export function DataContextMenu({
   value,
   children
 }: DataContextMenuProps) {
+  const firstToolOfType = (
+    Object.entries(TOOL_METADATA) as ToolMetadataEntries
+  ).find(([, tool]) => tool.queryType === type)?.[0];
+
   return (
     <ContextMenu>
       <ContextMenuTrigger className={cn('whitespace-nowrap', className)}>
@@ -61,8 +67,10 @@ export function DataContextMenu({
             </p>
           </ContextMenuItem>
         )}
-        {type !== 'text' && (
-          <ContextMenuItem>
+        {firstToolOfType && (
+          <ContextMenuItem
+            render={<Link to={`/${firstToolOfType}`} search={{ q: value }} />}
+          >
             <p className="max-w-80 truncate whitespace-nowrap">
               Lookup <strong>{value}</strong>
             </p>
