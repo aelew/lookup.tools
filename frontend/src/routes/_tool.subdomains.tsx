@@ -83,12 +83,20 @@ function RouteComponent() {
               {subdomains?.map((record) => (
                 <TableRow key={record.fqdn}>
                   <TableCell>
-                    <DataContextMenu type="domain" value={record.fqdn}>
+                    <DataContextMenu
+                      className="w-full"
+                      type="domain"
+                      value={record.fqdn}
+                    >
                       {record.fqdn}
                     </DataContextMenu>
                   </TableCell>
                   <TableCell className="tabular-nums">
-                    <DataContextMenu type="ip" value={record.ip}>
+                    <DataContextMenu
+                      className="w-full"
+                      type="ip"
+                      value={record.ip}
+                    >
                       {record.ip}
                     </DataContextMenu>
                   </TableCell>
@@ -121,7 +129,11 @@ function RouteComponent() {
                   </TableCell>
                   <TableCell>
                     {mostCommonAddress ? (
-                      <DataContextMenu type="ip" value={mostCommonAddress}>
+                      <DataContextMenu
+                        className="w-full"
+                        type="ip"
+                        value={mostCommonAddress}
+                      >
                         {mostCommonAddress}
                       </DataContextMenu>
                     ) : (
@@ -160,7 +172,11 @@ function RouteComponent() {
                                   ?.attributes.cloudflare && 'grayscale'
                               )}
                             />
-                            <DataContextMenu type="ip" value={address}>
+                            <DataContextMenu
+                              className="min-w-0 flex-1"
+                              type="ip"
+                              value={address}
+                            >
                               {address}
                             </DataContextMenu>
                           </div>

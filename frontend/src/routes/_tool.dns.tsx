@@ -151,13 +151,18 @@ function RouteComponent() {
                       return (
                         <TableRow key={record.name + record.data + idx}>
                           <TableCell>
-                            <DataContextMenu type="domain" value={record.name}>
+                            <DataContextMenu
+                              className="w-full"
+                              type="domain"
+                              value={record.name}
+                            >
                               {record.name}
                             </DataContextMenu>
                           </TableCell>
                           <TableCell>
                             <DataContextMenu
                               className="flex justify-center"
+                              showActions={false}
                               value={record.ttl.toString()}
                             >
                               <Badge className="gap-0" variant="secondary">
@@ -169,6 +174,7 @@ function RouteComponent() {
                             {Icon && <Icon className="size-5 shrink-0" />}
 
                             <DataContextMenu
+                              className="min-w-0 flex-1"
                               type={match<DNSRecordType, DataContextMenuType>(
                                 record.type
                               )
