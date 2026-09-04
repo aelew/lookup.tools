@@ -11,11 +11,25 @@ _cloudflare_ip_ranges: list | None = None
 _cloudflare_ip_ranges_fetched_at: float = 0
 
 
+def _close_connection_when_done(
+    task: asyncio.Task[tuple[asyncio.StreamReader, asyncio.StreamWriter]],
+) -> None:
+    if not task.done():
+        task.add_done_callback(_close_connection_when_done)
+        return
+
+    if task.cancelled() or task.exception() is not None:
+        return
+
+    _, writer = task.result()
+    writer.close()
+
+
 async def ping(server: str, port=80, timeout=3) -> str | None:
+    connection_task = asyncio.create_task(asyncio.open_connection(server, port))
+
     try:
-        _, writer = await asyncio.wait_for(
-            asyncio.open_connection(server, port), timeout
-        )
+        _, writer = await asyncio.wait_for(asyncio.shield(connection_task), timeout)
         addr_info = writer.get_extra_info("peername")
 
         writer.close()
@@ -23,7 +37,11 @@ async def ping(server: str, port=80, timeout=3) -> str | None:
 
         return addr_info[0]
     except (TimeoutError, OSError):
+        _close_connection_when_done(connection_task)
         return None
+    except asyncio.CancelledError:
+        _close_connection_when_done(connection_task)
+        raise
 
 
 def _fetch_cloudflare_ip_ranges() -> list:
